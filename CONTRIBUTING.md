@@ -1,5 +1,5 @@
 # Contributing to the project
-To contribute to this project, you must follow the following guidelines.
+To contribute to this project, you must follow the guidelines in this document.
 ## Disclaimer
 All images in this document are the property of their respective owners and have been taken from the following link:
 <br> https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow <br>
@@ -36,7 +36,36 @@ The branch used for official release versions of the app; no direct commits to t
 The branch used for developing the app and direct commits to this branch should only be minor fixes and changes.
 <br> Merges to this branch should contain the ID of the associated Jira task. 
 ### feature
-The branch is used for developing features of the application. Commits to this branch should contain short descriptions of the changes made. 
+The branch is used for developing features of the application.
+<br> Commits to this branch should contain short descriptions of the changes made. 
+### Commit format
+All commit messages must be in the following format:
+<br><br>
+(context) (type) : (description)
+<br>[optional body]
+<br><br>
+The context is the context of the commit. 
+<br>
+It can be one of the following or empty if the commit is not related to a specific context:
+<br>
+- be for commits related to the Back-End project (eg. MySQL)
+- be for commits related to the Front-End project (eg. Kotlin)
+<br><br>
+
+The type is the type of the commit. It can be one of the following:  
+- feat for new features
+- fix for bug fixes
+- refactor for refactoring
+- docs for documentation
+- test for tests
+- chore for chores
+<br><br>
+
+The description is a short description of the commit.
+<br><br>
+The body is an optional body of the commit. It can be used to provide more details about the commit.
+<br>
+The commit message must be in English.
 ## Pull requests and review conventions
 At least two team members should constantly review pull requests before accepting.
 <br> The pull review should not be merged as long as a team member has pointed out problems that still need to be resolved.
