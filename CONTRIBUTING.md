@@ -41,6 +41,9 @@ The branch is used for developing features of the application. Commits to this b
 At least two team members should constantly review pull requests before accepting.
 <br> The pull review should not be merged as long as a team member has pointed out problems that still need to be resolved.
 
+# Contributing to the frontend code
+In order to build and run the frontend code of this project you need to install Android Studio Giraffe 2022.3.1 or newer. When opening the project simply choose the "Open" option in the Android Studio starting screen and open the frontend folder.
+<br> Android Studio should come with a virtual device that is already set up and capable of running the application (minimum SKD is 27).
 
 
 
