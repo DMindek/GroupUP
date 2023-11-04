@@ -1,7 +1,7 @@
 package com.intersoft.user
 
 class MockUserRepository : UserRepository {
-    private val userList = mutableListOf<UserModel>(
+    private val userList = mutableListOf(
         UserModel("test", "mail@mail", "abc", "here"),
         UserModel("me", "mail@email", "123", "there"),
     )
