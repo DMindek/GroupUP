@@ -1,5 +1,6 @@
 package com.intersoft.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,9 +27,11 @@ fun PrimaryButton(buttonText: String, action: () -> Unit){
 
 @Composable
 fun TextInputField(label: String, action: (String) -> Unit){
+    Column{
         Text(text = label,
             fontSize = 8.sp,
             color = Color(R.color.foregroundText)
         )
         BasicTextField("", action)
+    }
 }
