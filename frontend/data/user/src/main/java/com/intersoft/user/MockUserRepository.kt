@@ -5,11 +5,16 @@ class MockUserRepository : UserRepository {
         UserModel("test", "mail@mail", "abc", "here"),
         UserModel("me", "mail@email", "123", "there"),
     )
-    override fun getUserByUsername(username: String): UserModel? {
-        return userList.firstOrNull{user -> user.username == username}
+    override fun getUserByUsername(searchUsername: String): UserModel? {
+        return userList.firstOrNull{user -> user.username == searchUsername}
     }
 
-    override fun addUser(user: UserModel) {
-        userList.add(user)
+    override fun addUser(newUser: UserModel, onRegistrationError: (String) -> Unit) {
+        if(userList.find { user -> (user.username == newUser.username) || (user.email == newUser.email) } == null){
+            userList.add(newUser)
+        }
+        else{
+            onRegistrationError("User already exists")
+        }
     }
 }

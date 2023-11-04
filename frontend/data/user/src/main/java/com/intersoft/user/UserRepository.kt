@@ -1,7 +1,7 @@
 package com.intersoft.user
 
 interface UserRepository {
-    fun getUserByUsername(username: String): UserModel?
+    fun getUserByUsername(searchUsername: String): UserModel?
 
-    fun addUser(user: UserModel)
+    fun addUser(newUser: UserModel, onRegistrationError: (String) -> Unit)
 }
