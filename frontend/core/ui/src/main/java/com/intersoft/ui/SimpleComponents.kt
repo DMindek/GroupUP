@@ -1,6 +1,8 @@
 package com.intersoft.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
@@ -14,7 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,10 +28,10 @@ fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () 
          onClick = action,
          modifier = modifier,
          colors = ButtonDefaults.buttonColors(
-             containerColor = Color(R.color.primary),
-             contentColor = Color(R.color.primaryText),
-             disabledContainerColor = Color(R.color.primary),
-             disabledContentColor = Color(R.color.primaryText)
+             containerColor = colorResource(R.color.primary),
+             contentColor = colorResource(R.color.primaryText),
+             disabledContainerColor = colorResource(R.color.primary),
+             disabledContentColor = colorResource(R.color.primaryText)
          )
     ){
          Text(text = buttonText)
@@ -44,7 +46,7 @@ fun TextInputField(label: String, action: (String) -> Unit = {}){
     Column(modifier = Modifier.padding(20.dp)){
         Text(text = label,
             fontSize = 16.sp,
-            color = Color(R.color.foregroundText)
+            color = colorResource(R.color.foregroundText)
         )
         BasicTextField(textValue,
             {
@@ -52,7 +54,12 @@ fun TextInputField(label: String, action: (String) -> Unit = {}){
                 action(it)
             },
             singleLine = true,
-            textStyle = TextStyle(fontSize = 25.sp)
+            textStyle = TextStyle(fontSize = 25.sp),
+            modifier = Modifier.background(color = colorResource(R.color.InputField)),
+            decorationBox = {innerTextField ->
+                Row(modifier = Modifier.fillMaxWidth()){}
+                innerTextField()
+            }
         )
     }
 }
@@ -65,6 +72,6 @@ fun TitleText(text: String){
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 20.dp)
+            .padding(bottom = 30.dp)
     )
 }
