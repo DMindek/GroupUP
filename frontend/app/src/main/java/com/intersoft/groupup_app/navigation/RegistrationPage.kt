@@ -12,9 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.intersoft.auth.RegistrationManager
+import com.intersoft.ui.ErrorText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
+import com.intersoft.user.UserModel
 
 @Composable
 fun RegistrationPage(onRegister: () -> Unit){
@@ -30,7 +33,10 @@ fun RegistrationPage(onRegister: () -> Unit){
     var password by remember {
         mutableStateOf("")
     }
-    var passwordConfirm by remember {
+    var passwordRetype by remember {
+        mutableStateOf("")
+    }
+    var errorText by remember {
         mutableStateOf("")
     }
 
@@ -40,13 +46,18 @@ fun RegistrationPage(onRegister: () -> Unit){
             .padding(30.dp)
     ){
         TitleText(text = "Register")
-        TextInputField(label = "email")
-        TextInputField(label = "username")
-        TextInputField(label = "location")
-        TextInputField(label = "password")
-        TextInputField(label = "confirm password")
-        PrimaryButton(buttonText = "Sign up", modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 40.dp)) {
-
+        TextInputField(label = "email") { email = it }
+        TextInputField(label = "username") {username = it}
+        TextInputField(label = "location") {location = it}
+        TextInputField(label = "password") {password = it}
+        TextInputField(label = "confirm password") {passwordRetype = it}
+        ErrorText(text = errorText)
+        PrimaryButton(buttonText = "Sign up", modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 40.dp)) {
+            RegistrationManager.registerUser(UserModel(username, email, password, location), passwordRetype, onRegister) {
+                errorText = it
+            }
         }
     }
 }

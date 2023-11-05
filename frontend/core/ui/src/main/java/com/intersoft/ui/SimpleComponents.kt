@@ -55,7 +55,7 @@ fun TextInputField(label: String, action: (String) -> Unit = {}){
             },
             singleLine = true,
             textStyle = TextStyle(fontSize = 25.sp),
-            modifier = Modifier.background(color = colorResource(R.color.InputField)),
+            modifier = Modifier.background(color = colorResource(R.color.inputField)),
             decorationBox = {innerTextField ->
                 Row(modifier = Modifier.fillMaxWidth()){}
                 innerTextField()
@@ -73,5 +73,16 @@ fun TitleText(text: String){
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 30.dp)
+    )
+}
+
+@Composable
+fun ErrorText(text: String){
+    Text(
+        text = text,
+        color = colorResource(R.color.errorColor),
+        fontSize = 12.sp,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
     )
 }

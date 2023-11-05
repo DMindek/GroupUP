@@ -2,6 +2,7 @@
 <resources>
     <color name="primary">#FF6200EE</color>
     <color name="primaryText">#E3CFFF</color>
+    <color name="errorColor">#B80000</color>
     <color name="foregroundText">#000000</color>
-    <color name="InputField">#D5D5D5</color>
+    <color name="inputField">#D5D5D5</color>
 </resources>
