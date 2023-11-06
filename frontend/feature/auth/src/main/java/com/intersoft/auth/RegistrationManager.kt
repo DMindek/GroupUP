@@ -23,6 +23,7 @@ object RegistrationManager {
         onRegisterSuccess()
     }
     private fun validateInput(user: UserModel, passwordRetype: String): String{
+        if(!isValidEmail(user.email)) return "Please enter a valid e-mail"
         if(user.username.length > 15) return "Username must have at most 15 characters"
         if(user.username.isEmpty()) return "Please enter a username"
         if(user.location.isEmpty()) return "Please enter a location"
@@ -38,5 +39,9 @@ object RegistrationManager {
         return "[a-zA-Z]".toRegex().containsMatchIn(text) &&
                 "\\d".toRegex().containsMatchIn(text) &&
                 "\\W".toRegex().containsMatchIn(text)
+    }
+
+    private fun isValidEmail(email: String): Boolean{
+        return "^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}\$".toRegex().containsMatchIn(email)
     }
 }
