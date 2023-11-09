@@ -21,7 +21,9 @@ object NetworkManager {
         }
 
         return if(res.code() != 201){
-            res.errorBody().string()
+            if(res.code() == 422)
+                res.errorBody().string()
+            else "Unknown error occurred"
         } else null
     }
 }
