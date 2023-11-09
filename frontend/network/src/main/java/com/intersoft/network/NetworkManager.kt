@@ -17,7 +17,7 @@ object NetworkManager {
         try{
             res = serverService.createUser(user).execute()
         }catch (e: Exception){
-            return "error: Could not reach server"
+            return "Could not reach server"
         }
 
         return if(res.code() != 201){

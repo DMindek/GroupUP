@@ -15,6 +15,11 @@ class UserRepository: IUserRepository {
 
         val res = NetworkManager.registerUser(user.toString())
         if(res != null){
+            if(res[0] != '{') {
+                onRegistrationError(res)
+                return
+            }
+
             val error: RegistrationErrorResponse
             try {
                 error = Gson().fromJson(res, RegistrationErrorResponse::class.java)
