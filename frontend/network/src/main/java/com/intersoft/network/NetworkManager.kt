@@ -12,7 +12,14 @@ object NetworkManager {
     private val serverService: ServerService = retrofit.create(ServerService::class.java)
 
     fun registerUser(user: String): String?{
-        val res = serverService.createUser(user).execute()
+        val res: retrofit2.Response<String>
+
+        try{
+            res = serverService.createUser(user).execute()
+        }catch (e: Exception){
+            return "error: Could not reach server"
+        }
+
         return if(res.code() != 201){
             res.errorBody().string()
         } else null
