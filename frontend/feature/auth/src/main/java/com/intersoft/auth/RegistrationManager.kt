@@ -1,11 +1,11 @@
 package com.intersoft.auth
 
 import com.intersoft.user.IUserRepository
-import com.intersoft.user.MockUserRepository
 import com.intersoft.user.UserModel
+import com.intersoft.user.UserRepository
 
 object RegistrationManager {
-    private var userRepository: IUserRepository = MockUserRepository()
+    private var userRepository: IUserRepository = UserRepository()
 
     fun setRepository(repo: IUserRepository){
         userRepository = repo
