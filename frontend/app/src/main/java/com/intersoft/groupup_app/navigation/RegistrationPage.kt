@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.RegistrationManager
@@ -49,8 +50,8 @@ fun RegistrationPage(onRegister: () -> Unit){
         TextInputField(label = "email") { email = it }
         TextInputField(label = "username") {username = it}
         TextInputField(label = "location") {location = it}
-        TextInputField(label = "password") {password = it}
-        TextInputField(label = "confirm password") {passwordRetype = it}
+        TextInputField(label = "password", PasswordVisualTransformation()) {password = it}
+        TextInputField(label = "confirm password", PasswordVisualTransformation()) {passwordRetype = it}
         ErrorText(text = errorText)
         PrimaryButton(buttonText = "Sign up", modifier = Modifier
             .align(Alignment.CenterHorizontally)

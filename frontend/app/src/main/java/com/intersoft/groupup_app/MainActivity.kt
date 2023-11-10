@@ -1,6 +1,7 @@
 package com.intersoft.groupup_app
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,7 +33,10 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "registration"){
                         composable("registration"){
                             RegistrationPage(
-                                onRegister = {navController.navigate("login")}
+                                onRegister = {
+                                    navController.navigate("login")
+                                    Toast.makeText(applicationContext, "account has been registered", Toast.LENGTH_SHORT).show()
+                                }
                             )
                         }
                         composable("login"){

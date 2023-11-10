@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +40,7 @@ fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () 
 }
 
 @Composable
-fun TextInputField(label: String, action: (String) -> Unit = {}){
+fun TextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, action: (String) -> Unit = {}){
     var textValue by remember{
         mutableStateOf("")
     }
@@ -54,6 +55,7 @@ fun TextInputField(label: String, action: (String) -> Unit = {}){
                 action(it)
             },
             singleLine = true,
+            visualTransformation = visualTransformation,
             textStyle = TextStyle(fontSize = 25.sp),
             modifier = Modifier.background(color = colorResource(R.color.inputField)),
             decorationBox = {innerTextField ->
