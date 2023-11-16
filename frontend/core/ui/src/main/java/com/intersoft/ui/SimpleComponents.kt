@@ -5,11 +5,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +27,30 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.Instant
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GeneralDatePicker(onDismiss: () -> Unit, onConfirm: () -> Unit){
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = Instant.now().toEpochMilli())
+    DatePickerDialog(
+        shape = RoundedCornerShape(6.dp),
+        onDismissRequest = onDismiss,
+        confirmButton = {
+           onConfirm()
+        },
+        dismissButton = {
+            onDismiss
+        }
+    ){
+        DatePicker(
+            state = datePickerState,
+            dateValidator = { timestamp ->
+                timestamp > Instant.now().toEpochMilli()
+            }
+        )
+    }
+}
 
 @Composable
 fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
@@ -75,6 +104,16 @@ fun TitleText(text: String){
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 30.dp)
+    )
+}
+
+@Composable
+fun LabelText(text: String){
+    Text(
+        text = text,
+        fontSize = 16.sp,
+        textAlign = TextAlign.Start,
+        color = colorResource(R.color.foregroundText)
     )
 }
 

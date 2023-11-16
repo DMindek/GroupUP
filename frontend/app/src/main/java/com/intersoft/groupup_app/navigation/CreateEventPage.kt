@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.intersoft.ui.ErrorText
+import com.intersoft.ui.GeneralDatePicker
+import com.intersoft.ui.LabelText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
@@ -28,9 +30,6 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableStateOf("")
     }
     var description by remember {
-        mutableStateOf("")
-    }
-    var date by remember {
         mutableStateOf("")
     }
     var duration by remember {
@@ -47,6 +46,9 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableStateOf("")
     }
 
+    var openDatePicker = remember {
+        mutableStateOf(false)
+    }
 
     Column (
         modifier = Modifier
@@ -58,7 +60,16 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         TextInputField(label = "Name") { name = it }
         TextInputField(label = "Description") {description = it}
 
-        TextInputField(label = "TEMP DATE FIELD PLACEHOLDER") {date = it} // TODO: Make date input field
+        Spacer(modifier = Modifier.height(20.dp))
+
+        LabelText(text = "Date")
+        if(openDatePicker.value){
+        GeneralDatePicker(::onDateDismiss, ::onDateConfirm)
+        }else{
+            PrimaryButton(buttonText = "Choose date"){
+                showDatePicker()
+            }
+        }
 
         TextInputField(label = "Duration") {duration = it}
         TextInputField(label = "Max Participants") {numberOfParticipants = it}
@@ -84,6 +95,13 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
     }
 
 }
+
+fun showDatePicker() {
+    //TODO MAKE DATE PICKER SHOWABLE/HIDEABLE
+}
+
+private fun onDateDismiss(){/*TODO IMPLEMENT HIDE DATEPICKER*/}
+private fun onDateConfirm(){/*TODO IMPLEMENT HIDE DATEPICKER AND SHOW PICKED DATE*/}
 
 
 @Preview
