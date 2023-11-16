@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "CreateEvent"){ // TODO: MAKE REGISTRATION DEFAULT SCREEN AGAIN
+                    NavHost(navController = navController, startDestination = "home"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -45,11 +45,18 @@ class MainActivity : ComponentActivity() {
                             LoginPage()
                         }
                         composable("home"){
-                            HomePage()
+                            HomePage(
+                                onCreateEventButtonPress = {
+                                navController.navigate("createEvent")
+                                }
+                            )
                         }
                         composable("createEvent"){
                             CreateEventPage(
-                                onCreateEvent ={
+                                onCreateEvent = {
+                                    navController.navigate("home")
+                                },
+                                onCancelEventCreation = {
                                     navController.navigate("home")
                                 }
                             )

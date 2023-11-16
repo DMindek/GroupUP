@@ -23,7 +23,7 @@ import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
 
 @Composable
-fun CreateEventPage(onCreateEvent: () -> Unit){
+fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit){
     var name by remember {
         mutableStateOf("")
     }
@@ -67,16 +67,17 @@ fun CreateEventPage(onCreateEvent: () -> Unit){
         Spacer(modifier = Modifier.height(20.dp))
 
         Row (modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 20.dp)
+            .fillMaxSize()
+            .padding(start = 20.dp)
         ){
             PrimaryButton(buttonText = "Create") {
                 // TODO: Implement event creation
+                onCreateEvent()
                 errorText = ""
             }
             Spacer(modifier = Modifier.width(100.dp))
             PrimaryButton(buttonText = "Cancel") {
-                // TODO: Implement returning to previous screen
+                onCancelEventCreation()
             }
         }
 
@@ -88,5 +89,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit){
 @Preview
 @Composable
 fun CreateEventPagePreview(){
-    CreateEventPage{}
+    CreateEventPage(onCreateEvent = { /**/ }) {
+
+    }
 }
