@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "registration"){
+                    NavHost(navController = navController, startDestination = "login"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -40,7 +40,13 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("login"){
-                            LoginPage()
+                            LoginPage(
+                                onLogin = { navController.navigate("main") },
+                                onRegisterClick = { navController.navigate("registration") }
+                            )
+                        }
+                        composable("main"){
+
                         }
                     }
                 }
