@@ -34,6 +34,20 @@ class UserRepository: IUserRepository {
             else if(error.password != null) onRegistrationError(error.password[0])
         }
     }
+
+    override fun logIn(username: String, password: String, onLoginSuccess: () -> Unit, onLoginError: (String) -> Unit) {
+        val data = JSONObject().put("username", username)
+            .put("password", password)
+
+        NetworkManager.logIn(data.toString()){
+            if(it != null){
+                if(it[0] != '{') {
+                    onLoginError(it)
+                }
+            }
+            onLoginSuccess()
+        }
+    }
 }
 
 class RegistrationErrorResponse{

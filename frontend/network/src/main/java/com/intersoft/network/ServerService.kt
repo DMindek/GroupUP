@@ -13,4 +13,8 @@ interface ServerService {
     @Headers("Content-Type: application/json")
     @POST("api/v1/register")
     fun createUser(@Body user: String): Call<String>
+
+    @Headers("Content-Type: application/json")
+    @POST("api/v1/login")
+    fun logIn(@Body password: String): Call<String>
 }

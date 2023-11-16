@@ -15,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.intersoft.auth.LoginManager
 import com.intersoft.groupup_app.R
+import com.intersoft.ui.ErrorText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.SecondaryButton
 import com.intersoft.ui.TextInputField
@@ -29,6 +31,10 @@ fun LoginPage(onLogin: () -> Unit, onRegisterClick: () -> Unit){
     var password by remember {
         mutableStateOf("")
     }
+    var errorText by remember {
+        mutableStateOf("")
+    }
+
     Column(
         verticalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
@@ -43,12 +49,16 @@ fun LoginPage(onLogin: () -> Unit, onRegisterClick: () -> Unit){
         )
         TextInputField(label = "username") { username = it }
         TextInputField(label = "password") { password = it }
+        ErrorText(text = errorText)
+
         PrimaryButton(buttonText = "Sign in",
             modifier = Modifier
                 .width(200.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-
+            LoginManager.logIn(username, password, onLogin){
+                errorText = it
+            }
         }
         SecondaryButton (buttonText = "Sign up", modifier = Modifier.width(150.dp)) {
             onRegisterClick()

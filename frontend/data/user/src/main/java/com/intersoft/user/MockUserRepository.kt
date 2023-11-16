@@ -14,4 +14,11 @@ class MockUserRepository : IUserRepository {
             onRegistrationError("User already exists")
         }
     }
+
+    override fun logIn(username: String, password: String, onLoginSuccess: () -> Unit, onLoginError: (String) -> Unit) {
+        if(userList.find { user -> (user.username == username) || (user.password == password) } == null){
+            onLoginError("Incorrect credentials")
+        }
+        else onLoginSuccess()
+    }
 }
