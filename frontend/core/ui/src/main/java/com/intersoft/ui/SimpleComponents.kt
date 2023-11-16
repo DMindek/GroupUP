@@ -60,7 +60,7 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
     var textValue by remember{
         mutableStateOf("")
     }
-    Column(modifier = Modifier.padding(20.dp)){
+    Column(){
         Text(text = label,
             fontSize = 16.sp,
             color = colorResource(R.color.foregroundText)
@@ -88,6 +88,7 @@ fun TitleText(text: String){
         text = text,
         fontSize = 40.sp,
         textAlign = TextAlign.Center,
+        lineHeight = 50.sp,
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 30.dp)

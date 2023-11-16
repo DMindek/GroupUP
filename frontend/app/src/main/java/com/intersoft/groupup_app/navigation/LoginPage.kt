@@ -28,7 +28,7 @@ fun LoginPage(onLogin: () -> Unit, onRegisterClick: () -> Unit){
     Column(
         modifier = Modifier
         .fillMaxSize()
-        .padding(30.dp)
+        .padding(50.dp)
     ) {
         TitleText(text = "Welcome to GroupUP")
         TextInputField(label = "username") { username = it }
