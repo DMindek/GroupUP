@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.intersoft.groupup_app.navigation.CreateEventPage
+import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "registration"){
+                    NavHost(navController = navController, startDestination = "CreateEvent"){ // TODO: MAKE REGISTRATION DEFAULT SCREEN AGAIN
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -41,6 +43,16 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("login"){
                             LoginPage()
+                        }
+                        composable("home"){
+                            HomePage()
+                        }
+                        composable("createEvent"){
+                            CreateEventPage(
+                                onCreateEvent ={
+                                    navController.navigate("home")
+                                }
+                            )
                         }
                     }
                 }
