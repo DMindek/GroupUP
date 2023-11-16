@@ -18,6 +18,7 @@ import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
+import com.intersoft.groupup_app.navigation.UserCreatedEventsPage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 
 class MainActivity : ComponentActivity() {
@@ -54,12 +55,15 @@ class MainActivity : ComponentActivity() {
                         composable("createEvent"){
                             CreateEventPage(
                                 onCreateEvent = {
-                                    navController.navigate("home")
+                                    navController.navigate("userCreatedEvents")
                                 },
                                 onCancelEventCreation = {
                                     navController.navigate("home")
                                 }
                             )
+                        }
+                        composable("userCreatedEvents"){
+                            UserCreatedEventsPage()
                         }
                     }
                 }
