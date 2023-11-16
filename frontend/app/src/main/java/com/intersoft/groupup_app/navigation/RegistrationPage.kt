@@ -1,5 +1,6 @@
 package com.intersoft.groupup_app.navigation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,6 +43,7 @@ fun RegistrationPage(onRegister: () -> Unit){
     }
 
     Column (
+        verticalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxSize()
             .padding(50.dp)
@@ -55,7 +57,7 @@ fun RegistrationPage(onRegister: () -> Unit){
         ErrorText(text = errorText)
         PrimaryButton(buttonText = "Sign up", modifier = Modifier
             .align(Alignment.CenterHorizontally)
-            .padding(top = 40.dp)) {
+            .padding(top = 30.dp)) {
             RegistrationManager.registerUser(UserModel(username, email, password, location), passwordRetype, onRegister) {
                 errorText = it
             }
