@@ -29,24 +29,26 @@ object NetworkManager {
         } else null
     }
 
-    fun logIn(password: String, onLoginFail: (String?) -> Unit){
-        serverService.logIn(password).enqueue(ResponseHandler(onLoginFail))
+    fun logIn(data: String, onLoginSuccess: (String) -> Unit, onLoginFail: (String?) -> Unit){
+        serverService.logIn(data).enqueue(ResponseHandler(onLoginSuccess, onLoginFail))
     }
 
-    private class ResponseHandler(callback: (String?) -> Unit): retrofit2.Callback<String>{
-        val onResult: (String?) -> Unit = callback
+    private class ResponseHandler(onSuccess: (String) -> Unit, onFail: (String?) -> Unit): retrofit2.Callback<String>{
+        val fail: (String?) -> Unit = onFail
+        val success: (String) -> Unit = onSuccess
+
         override fun onResponse(call: Call<String>?, response: Response<String>?) {
-            if(response == null) onResult("no response from server")
+            if(response == null) fail("no response from server")
             else if (response.code() != 201) {
                 if (response.code() == 422)
                     response.errorBody().string()
-                else onResult("Unknown error occurred")
+                else fail("Unknown error occurred")
             }
-            else onResult(null)
+            else success(response.body().toString())
         }
 
         override fun onFailure(call: Call<String>?, t: Throwable?) {
-            onResult("Could not reach server")
+            fail("Could not reach server")
         }
 
     }

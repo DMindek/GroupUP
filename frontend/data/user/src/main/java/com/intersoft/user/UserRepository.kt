@@ -36,16 +36,18 @@ class UserRepository: IUserRepository {
     }
 
     override fun logIn(username: String, password: String, onLoginSuccess: () -> Unit, onLoginError: (String) -> Unit) {
-        val data = JSONObject().put("username", username)
+        val data = JSONObject()
+            .put("username", username)
             .put("password", password)
 
-        NetworkManager.logIn(data.toString()){
+        NetworkManager.logIn(data.toString(), onLoginSuccess = {
+            //TODO parse JSON and call onLoginSuccess with result
+        }){
             if(it != null){
                 if(it[0] != '{') {
                     onLoginError(it)
                 }
             }
-            onLoginSuccess()
         }
     }
 }
