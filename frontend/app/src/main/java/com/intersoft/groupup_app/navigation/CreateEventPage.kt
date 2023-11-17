@@ -68,24 +68,27 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         TextInputField(label = "Name") { name = it }
         TextInputField(label = "Description") { description = it }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+        ) {
+            LabelText(text = "Date",)
+            if (showDatePicker.value) {
+                GeneralDatePicker(
+                    onDismiss = { showDatePicker.value = false },
+                    onConfirm = {
+                        showDatePicker.value = false
+                        selectedDateText = dateTimeManager.formatMilisDatetoString(it)
 
-        LabelText(text = "Date")
-        if (showDatePicker.value) {
-            GeneralDatePicker(
-                onDismiss = { showDatePicker.value = false },
-                onConfirm = {
-                    showDatePicker.value = false
-                    selectedDateText = dateTimeManager.formatMilisDatetoString(it)
+                    }
+                )
+            }
 
-                }
-            )
+            DisabledTextField(selectedDateText)
+            PrimaryButton(buttonText = "Choose date") { showDatePicker.value = true }
         }
 
-        DisabledTextField(selectedDateText)
-        PrimaryButton(buttonText = "Choose date") { showDatePicker.value = true }
-
-        TextInputField(label = "Duration") { duration = it }
+        TextInputField(label = "Duration") { duration = it } //TODO MAKE DURATION TIMERANGE PICKER
         TextInputField(label = "Max Participants") { numberOfParticipants = it }
         TextInputField(label = "location") { location = it }
         ErrorText(text = errorText)
