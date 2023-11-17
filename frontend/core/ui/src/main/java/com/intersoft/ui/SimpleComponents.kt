@@ -31,9 +31,9 @@ import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralDatePicker(onDismiss: () -> Unit, onConfirm: (Long?) -> Unit){
+fun GeneralDatePicker(onDismiss: () -> Unit, onConfirm: (Long) -> Unit){
     val datePickerState = rememberDatePickerState(initialSelectedDateMillis = Instant.now().toEpochMilli())
-    val selectedDate = datePickerState.selectedDateMillis
+    val selectedDate = datePickerState.selectedDateMillis!!
 
     DatePickerDialog(
         shape = RoundedCornerShape(6.dp),

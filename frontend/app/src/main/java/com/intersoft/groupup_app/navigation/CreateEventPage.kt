@@ -23,6 +23,7 @@ import com.intersoft.ui.LabelText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
+import com.intersoft.utils.DateTimeManager
 
 @Composable
 fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit) {
@@ -50,10 +51,11 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableStateOf("")
     }
 
-    var showDatePicker = remember {
+    val showDatePicker = remember {
         mutableStateOf(false)
     }
 
+    val dateTimeManager = DateTimeManager()
 
 
     Column(
@@ -74,7 +76,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
                 onDismiss = { showDatePicker.value = false },
                 onConfirm = {
                     showDatePicker.value = false
-                    selectedDateText = it.toString()
+                    selectedDateText = dateTimeManager.formatMilisDatetoString(it)
 
                 }
             )
