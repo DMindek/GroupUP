@@ -31,16 +31,30 @@ import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralDatePicker(onDismiss: () -> Unit, onConfirm: () -> Unit){
+fun GeneralDatePicker(onDismiss: () -> Unit, onConfirm: (Long?) -> Unit){
     val datePickerState = rememberDatePickerState(initialSelectedDateMillis = Instant.now().toEpochMilli())
+    val selectedDate = datePickerState.selectedDateMillis
+
     DatePickerDialog(
         shape = RoundedCornerShape(6.dp),
         onDismissRequest = onDismiss,
         confirmButton = {
-           onConfirm()
+            Button(onClick = {
+                onConfirm(selectedDate)
+            }
+
+            ) {
+                Text(text = "OK")
+            }
         },
         dismissButton = {
-            onDismiss
+            Button(onClick = {
+                onDismiss()
+            }
+
+            ) {
+                Text(text = "Cancel")
+            }
         }
     ){
         DatePicker(
@@ -93,6 +107,21 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
             }
         )
     }
+}
+
+@Composable
+fun DisabledTextField(textvalue:String, visualTransformation: VisualTransformation = VisualTransformation.None){
+        BasicTextField(textvalue, {},
+            singleLine = true,
+            visualTransformation = visualTransformation,
+            textStyle = TextStyle(fontSize = 25.sp),
+            modifier = Modifier.background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark)),
+            decorationBox = {innerTextField ->
+                Row(modifier = Modifier.fillMaxWidth()){}
+                innerTextField()
+            },
+            enabled = false
+        )
 }
 
 @Composable
