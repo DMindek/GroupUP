@@ -28,7 +28,6 @@ import com.intersoft.ui.MultiLineTextInputField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
-import com.intersoft.utils.DateTimeManager
 
 @Composable
 fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit) {
@@ -52,10 +51,6 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableStateOf("")
     }
 
-    var selectedDateText by remember {
-        mutableStateOf("")
-    }
-
     val selectedStartTime by remember {
         mutableStateOf("")
     }
@@ -64,9 +59,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableStateOf("")
     }
 
-    val showDatePicker = remember {
-        mutableStateOf(false)
-    }
+
 
     val showStartTimePicker = remember {
         mutableStateOf(false)
@@ -76,7 +69,6 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableStateOf(false)
     }
 
-    val dateTimeManager = DateTimeManager()
 
 
     Column(
@@ -88,26 +80,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         TitleText(text = "Create an event")
         TextInputField(label = "Name") { name = it }
         MultiLineTextInputField("Description") {description = it}
-
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp)
-        ) {
-            LabelText(text = "Date",)
-            if (showDatePicker.value) {
-                GeneralDatePicker(
-                    onDismiss = { showDatePicker.value = false },
-                    onConfirm = {
-                        showDatePicker.value = false
-                        selectedDateText = dateTimeManager.formatMilisDatetoString(it)
-
-                    }
-                )
-            }
-
-            DisabledTextField(selectedDateText)
-            PrimaryButton(buttonText = "Choose date") { showDatePicker.value = true }
-        }
+        GeneralDatePicker("Event Date")
 
 
         Column(modifier = Modifier
@@ -164,7 +137,6 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
 
 
         CounterElement(label = "Max Participants") {numberOfParticipants = it}
-
         TextInputField(label = "location") { location = it }
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
