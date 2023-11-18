@@ -35,9 +35,9 @@ class UserRepository: IUserRepository {
         }
     }
 
-    override fun logIn(username: String, password: String, onLoginSuccess: () -> Unit, onLoginError: (String) -> Unit) {
+    override fun logIn(email: String, password: String, onLoginSuccess: () -> Unit, onLoginError: (String) -> Unit) {
         val data = JSONObject()
-            .put("username", username)
+            .put("email", email)
             .put("password", password)
 
         NetworkManager.logIn(data.toString(), onLoginSuccess = {

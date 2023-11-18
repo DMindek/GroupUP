@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.LoginManager
 import com.intersoft.groupup_app.R
@@ -25,7 +26,7 @@ import com.intersoft.ui.TitleText
 
 @Composable
 fun LoginPage(onLogin: () -> Unit, onRegisterClick: () -> Unit){
-    var username by remember {
+    var email by remember {
         mutableStateOf("")
     }
     var password by remember {
@@ -47,8 +48,8 @@ fun LoginPage(onLogin: () -> Unit, onRegisterClick: () -> Unit){
             contentDescription = "app logo",
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
-        TextInputField(label = "username") { username = it }
-        TextInputField(label = "password") { password = it }
+        TextInputField(label = "e-mail") { email = it }
+        TextInputField(label = "password", visualTransformation = PasswordVisualTransformation()) { password = it }
         ErrorText(text = errorText)
 
         PrimaryButton(buttonText = "Sign in",
@@ -56,7 +57,7 @@ fun LoginPage(onLogin: () -> Unit, onRegisterClick: () -> Unit){
                 .width(200.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            LoginManager.logIn(username, password, onLogin){
+            LoginManager.logIn(email, password, onLogin){
                 errorText = it
             }
         }

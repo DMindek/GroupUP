@@ -10,7 +10,16 @@ object LoginManager {
         userRepository = repo
     }
 
-    fun logIn(username: String, password: String, onLoginSuccess: () -> Unit, onLoginFail: (String) -> Unit){
-        UserRepository().logIn(username, password, onLoginSuccess, onLoginFail)
+    fun logIn(email: String, password: String, onLoginSuccess: () -> Unit, onLoginFail: (String) -> Unit){
+        val error = validateInput(email, password)
+
+        if(error != null)onLoginFail(error)
+        else UserRepository().logIn(email, password, onLoginSuccess, onLoginFail)
+    }
+
+    private fun validateInput(email: String, password: String): String?{
+        if(email.isEmpty()) return "Please enter an e-mail"
+        if(password.isEmpty()) return "Please enter a password"
+        return null
     }
 }
