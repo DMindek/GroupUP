@@ -38,10 +38,46 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import java.time.Instant
+import com.intersoft.utils.DateTimeManager
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralDatePicker(onDismiss: () -> Unit, onConfirm: (Long) -> Unit){
+fun GeneralDatePicker(label: String){
+    val showDatePicker = remember {
+        mutableStateOf(false)
+    }
+    var selectedDateText by remember {
+        mutableStateOf("")
+    }
+
+    val dateTimeManager = DateTimeManager()
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp)
+    ) {
+        LabelText(text = label,)
+        if (showDatePicker.value) {
+            SetupDatePickerDialogue(
+                onDismiss = { showDatePicker.value = false },
+                onConfirm = {
+                    showDatePicker.value = false
+                    selectedDateText = dateTimeManager.formatMilisDatetoString(it)
+
+                }
+            )
+        }
+
+        DisabledTextField(selectedDateText)
+        PrimaryButton(buttonText = "Choose date") { showDatePicker.value = true }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SetupDatePickerDialogue(onDismiss: () -> Unit, onConfirm: (Long) -> Unit){
     val datePickerState = rememberDatePickerState(initialSelectedDateMillis = Instant.now().toEpochMilli())
     val selectedDate = datePickerState.selectedDateMillis!!
 
@@ -76,13 +112,15 @@ fun GeneralDatePicker(onDismiss: () -> Unit, onConfirm: (Long) -> Unit){
     }
 }
 
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GeneralTimePicker(onCancel: () -> Unit, onConfirm: () -> Unit){
     val state = rememberTimePickerState(is24Hour = true)
 
 
-    TimePickerDialog(onCancel = { onCancel()}, onConfirm = { onConfirm() }) {
+    SetupTimePickerDialogue(onCancel = { onCancel()}, onConfirm = { onConfirm() }) {
         TimePicker(
             state = state,
             modifier = Modifier.padding(16.dp)
@@ -91,7 +129,7 @@ fun GeneralTimePicker(onCancel: () -> Unit, onConfirm: () -> Unit){
 }
 
 @Composable
-fun TimePickerDialog(
+private fun SetupTimePickerDialogue(
     title: String = "Select Time",
     onCancel: () -> Unit,
     onConfirm: () -> Unit,
