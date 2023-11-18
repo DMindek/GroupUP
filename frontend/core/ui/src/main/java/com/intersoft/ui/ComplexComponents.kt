@@ -28,7 +28,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.time.Instant
-import androidx.constraintlayout.compose.ConstraintLayoutScope.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -109,7 +108,7 @@ fun CounterElement(label: String, action: (String) -> Unit = {}){
             Spacer(modifier = Modifier.width(15.dp))
 
             Button(
-                onClick ={count--} ,
+                onClick ={if(count>0)count--} ,
                 colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.primary),
                 contentColor = colorResource(R.color.primaryText),
