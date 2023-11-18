@@ -16,10 +16,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.ErrorText
 import com.intersoft.ui.GeneralDatePicker
 import com.intersoft.ui.LabelText
+import com.intersoft.ui.MultiLineTextInputField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
@@ -66,7 +68,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
     ) {
         TitleText(text = "Create an event")
         TextInputField(label = "Name") { name = it }
-        TextInputField(label = "Description") { description = it }
+        MultiLineTextInputField("Description") {description = it}
 
         Column(modifier = Modifier
             .fillMaxSize()
@@ -89,7 +91,8 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         }
 
         TextInputField(label = "Duration") { duration = it } //TODO MAKE DURATION TIMERANGE PICKER
-        TextInputField(label = "Max Participants") { numberOfParticipants = it }
+        CounterElement(label = "Max Participants") {numberOfParticipants = it}
+
         TextInputField(label = "location") { location = it }
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
