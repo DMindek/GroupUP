@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: %i[ show update destroy ]
   before_action :authenticate_user, except: [:create, :login, :index]
+  before_action :set_user, only: %i[ show update destroy ]
 
   # GET /users
   def index
@@ -42,13 +42,18 @@ class Api::V1::UsersController < ApplicationController
   # POST /login
   def login
     @user = User.find_by(email: params[:email])
-    if @user&.authenticate(params[:password])
+    if not @user
+      render json: { error: 'Incorrect email or password' }, status: :unprocessable_entity
+    elsif @user&.authenticate(params[:password])
       render json: {
         token: JWT.encode({ user_id: @user.id }, Rails.application.credentials.secret_key_base[0]),
-        email: @user.email
+        email: @user.email,
+        id: @user.id,
+        username: @user.username,
+        location: @user.location
       }
     else
-      render json: { error: 'unauthorized' }, status: :unauthorized
+      render json: { error: 'Incorrect email or password' }, status: :unprocessable_entity
     end
   end
 
