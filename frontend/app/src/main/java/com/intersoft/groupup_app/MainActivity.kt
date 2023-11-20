@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
+import com.intersoft.groupup_app.navigation.UserInformationPage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "registration"){
+                    NavHost(navController = navController, startDestination = "user_information"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -41,6 +42,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("login"){
                             LoginPage()
+                        }
+                        composable("home"){
+                            Text("Home page")
+                        }
+                        composable("user_information") {
+                            UserInformationPage()
                         }
                     }
                 }
