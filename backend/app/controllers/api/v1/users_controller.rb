@@ -11,7 +11,7 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: @user.to_json(except: [:password_digest, :created_at, :updated_at])
+    render json: show_user(@user)
   end
 
   # POST /users
@@ -27,8 +27,8 @@ class Api::V1::UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
-      render json: @user
+    if @user.update(user_update_params)
+      render json: show_user(@user)
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -63,10 +63,19 @@ class Api::V1::UsersController < ApplicationController
       @user = User.find(params[:id])
     end
 
+    def show_user(user)
+      return user.to_json(except: [:password_digest, :created_at, :updated_at])
+    end
+
+
 
     # Only allow a list of trusted parameters through.
     def user_params
       params.require(:user).permit(:username, :location, :email, :password)
+    end
+
+    def user_update_params
+      params.require(:user).permit(:username, :location, :email)
     end
 
     def authenticate_user
