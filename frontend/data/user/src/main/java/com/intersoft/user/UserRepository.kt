@@ -34,10 +34,41 @@ class UserRepository: IUserRepository {
             else if(error.password != null) onRegistrationError(error.password[0])
         }
     }
+
+    override fun editUser(user: UserModel, onEditError: (String) -> Unit) {
+        val userJson = JSONObject().put("user", JSONObject()
+            .put("username", user.username)
+            .put("email", user.email)
+            .put("location", user.location)
+        )
+
+        val res = NetworkManager.editUser(userJson.toString())
+        if(res != null){
+            if(res[0] != '{') {
+                onEditError(res)
+                return
+            }
+
+            val error: EditUserInfoErrorResponse
+            try {
+                error = Gson().fromJson(res, EditUserInfoErrorResponse::class.java)
+            }catch (e: Exception){
+                onEditError("Server returned unknown error")
+                return
+            }
+
+            if(error.error != null)
+                onEditError(error.error)
+        }
+    }
 }
 
-class RegistrationErrorResponse{
+class RegistrationErrorResponse {
     val email: Array<String>? = null
     val username: Array<String>? = null
     val password: Array<String>? = null
+}
+
+class EditUserInfoErrorResponse {
+    val error: String? = null
 }

@@ -26,4 +26,23 @@ object NetworkManager {
             else "Unknown error occurred"
         } else null
     }
+
+    fun editUser(user: String): String?{
+        val res: retrofit2.Response<String>
+        //TODO get id and authToken from somewhere
+        val id = "0"
+        val authToken = ""
+
+        try{
+            res = serverService.editUser( id,user, authToken).execute()
+        }catch (e: Exception){
+            return "Could not reach server"
+        }
+
+        return if(res.code() != 200){
+            if(res.code() == 422)
+                res.errorBody().string()
+            else "Unknown error occurred"
+        } else null
+    }
 }

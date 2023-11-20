@@ -14,4 +14,14 @@ class MockUserRepository : IUserRepository {
             onRegistrationError("User already exists")
         }
     }
+
+    override fun editUser(user: UserModel, onEditError: (String) -> Unit) {
+        val index = userList.indexOfFirst { it.username == user.username }
+        if(index == -1){
+            onEditError("User does not exist")
+        }
+        else{
+            userList[index] = user
+        }
+    }
 }

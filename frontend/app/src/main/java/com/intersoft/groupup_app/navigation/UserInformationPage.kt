@@ -27,10 +27,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.intersoft.auth.EditUserInfoManager
 import com.intersoft.groupup_app.R
 import com.intersoft.ui.IconInformationText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
+import com.intersoft.user.UserModel
 
 data class UserData(
     val userName: String,
@@ -180,7 +182,17 @@ fun EditUserDialog(
             } },
         confirmButton = {
             PrimaryButton(buttonText ="Save") {
-                onSave(editedName.value, editedEmail.value, editedLocation.value)
+                EditUserInfoManager.editUser(
+                    UserModel(
+                        editedName.value,
+                        editedEmail.value,
+                        "",
+                        editedLocation.value
+                    ),
+                    onEditSuccess = {  onSave(editedName.value, editedEmail.value, editedLocation.value) },
+                    onEditFail = { onDismiss() }
+                )
+
             } }
 
         )
