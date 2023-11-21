@@ -15,10 +15,10 @@ class MockUserRepository : IUserRepository {
         }
     }
 
-    override fun logIn(username: String, password: String, onLoginSuccess: () -> Unit, onLoginError: (String) -> Unit) {
-        if(userList.find { user -> (user.username == username) || (user.password == password) } == null){
+    override fun logIn(email: String, password: String, onLoginSuccess: (LoginSuccessResponse) -> Unit, onLoginError: (String) -> Unit) {
+        if(userList.find { user -> (user.email == email) || (user.password == password) } == null){
             onLoginError("Incorrect credentials")
         }
-        else onLoginSuccess()
+        else onLoginSuccess(LoginSuccessResponse())
     }
 }
