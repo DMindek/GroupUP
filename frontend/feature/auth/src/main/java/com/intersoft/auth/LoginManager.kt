@@ -47,6 +47,7 @@ object LoginManager {
             putString(getString(context, R.string.shared_prefs_user_username), AuthContext.username)
             putString(getString(context, R.string.shared_prefs_user_email), AuthContext.email)
             putString(getString(context, R.string.shared_prefs_user_location), AuthContext.location)
+            apply()
         }
     }
 }
