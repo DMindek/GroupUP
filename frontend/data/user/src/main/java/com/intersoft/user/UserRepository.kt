@@ -35,17 +35,37 @@ class UserRepository: IUserRepository {
         }
     }
 
-    override fun logIn(email: String, password: String, onLoginSuccess: () -> Unit, onLoginError: (String) -> Unit) {
+    override fun logIn(email: String, password: String, onLoginSuccess: (LoginSuccessResponse) -> Unit, onLoginError: (String) -> Unit) {
         val data = JSONObject()
             .put("email", email)
             .put("password", password)
 
-        NetworkManager.logIn(data.toString(), onLoginSuccess = {
-            //TODO parse JSON and call onLoginSuccess with result
+        NetworkManager.logInUser(data.toString(), onLoginSuccess = {
+            val res: LoginSuccessResponse
+            try {
+                res = Gson().fromJson(it, LoginSuccessResponse::class.java)
+            }catch (e: Exception){
+                onLoginError("Could not parse server response")
+                return@logInUser
+            }
+
+            onLoginSuccess(res)
         }){
             if(it != null){
                 if(it[0] != '{') {
                     onLoginError(it)
+                }
+                else{
+                    val error: SingleError
+                    try {
+                        error = Gson().fromJson(it, SingleError::class.java)
+                    }catch (e: Exception){
+                        onLoginError("Server returned unknown error")
+                        return@logInUser
+                    }
+                    if(error.error != null){
+                        onLoginError(error.error)
+                    }
                 }
             }
         }
@@ -56,4 +76,16 @@ class RegistrationErrorResponse{
     val email: Array<String>? = null
     val username: Array<String>? = null
     val password: Array<String>? = null
+}
+
+class SingleError{
+    val error: String? = null
+}
+
+class LoginSuccessResponse{
+    val token: String? = null
+    val email: String? = null
+    val id: Int? = null
+    val username: String? = null
+    val location: String? = null
 }

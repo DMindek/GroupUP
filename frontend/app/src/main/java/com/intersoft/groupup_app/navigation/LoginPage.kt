@@ -1,5 +1,6 @@
 package com.intersoft.groupup_app.navigation
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,7 @@ import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
 
 @Composable
-fun LoginPage(onLogin: () -> Unit, onRegisterClick: () -> Unit){
+fun LoginPage(context: Context, onLogin: () -> Unit, onRegisterClick: () -> Unit){
     var email by remember {
         mutableStateOf("")
     }
@@ -57,7 +58,7 @@ fun LoginPage(onLogin: () -> Unit, onRegisterClick: () -> Unit){
                 .width(200.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            LoginManager.logIn(email, password, onLogin){
+            LoginManager.logIn(email, password, context, onLogin){
                 errorText = it
             }
         }

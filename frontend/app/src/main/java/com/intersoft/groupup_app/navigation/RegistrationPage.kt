@@ -12,7 +12,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.RegistrationManager
 import com.intersoft.ui.ErrorText
@@ -58,15 +57,11 @@ fun RegistrationPage(onRegister: () -> Unit){
         PrimaryButton(buttonText = "Sign up", modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(top = 30.dp)) {
-            RegistrationManager.registerUser(UserModel(username, email, password, location), passwordRetype, onRegister) {
-                errorText = it
-            }
+            RegistrationManager.registerUser(UserModel(username, email, password, location), passwordRetype,
+                onRegisterSuccess = onRegister,
+                onRegisterFail = {
+                    errorText = it
+            })
         }
     }
-}
-
-@Preview
-@Composable
-fun RegistrationPagePreview(){
-    RegistrationPage{}
 }

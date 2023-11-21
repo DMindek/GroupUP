@@ -29,26 +29,26 @@ object NetworkManager {
         } else null
     }
 
-    fun logIn(data: String, onLoginSuccess: (String) -> Unit, onLoginFail: (String?) -> Unit){
-        serverService.logIn(data).enqueue(ResponseHandler(onLoginSuccess, onLoginFail))
+    fun logInUser(data: String, onLoginSuccess: (String) -> Unit, onLoginFail: (String?) -> Unit){
+        serverService.logIn(data).enqueue(ResponseHandler(200, 401, onLoginSuccess, onLoginFail))
     }
 
-    private class ResponseHandler(onSuccess: (String) -> Unit, onFail: (String?) -> Unit): retrofit2.Callback<String>{
-        val fail: (String?) -> Unit = onFail
-        val success: (String) -> Unit = onSuccess
+    private class ResponseHandler(val successCode: Int, val errorCode: Int,
+                                  val onSuccess: (String) -> Unit,
+                                  val onFail: (String?) -> Unit): retrofit2.Callback<String>{
 
         override fun onResponse(call: Call<String>?, response: Response<String>?) {
-            if(response == null) fail("no response from server")
-            else if (response.code() != 201) {
-                if (response.code() == 422)
+            if(response == null) onFail("no response from server")
+            else if (response.code() != successCode) {
+                if (response.code() == errorCode)
                     response.errorBody().string()
-                else fail("Unknown error occurred")
+                else onFail("Unknown error occurred")
             }
-            else success(response.body().toString())
+            else onSuccess(response.body().toString())
         }
 
         override fun onFailure(call: Call<String>?, t: Throwable?) {
-            fail("Could not reach server")
+            onFail("Could not reach server")
         }
 
     }
