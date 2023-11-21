@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkManager {
     private var retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("https://localhost:3000")
+        .baseUrl("http://10.0.2.2:3000/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -16,17 +16,24 @@ object NetworkManager {
     fun registerUser(user: String): String?{
         val res: Response<String>
 
-        try{
-            res = serverService.createUser(user).execute()
-        }catch (e: Exception){
-            return "Could not reach server"
-        }
+        val res = serverService.createUser(user)
+        Log.d("NetworkManager", "Request ${res.request().body()}")
 
-        return if(res.code() != 201){
-            if(res.code() == 422)
-                res.errorBody().string()
-            else "Unknown error occurred"
-        } else null
+        res.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+                Log.d("NetworkManager", "Response: ${response?.body()}")
+                if(response?.code() != 201){
+                    if(response?.code() == 422)
+                        requestListener.onError(response.errorBody().string())
+                    else requestListener.onError("Unknown error occurred")
+                } else requestListener.onSuccess(response.body()!!)
+            }
+
+            override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
+                Log.d("NetworkManager", "Error: ${t?.message}")
+                requestListener.onError("Broken connection")
+            }
+        })
     }
 
     fun logInUser(data: String, onLoginSuccess: (String) -> Unit, onLoginFail: (String?) -> Unit){
