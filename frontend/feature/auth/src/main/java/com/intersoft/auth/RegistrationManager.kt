@@ -18,15 +18,13 @@ object RegistrationManager {
             return
         }
 
-        userRepository.addUser(user){
+        userRepository.addUser(user, onRegisterSuccess){
             errors = it
-        }
-        if(errors != ""){
-            onRegisterFail(errors)
-            return
+            if(errors != ""){
+                onRegisterFail(errors)
+            }
         }
 
-        onRegisterSuccess()
     }
 
     private fun validateInput(user: UserModel, passwordRetype: String): String{

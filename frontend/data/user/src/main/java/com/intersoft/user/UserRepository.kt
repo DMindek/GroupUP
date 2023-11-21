@@ -1,38 +1,52 @@
 package com.intersoft.user
 
+import android.util.Log
 import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
+import com.intersoft.network.RequestListener
+import com.intersoft.network.models.responses.RegisterBody
+import com.intersoft.network.models.responses.UserData
 import org.json.JSONObject
 
 class UserRepository: IUserRepository {
-    override fun addUser(newUser: UserModel, onRegistrationError: (String) -> Unit) {
-        val user = JSONObject().put("user", JSONObject()
-            .put("username", newUser.username)
-            .put("email", newUser.email)
-            .put("password", newUser.password)
-            .put("location", newUser.location)
-        )
 
-        val res = NetworkManager.registerUser(user.toString())
-        if(res != null){
-            if(res[0] != '{') {
-                onRegistrationError(res)
-                return
+    override fun addUser(
+        newUser: UserModel,
+        onRegisterSucceed: () -> Unit,
+        onRegistrationError: (String) -> Unit
+    ) {
+        Log.d("UserRepository", newUser.toString())
+        val user = UserData(newUser.username, newUser.email, newUser.password, newUser.location)
+        val res = NetworkManager.registerUser(RegisterBody(user), object: RequestListener {
+            override fun <T> onSuccess(data: T) {
+                Log.d("UserRepository", "User added successfully")
+                onRegisterSucceed()
             }
 
-            val error: RegistrationErrorResponse
-            try {
-                error = Gson().fromJson(res, RegistrationErrorResponse::class.java)
-            }catch (e: Exception){
-                onRegistrationError("Server returned unknown error")
-                return
+            override fun onError(error: String) {
+                Log.d("UserRepository", "Error occurred: $error")
+                if(error != null){
+                    if(error[0] != '{') {
+                        onRegistrationError(error)
+                        return
+                    }
+
+                    val errorFinal: RegistrationErrorResponse
+                    try {
+                        errorFinal = Gson().fromJson(error, RegistrationErrorResponse::class.java)
+                    }catch (e: Exception){
+                        onRegistrationError("Server returned unknown error")
+                        return
+                    }
+
+                    if(errorFinal.email != null)
+                        onRegistrationError(errorFinal.email[0])
+                    else if(errorFinal.username != null) onRegistrationError(errorFinal.username[0])
+                    else if(errorFinal.password != null) onRegistrationError(errorFinal.password[0])
+                }
             }
 
-            if(error.email != null)
-                onRegistrationError(error.email[0])
-            else if(error.username != null) onRegistrationError(error.username[0])
-            else if(error.password != null) onRegistrationError(error.password[0])
-        }
+        })
     }
 }
 
