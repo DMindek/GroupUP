@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                         composable("login"){
                             LoginPage(
                                 context =LocalContext.current,
-                                onLogin = { navController.navigate("main") },
+                                onLogin = { navController.navigate("user_information") },
                                 onRegisterClick = { navController.navigate("registration") }
                             )
                         }

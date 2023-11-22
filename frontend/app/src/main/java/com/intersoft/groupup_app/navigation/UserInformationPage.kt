@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.intersoft.auth.AuthContext
 import com.intersoft.auth.EditUserInfoManager
 import com.intersoft.groupup_app.R
 import com.intersoft.ui.IconInformationText
@@ -35,10 +36,10 @@ import com.intersoft.ui.TextInputField
 import com.intersoft.user.UserModel
 
 data class UserData(
-    val userName: String,
-    val userEmail: String,
-    val userLocation: String,
-    val userImage: Int
+    var userName: String,
+    var userEmail: String,
+    var userLocation: String,
+    var userImage: Int
 )
 
 @Composable
@@ -50,6 +51,16 @@ fun UserInformationPage(){
         userLocation = "New York",
         userImage = R.drawable.icon
     )
+
+    if(AuthContext.token == null) return
+    else{
+        userData.userName = AuthContext.username!!
+        userData.userEmail = AuthContext.email!!
+        userData.userLocation = AuthContext.location!!
+
+    }
+
+
 
     var isEditDialogVisible by remember { mutableStateOf(false) }
     var editedUserName by remember { mutableStateOf(userData.userName) }

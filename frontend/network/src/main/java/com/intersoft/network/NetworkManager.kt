@@ -82,7 +82,7 @@ object NetworkManager {
 
         return if(res.code() != 200){
             if(res.code() == 422)
-                res.errorBody().string()
+                res.errorBody()?.string()
             else "Unknown error occurred"
         } else null
     }

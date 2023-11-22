@@ -29,6 +29,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -47,21 +48,6 @@ fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () 
      }
 }
 
-@Composable
-fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
-    Button(
-        onClick = action,
-        modifier = modifier,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.secondary),
-            contentColor = colorResource(R.color.secondaryText),
-            disabledContainerColor = colorResource(R.color.secondary),
-            disabledContentColor = colorResource(R.color.secondaryText)
-        )
-    ){
-        Text(text = buttonText)
-    }
-}
 
 @Composable
 fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
