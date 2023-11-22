@@ -1,6 +1,7 @@
 package com.intersoft.user
 
 interface IUserRepository {
-    fun addUser(newUser: UserModel, onRegistrationError: (String) -> Unit)
+    fun addUser(newUser: UserModel, onRegistrationSucceed: ()->Unit ,onRegistrationError: (String) -> Unit)
+    fun logIn(email: String, password: String, onLoginSuccess: (LoginSuccessResponse) -> Unit, onLoginError: (String) -> Unit)
     fun editUser(user: UserModel, onEditError: (String) -> Unit)
 }
