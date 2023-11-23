@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :users
       post "/login", to: "users#login"
       post "/register", to: "users#create"
+      post "/users/:id/edit", to: "users#update"
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
