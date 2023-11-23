@@ -2,21 +2,29 @@ package com.intersoft.groupup_app.navigation
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.intersoft.auth.AuthContext
 import com.intersoft.auth.EditUserInfoManager
 import com.intersoft.groupup_app.R
@@ -110,7 +119,9 @@ fun UserInformationPage(){
             userEmail = editedUserEmail,
             userLocation = editedUserLocation,
             error = error,
+            showDialog = isEditDialogVisible,
             onDismiss = {
+                error = ""
                 isEditDialogVisible = false
             },
             onSave = {name, email, location ->
@@ -188,53 +199,78 @@ fun EditUserDialog(
     userEmail: String,
     userLocation: String,
     error: String,
+    showDialog : Boolean ,
     onDismiss: () -> Unit,
     onSave: (String, String, String) -> Unit
 ) {
     val editedName = remember { mutableStateOf(userName) }
     val editedEmail = remember { mutableStateOf(userEmail) }
     val editedLocation = remember { mutableStateOf(userLocation) }
-    var error by remember { mutableStateOf("") }
 
-    AlertDialog(
+    if(!showDialog) return
+    Dialog(
         onDismissRequest = {
             onDismiss()
-                           },
-        title = { Text(text = "Edit user information") },
-        text = {
-            Column {
-                TextInputField(label = "Name", placeholder = editedName.value) {
-                    editedName.value = it
-                }
-                TextInputField(label = "Email", placeholder = editedEmail.value) {
-                    editedEmail.value = it
-                }
-                TextInputField(label = "Location", placeholder = editedLocation.value) {
-                    editedLocation.value = it
-                }
-                ErrorText(text = error);
-            }
-        },
-        dismissButton = {
-            Button(onClick = { onDismiss() }) {
-                Text(text = "Cancel")
-            } },
-        confirmButton = {
-            PrimaryButton(buttonText ="Save") {
-                EditUserInfoManager.editUser(
-                    UserModel(
-                        editedName.value,
-                        editedEmail.value,
-                        "",
-                        editedLocation.value
-                    ),
-                    onEditSuccess = {  onSave(editedName.value, editedEmail.value, editedLocation.value) },
-                    onEditFail = { onDismiss() }
+        }
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ){
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = "Edit user information", style = MaterialTheme.typography.headlineSmall)
+
+                TextInputField(
+                    label = "Name",
+                    placeholder = editedName.value,
+                    action = { editedName.value = it },
                 )
+                TextInputField(
+                    label = "Email",
+                    placeholder = editedEmail.value,
+                    action = { editedEmail.value = it }
+                )
+                TextInputField(
+                    label = "Location",
+                    placeholder = editedLocation.value,
+                    action = { editedLocation.value = it }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                ErrorText(text = error)
 
-            } }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(
+                        onClick = {
+                            onDismiss()
+                        },
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
+                        Text(text = "Cancel")
+                    }
+                    Button(
+                        onClick = {
+                            // Perform your save operation here
+                            onSave(editedName.value, editedEmail.value, editedLocation.value)
+                        }
+                    ) {
+                        Text(text = "Save")
+                    }
+                }
+            }
+        }
 
-        )
+    }
 }
 
 @Preview
@@ -251,6 +287,7 @@ fun EditUserDialogPreview() {
         userEmail = "johnDoe@gmail.com",
         userLocation = "New York",
         error = "",
+        showDialog = true,
         onDismiss = {},
         onSave = { _, _, _ -> }
     )
