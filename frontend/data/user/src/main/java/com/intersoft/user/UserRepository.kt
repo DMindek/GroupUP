@@ -19,7 +19,7 @@ class UserRepository: IUserRepository {
         onRegistrationError: (String) -> Unit
     ) {
         Log.d("UserRepository", newUser.toString())
-        val user = UserData(newUser.username, newUser.email, newUser.password, newUser.location)
+        val user = UserData(newUser.username, newUser.email, newUser.location, newUser.password,)
         val res = NetworkManager.registerUser(RegisterBody(user), object: RequestListener {
             override fun <T> onSuccess(data: T) {
                 Log.d("UserRepository", "User added successfully")
@@ -84,9 +84,13 @@ class UserRepository: IUserRepository {
         onEditError: (String) -> Unit
     )
     {
-        val userData = UserData(user.username, user.email, null ,user.location)
+        val userData = UserData(user.username, user.email, user.location)
         val res = NetworkManager.editUser(EditBody(userData), user.id!!, user.token!!, onEditSuccess = {
-            val userModel = UserModel(it.user.username, it.user.email, "", it.user.location)
+            if(it == null){
+                onEditError("Server returned o body")
+                return@editUser
+            }
+            val userModel = UserModel(it.username, it.email, "", it.location)
             onEditSuccess(userModel)
         }, onEditError = {
             if(it != null){

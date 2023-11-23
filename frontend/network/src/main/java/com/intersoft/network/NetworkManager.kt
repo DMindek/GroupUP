@@ -5,6 +5,7 @@ import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
+import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,10 +50,11 @@ object NetworkManager {
     fun editUser(data: EditBody,
                  userId: Int,
                  authToken: String,
-                 onEditSuccess: (EditBody) -> Unit,
+                 onEditSuccess: (UserData) -> Unit,
                  onEditError: (String?) -> Unit ){
+
         serverService.editUser(userId, data, authToken).enqueue(
-            ResponseHandler<EditBody>(200, 422, onEditSuccess, onEditError)
+            ResponseHandler<UserData>(200, 422, onEditSuccess, onEditError)
         )
     }
 
@@ -63,8 +65,7 @@ object NetworkManager {
         override fun onResponse(call: Call<T>?, response: Response<T>?) {
             Log.d("NetworkManager", "Response: ${response?.message()}")
             if (response != null) {
-                if(!response.isSuccessful) onFail("no response from server")
-                else if (response.code() != successCode) {
+                if (response.code() != successCode) {
                     Log.d("NetworkManager", "Error: ${response.errorBody()?.string()}")
                     if (response.code() == errorCode)
                         onFail(response.errorBody()?.string())

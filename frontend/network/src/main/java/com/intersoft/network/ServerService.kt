@@ -4,6 +4,7 @@ import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
+import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -27,5 +28,5 @@ interface ServerService {
     fun editUser(
         @Path("id") id: Int,
         @Body user: EditBody,
-        @Header("Authorization") authToken: String ) : Call<EditBody>
+        @Header("Authorization") authToken: String ) : Call<UserData>
 }

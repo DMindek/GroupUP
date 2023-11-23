@@ -7,6 +7,6 @@ data class RegisterBody(
 data class UserData(
     val username: String,
     val email: String,
-    val password: String? = null,
-    val location: String
+    val location: String,
+    val password: String? = null
 )
