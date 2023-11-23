@@ -1,5 +1,6 @@
 package com.intersoft.network
 
+import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
@@ -24,7 +25,7 @@ interface ServerService {
     @Headers("Content-Type: application/json")
     @POST("api/v1/users/{id}/edit")
     fun editUser(
-        @Path("id") id: String,
-        @Body user: String,
-        @Header("Authorization") authToken: String ) : Call<String>
+        @Path("id") id: Int,
+        @Body user: EditBody,
+        @Header("Authorization") authToken: String ) : Call<EditBody>
 }

@@ -1,5 +1,6 @@
 package com.intersoft.groupup_app.navigation
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.auth.EditUserInfoManager
 import com.intersoft.groupup_app.R
+import com.intersoft.ui.ErrorText
 import com.intersoft.ui.IconInformationText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
@@ -60,12 +62,12 @@ fun UserInformationPage(){
 
     }
 
-
-
     var isEditDialogVisible by remember { mutableStateOf(false) }
     var editedUserName by remember { mutableStateOf(userData.userName) }
     var editedUserEmail by remember { mutableStateOf(userData.userEmail) }
     var editedUserLocation by remember { mutableStateOf(userData.userLocation) }
+    var error by remember { mutableStateOf("") }
+
 
     val onEditButtonPressed = {
         isEditDialogVisible = true
@@ -107,14 +109,37 @@ fun UserInformationPage(){
             userName = editedUserName,
             userEmail = editedUserEmail,
             userLocation = editedUserLocation,
+            error = error,
             onDismiss = {
                 isEditDialogVisible = false
             },
             onSave = {name, email, location ->
-                editedUserName = name
-                editedUserEmail = email
-                editedUserLocation = location
-                isEditDialogVisible = false
+                EditUserInfoManager.editUser(
+                    UserModel(
+                        name,
+                        email,
+                        "",
+                        location
+                    ),
+                    onEditSuccess = {
+                        Log.d("UserInformationPage", "User edited successfully")
+                        AuthContext.username = name
+                        AuthContext.email = email
+                        AuthContext.location = location
+                        editedUserName = name
+                        editedUserEmail = email
+                        editedUserLocation = location
+
+                        error = ""
+
+                        isEditDialogVisible = false
+                    },
+                    onEditFail = {
+                        error = it
+                        isEditDialogVisible = true
+                    }
+                )
+
             }
 
         )
@@ -162,12 +187,14 @@ fun EditUserDialog(
     userName: String,
     userEmail: String,
     userLocation: String,
+    error: String,
     onDismiss: () -> Unit,
     onSave: (String, String, String) -> Unit
 ) {
     val editedName = remember { mutableStateOf(userName) }
     val editedEmail = remember { mutableStateOf(userEmail) }
     val editedLocation = remember { mutableStateOf(userLocation) }
+    var error by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = {
@@ -185,6 +212,7 @@ fun EditUserDialog(
                 TextInputField(label = "Location", placeholder = editedLocation.value) {
                     editedLocation.value = it
                 }
+                ErrorText(text = error);
             }
         },
         dismissButton = {
@@ -222,6 +250,7 @@ fun EditUserDialogPreview() {
         userName = "John Doe",
         userEmail = "johnDoe@gmail.com",
         userLocation = "New York",
+        error = "",
         onDismiss = {},
         onSave = { _, _, _ -> }
     )

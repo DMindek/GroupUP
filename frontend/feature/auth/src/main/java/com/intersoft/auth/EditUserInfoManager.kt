@@ -12,19 +12,20 @@ object EditUserInfoManager {
     }
 
     fun editUser(user: UserModel, onEditSuccess: () -> Unit, onEditFail: (String) -> Unit){
-        var errors = ""
+        user.id = AuthContext.id
+        user.token = AuthContext.token
 
-        /* TODO Edit user integration
-        userRepository.editUser(user){s
-            errors = it
+        userRepository.editUser(user, onEditSuccess = { res ->
+            editAuth(res)
+            onEditSuccess()
+        }){
+            onEditFail(it)
         }
-        */
+    }
 
-        if(errors != ""){
-            onEditFail(errors)
-            return
-        }
-
-        onEditSuccess()
+    private fun editAuth(user: UserModel){
+        AuthContext.username = user.username
+        AuthContext.email = user.email
+        AuthContext.location = user.location
     }
 }

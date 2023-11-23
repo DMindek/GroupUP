@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
 import com.intersoft.network.RequestListener
+import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
@@ -77,31 +78,35 @@ class UserRepository: IUserRepository {
         }
     }
 
-    override fun editUser(user: UserModel, onEditError: (String) -> Unit) {
-        val userJson = JSONObject().put("user", JSONObject()
-            .put("username", user.username)
-            .put("email", user.email)
-            .put("location", user.location)
-        )
+    override fun editUser(
+        user: UserModel,
+        onEditSuccess: (UserModel) -> Unit,
+        onEditError: (String) -> Unit
+    )
+    {
+        val userData = UserData(user.username, user.email, null ,user.location)
+        val res = NetworkManager.editUser(EditBody(userData), user.id!!, user.token!!, onEditSuccess = {
+            val userModel = UserModel(it.user.username, it.user.email, "", it.user.location)
+            onEditSuccess(userModel)
+        }, onEditError = {
+            if(it != null){
+                if(it[0] != '{') {
+                    onEditError(it)
+                }
+                else{
+                    val error: SingleError
+                    try {
+                        error = Gson().fromJson(it, SingleError::class.java)
+                        if(error.error != null){
+                            onEditError(error.error)
+                        }
+                    }catch (e: Exception){
+                        onEditError("Server returned unknown error")
+                    }
 
-        val res = NetworkManager.editUser(userJson.toString())
-        if(res != null){
-            if(res[0] != '{') {
-                onEditError(res)
-                return
+                }
             }
-
-            val error: SingleError
-            try {
-                error = Gson().fromJson(res, SingleError::class.java)
-            }catch (e: Exception){
-                onEditError("Server returned unknown error")
-                return
-            }
-
-            if(error.error != null)
-                onEditError(error.error)
-        }
+        })
     }
 }
 

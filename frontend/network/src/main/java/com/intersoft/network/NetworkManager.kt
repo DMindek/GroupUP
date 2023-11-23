@@ -1,6 +1,7 @@
 package com.intersoft.network
 
 import android.util.Log
+import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
@@ -45,20 +46,37 @@ object NetworkManager {
         serverService.logIn(data).enqueue(ResponseHandler<LoginResponse>(200, 422, onLoginSuccess, onLoginFail))
     }
 
+    fun editUser(data: EditBody,
+                 userId: Int,
+                 authToken: String,
+                 onEditSuccess: (EditBody) -> Unit,
+                 onEditError: (String?) -> Unit ){
+        serverService.editUser(userId, data, authToken).enqueue(
+            ResponseHandler<EditBody>(200, 422, onEditSuccess, onEditError)
+        )
+    }
+
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,
                                   val onSuccess : (T) -> Unit,
                                   val onFail: (String?) -> Unit): Callback<T>{
 
         override fun onResponse(call: Call<T>?, response: Response<T>?) {
             Log.d("NetworkManager", "Response: ${response?.message()}")
-            if(response == null) onFail("no response from server")
-            else if (response.code() != successCode) {
-                if (response.code() == errorCode)
-                    onFail(response.errorBody()?.string())
+            if (response != null) {
+                if(!response.isSuccessful) onFail("no response from server")
+                else if (response.code() != successCode) {
+                    Log.d("NetworkManager", "Error: ${response.errorBody()?.string()}")
+                    if (response.code() == errorCode)
+                        onFail(response.errorBody()?.string())
+                    else onFail("Unknown error occurred")
+                } else {
+                    Log.d("NetworkManager", "Success: ${response.body()}")
+                    if(response.body() == null) onFail("no response from server")
+                    else onSuccess(response.body()!!)
+                }
 
-                else onFail("Unknown error occurred")
+
             }
-            else onSuccess(response.body()!!)
         }
 
         override fun onFailure(call: Call<T>?, t: Throwable?) {
@@ -68,22 +86,4 @@ object NetworkManager {
 
     }
 
-    fun editUser(user: String): String?{
-        val res: retrofit2.Response<String>
-        //TODO get id and authToken from somewhere
-        val id = "0"
-        val authToken = ""
-
-        try{
-            res = serverService.editUser( id,user, authToken).execute()
-        }catch (e: Exception){
-            return "Could not reach server"
-        }
-
-        return if(res.code() != 200){
-            if(res.code() == 422)
-                res.errorBody()?.string()
-            else "Unknown error occurred"
-        } else null
-    }
 }

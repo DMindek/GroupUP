@@ -20,20 +20,19 @@ class MockUserRepository : IUserRepository {
         }
     }
 
-    override fun editUser(user: UserModel, onEditError: (String) -> Unit) {
-        val index = userList.indexOfFirst { it.username == user.username }
-        if(index == -1){
-            onEditError("User does not exist")
-        }
-        else{
-            userList[index] = user
-        }
-    }
     
     override fun logIn(email: String, password: String, onLoginSuccess: (LoginSuccessResponse) -> Unit, onLoginError: (String) -> Unit) {
         if(userList.find { user -> (user.email == email) || (user.password == password) } == null){
             onLoginError("Incorrect credentials")
         }
         else onLoginSuccess(LoginSuccessResponse())
+    }
+
+    override fun editUser(
+        user: UserModel,
+        onEditSuccess: (UserModel) -> Unit,
+        onEditError: (String) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 }
