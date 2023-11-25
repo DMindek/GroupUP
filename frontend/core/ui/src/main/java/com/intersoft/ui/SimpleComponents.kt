@@ -4,11 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +18,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -40,11 +37,27 @@ fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () 
 }
 
 @Composable
+fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
+    Button(
+        onClick = action,
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.secondary),
+            contentColor = colorResource(R.color.secondaryText),
+            disabledContainerColor = colorResource(R.color.secondary),
+            disabledContentColor = colorResource(R.color.secondaryText)
+        )
+    ){
+        Text(text = buttonText)
+    }
+}
+
+@Composable
 fun TextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, action: (String) -> Unit = {}){
     var textValue by remember{
         mutableStateOf("")
     }
-    Column(modifier = Modifier.padding(20.dp)){
+    Column(){
         Text(text = label,
             fontSize = 16.sp,
             color = colorResource(R.color.foregroundText)
@@ -72,9 +85,9 @@ fun TitleText(text: String){
         text = text,
         fontSize = 40.sp,
         textAlign = TextAlign.Center,
+        lineHeight = 50.sp,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 30.dp)
     )
 }
 
