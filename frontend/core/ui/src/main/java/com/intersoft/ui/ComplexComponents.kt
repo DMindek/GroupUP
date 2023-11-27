@@ -134,7 +134,12 @@ fun DurationSelectionElement(){
     var selectedEndTimeText by remember {
         mutableStateOf("")
     }
-    var showTimerPickerButton = false
+
+    val selectedStartTimeList = mutableListOf<Int>()
+
+    var selectedStartTime by remember{
+        mutableStateOf(selectedStartTimeList)
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -158,6 +163,8 @@ fun DurationSelectionElement(){
                     TextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
+                            if(startTimeIsSet(selectedStartTimeText) && durationMinutes != -1)
+                                selectedEndTimeText = setEndTime(durationHours,durationMinutes,selectedStartTime)
                         } else{
                             durationHours = -1
                         }
@@ -177,6 +184,8 @@ fun DurationSelectionElement(){
                     TextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
+                            if(startTimeIsSet(selectedStartTimeText) && durationHours != -1)
+                                selectedEndTimeText = setEndTime(durationHours,durationMinutes,selectedStartTime)
                         } else{
                             durationMinutes = -1
                         }
@@ -206,19 +215,35 @@ fun DurationSelectionElement(){
                     LabelText(text = "End time:")
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    DisabledTextField("")
+
+
+                    DisabledTextField(selectedEndTimeText)
                 }
             }
         }
         if(showStartTimePicker.value)
             GeneralTimePicker(
                 onConfirm = {
-                    selectedStartTimeText = it.joinToString(separator = ":")
+                    selectedStartTime = it
+                    selectedStartTimeText = selectedStartTime.joinToString(separator = ":")
+                    if(durationIsSet(durationHours,durationMinutes))
+                    selectedEndTimeText = setEndTime(durationHours,durationMinutes,selectedStartTime)
                     showStartTimePicker.value = false
                 },
                 onCancel =  {showStartTimePicker.value = false})
 
     }
+}
+
+fun setEndTime(durationHours: Int, durationMinutes: Int, selectedStartTime: MutableList<Int>): String {
+    val endTimeHours = selectedStartTime[0] + durationHours
+    val endTimeMinutes = selectedStartTime[1] + durationMinutes
+    val endTime = mutableListOf<Int>(endTimeHours,endTimeMinutes)
+    return endTime.joinToString(separator = ":")
+}
+
+private fun startTimeIsSet(selectedStartTimeText: String): Boolean {
+    return selectedStartTimeText.isNotBlank()
 }
 
 private fun durationIsSet(hours: Int, minutes: Int): Boolean {
