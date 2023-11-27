@@ -1,6 +1,7 @@
 package com.intersoft.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -60,7 +61,9 @@ fun GeneralDatePicker(label: String){
         LabelText(text = label,)
         if (showDatePicker.value) {
             SetupDatePickerDialogue(
-                onDismiss = { showDatePicker.value = false },
+                onDismiss = {
+                    showDatePicker.value = false
+                },
                 onConfirm = {
                     showDatePicker.value = false
                     selectedDateText = dateTimeManager.formatMilisDatetoString(it)
@@ -112,22 +115,102 @@ private fun SetupDatePickerDialogue(onDismiss: () -> Unit, onConfirm: (Long) -> 
     }
 }
 
+@Composable
+fun DurationSelectionElement(){
 
+    val showStartTimePicker = remember {
+        mutableStateOf(false)
+    }
+
+    val showEndTimePicker = remember {
+        mutableStateOf(false)
+    }
+
+    var selectedStartTime by remember {
+        mutableStateOf("")
+    }
+
+    var selectedEndTime by remember {
+        mutableStateOf("")
+    }
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp)
+    ) {
+        LabelText(text = "Duration",)
+        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+
+        Column(verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Start time row
+            Row {
+                Column (modifier = Modifier.width(100.dp)){
+                    LabelText(text = "Start time:")
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    DisabledTextField(selectedStartTime)
+                    Spacer(modifier = Modifier.padding(vertical = 5.dp))
+                    PrimaryButton(buttonText = "Choose start time", Modifier.width(180.dp)) {
+                        showStartTimePicker.value = true
+                    }
+
+                }
+            }
+            Spacer(modifier = Modifier.padding(vertical = 10.dp))
+            //End time row
+            Row {
+                Column (modifier = Modifier.width(100.dp)){
+                    LabelText(text = "End time:")
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    DisabledTextField(selectedEndTime)
+                    Spacer(modifier = Modifier.padding(vertical = 5.dp))
+                    PrimaryButton(buttonText = "Choose end time", Modifier.width(180.dp)) {
+                        showEndTimePicker.value = true
+                    }
+                }
+            }
+        }
+        if(showStartTimePicker.value)
+            GeneralTimePicker(
+                onConfirm = {
+                    selectedStartTime = it.joinToString(separator = ":")
+                    showStartTimePicker.value = false
+                },
+                onCancel =  {showStartTimePicker.value = false})
+
+        if(showEndTimePicker.value)
+            GeneralTimePicker(
+                onConfirm = {
+                    selectedEndTime = it.joinToString(separator = ":")
+                    showEndTimePicker.value = false
+                },
+                onCancel =  {showEndTimePicker.value = false})
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralTimePicker(onCancel: () -> Unit, onConfirm: () -> Unit){
-    val state = rememberTimePickerState(is24Hour = true)
+fun GeneralTimePicker(onCancel: () -> Unit, onConfirm: ( MutableList<Int>) -> Unit){
+    val timePickerState = rememberTimePickerState(initialHour = 0, initialMinute = 0,is24Hour = true)
+    val selectedTime = mutableListOf<Int>(timePickerState.hour,timePickerState.minute)
 
-
-    SetupTimePickerDialogue(onCancel = { onCancel()}, onConfirm = { onConfirm() }) {
+    SetupTimePickerDialogue(
+        onCancel = { onCancel()},
+        onConfirm = {
+            onConfirm(selectedTime)
+        }
+    ) {
         TimePicker(
-            state = state,
+            state = timePickerState,
             modifier = Modifier.padding(16.dp)
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SetupTimePickerDialogue(
     title: String = "Select Time",
@@ -136,6 +219,7 @@ private fun SetupTimePickerDialogue(
     toggle: @Composable () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
+
     Dialog(
         onDismissRequest = onCancel,
         properties = DialogProperties(
@@ -176,7 +260,9 @@ private fun SetupTimePickerDialogue(
                         onClick = onCancel
                     ) { Text("Cancel") }
                     TextButton(
-                        onClick = onConfirm
+                        onClick = {
+                            onConfirm()
+                        }
                     ) { Text("OK") }
                 }
             }
@@ -207,10 +293,8 @@ fun CounterElement(label: String, action: (String) -> Unit = {}){
 
         Row(modifier = Modifier
             .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically) {
-
-            //Text(text = "Number of participants : $count", modifier = Modifier.padding(end = 20.dp))
-
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             BasicTextField("$count",{action(it)},
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 25.sp),
@@ -254,5 +338,6 @@ fun CounterElement(label: String, action: (String) -> Unit = {}){
         }
     }
 }
+
 
 
