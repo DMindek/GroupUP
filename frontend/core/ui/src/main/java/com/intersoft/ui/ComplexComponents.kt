@@ -125,6 +125,16 @@ fun DurationSelectionElement(){
     var selectedStartTimeText by remember {
         mutableStateOf("")
     }
+    var durationHours by remember {
+        mutableStateOf(-1)
+    }
+    var durationMinutes by remember {
+        mutableStateOf(-1)
+    }
+    var selectedEndTimeText by remember {
+        mutableStateOf("")
+    }
+    var showTimerPickerButton = false
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -145,7 +155,13 @@ fun DurationSelectionElement(){
                     LabelText(text = "Hours")
                 }
                 Column(modifier = Modifier.width(80.dp)) {
-                    TextInputField("", paddingAmount = 0)
+                    TextInputField("", paddingAmount = 0){
+                        if(it.isNotBlank()){
+                            durationHours = it.toInt()
+                        } else{
+                            durationHours = -1
+                        }
+                    }
                 }
             }
             // Minutes row
@@ -158,7 +174,13 @@ fun DurationSelectionElement(){
                     LabelText(text = "Minutes")
                 }
                 Column(modifier = Modifier.width(80.dp)) {
-                    TextInputField("", paddingAmount = 0)
+                    TextInputField("", paddingAmount = 0){
+                        if(it.isNotBlank()){
+                            durationMinutes = it.toInt()
+                        } else{
+                            durationMinutes = -1
+                        }
+                    }
                 }
             }
 
@@ -171,7 +193,7 @@ fun DurationSelectionElement(){
                 Column(horizontalAlignment = Alignment.End) {
                     DisabledTextField(selectedStartTimeText)
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
-                    PrimaryButton(buttonText = "Choose start time", Modifier.width(180.dp)) {
+                    PrimaryButton(buttonText = "Choose start time", Modifier.width(180.dp),durationIsSet(durationHours,durationMinutes)) {
                         showStartTimePicker.value = true
                     }
 
@@ -197,6 +219,10 @@ fun DurationSelectionElement(){
                 onCancel =  {showStartTimePicker.value = false})
 
     }
+}
+
+private fun durationIsSet(hours: Int, minutes: Int): Boolean {
+    return (hours >= 0 && minutes >= 0)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

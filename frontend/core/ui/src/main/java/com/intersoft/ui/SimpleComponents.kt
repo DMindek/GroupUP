@@ -38,6 +38,22 @@ fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () 
          Text(text = buttonText)
      }
 }
+@Composable
+fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, isEnabled: Boolean, action: () -> Unit ){
+    Button(
+        onClick = action,
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.primary),
+            contentColor = colorResource(R.color.primaryText),
+            disabledContainerColor = colorResource(R.color.primary),
+            disabledContentColor = colorResource(R.color.primaryText)
+        ),
+        enabled = isEnabled
+    ){
+        Text(text = buttonText)
+    }
+}
 
 @Composable
 fun MultiLineTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, action: (String) -> Unit = {}){
@@ -94,7 +110,7 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
 }
 
 @Composable
-fun TextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, action: (String) -> Unit = {}, paddingAmount: Int){
+fun TextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, paddingAmount: Int, action: (String) -> Unit = {}){
     var textValue by remember{
         mutableStateOf("")
     }
