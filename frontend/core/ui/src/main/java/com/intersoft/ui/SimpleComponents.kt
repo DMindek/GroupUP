@@ -94,6 +94,34 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
 }
 
 @Composable
+fun TextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, action: (String) -> Unit = {}, paddingAmount: Int){
+    var textValue by remember{
+        mutableStateOf("")
+    }
+    Column(modifier = Modifier.padding(paddingAmount.dp)){
+        Text(text = label,
+            fontSize = 16.sp,
+            color = colorResource(R.color.foregroundText)
+        )
+        BasicTextField(textValue,
+            {
+                textValue = it
+                action(it)
+            },
+            singleLine = true,
+            visualTransformation = visualTransformation,
+            textStyle = TextStyle(fontSize = 25.sp),
+            modifier = Modifier.background(color = colorResource(R.color.inputField)),
+            decorationBox = {innerTextField ->
+                Row(modifier = Modifier.fillMaxWidth()){}
+                innerTextField()
+            }
+        )
+    }
+}
+
+
+@Composable
 fun DisabledTextField(textvalue:String, visualTransformation: VisualTransformation = VisualTransformation.None){
         BasicTextField(textvalue, {},
             singleLine = true,

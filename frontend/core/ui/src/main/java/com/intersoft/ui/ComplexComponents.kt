@@ -122,35 +122,54 @@ fun DurationSelectionElement(){
         mutableStateOf(false)
     }
 
-    val showEndTimePicker = remember {
-        mutableStateOf(false)
-    }
-
-    var selectedStartTime by remember {
-        mutableStateOf("")
-    }
-
-    var selectedEndTime by remember {
+    var selectedStartTimeText by remember {
         mutableStateOf("")
     }
 
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp)
-    ) {
-        LabelText(text = "Duration",)
-        Spacer(modifier = Modifier.padding(vertical = 20.dp))
 
+    ) {
+        LabelText(text = "Duration")
         Column(verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ) {
+            // Hours row
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(
+                    modifier = Modifier.width(80.dp),
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    LabelText(text = "Hours")
+                }
+                Column(modifier = Modifier.width(80.dp)) {
+                    TextInputField("", paddingAmount = 0)
+                }
+            }
+            // Minutes row
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(
+                    modifier = Modifier.width(80.dp),
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    LabelText(text = "Minutes")
+                }
+                Column(modifier = Modifier.width(80.dp)) {
+                    TextInputField("", paddingAmount = 0)
+                }
+            }
+
+            Spacer(modifier = Modifier.padding(20.dp))
             // Start time row
             Row {
                 Column (modifier = Modifier.width(100.dp)){
                     LabelText(text = "Start time:")
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    DisabledTextField(selectedStartTime)
+                    DisabledTextField(selectedStartTimeText)
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
                     PrimaryButton(buttonText = "Choose start time", Modifier.width(180.dp)) {
                         showStartTimePicker.value = true
@@ -165,29 +184,18 @@ fun DurationSelectionElement(){
                     LabelText(text = "End time:")
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    DisabledTextField(selectedEndTime)
-                    Spacer(modifier = Modifier.padding(vertical = 5.dp))
-                    PrimaryButton(buttonText = "Choose end time", Modifier.width(180.dp)) {
-                        showEndTimePicker.value = true
-                    }
+                    DisabledTextField("")
                 }
             }
         }
         if(showStartTimePicker.value)
             GeneralTimePicker(
                 onConfirm = {
-                    selectedStartTime = it.joinToString(separator = ":")
+                    selectedStartTimeText = it.joinToString(separator = ":")
                     showStartTimePicker.value = false
                 },
                 onCancel =  {showStartTimePicker.value = false})
 
-        if(showEndTimePicker.value)
-            GeneralTimePicker(
-                onConfirm = {
-                    selectedEndTime = it.joinToString(separator = ":")
-                    showEndTimePicker.value = false
-                },
-                onCancel =  {showEndTimePicker.value = false})
     }
 }
 
