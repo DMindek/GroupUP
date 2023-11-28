@@ -15,9 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.intersoft.groupup_app.navigation.EditProfilePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
 import com.intersoft.groupup_app.navigation.UserInformationPage
+import com.intersoft.groupup_app.navigation.UserProfilePage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 
 class MainActivity : ComponentActivity() {
@@ -54,7 +56,12 @@ class MainActivity : ComponentActivity() {
                             Text("Home page")
                         }
                         composable("user_information") {
-                            UserInformationPage()
+                            UserProfilePage {
+                                navController.navigate("edit_profile")
+                            }
+                        }
+                        composable("edit_profile") {
+                            EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
                     }
                 }

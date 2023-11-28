@@ -27,7 +27,7 @@ enum class UserProfileFields{
 }
 
 @Composable
-fun UserProfilePage(OnEditPress: () -> Unit){
+fun UserProfilePage(onEditPress: () -> Unit){
 
     var username by remember { mutableStateOf("John Smith") }
     var email by remember { mutableStateOf("test123@gmail.com") }
@@ -61,7 +61,7 @@ fun UserProfilePage(OnEditPress: () -> Unit){
                 )
 
                 PrimaryButton(buttonText ="Edit") {
-                    OnEditPress()
+                    onEditPress()
                 }
             }
         }

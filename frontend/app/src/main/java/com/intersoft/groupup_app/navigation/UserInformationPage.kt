@@ -52,6 +52,7 @@ data class UserData(
     var userLocation: String,
     var userImage: Int
 )
+// Depreciated code ----------------------------------
 
 @Composable
 fun UserInformationPage(){
