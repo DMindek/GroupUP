@@ -41,6 +41,7 @@ import androidx.compose.ui.window.DialogProperties
 import java.time.Instant
 import com.intersoft.utils.DateTimeManager
 
+val dateTimeManager = DateTimeManager()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +53,6 @@ fun GeneralDatePicker(label: String){
         mutableStateOf("")
     }
 
-    val dateTimeManager = DateTimeManager()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -163,8 +163,8 @@ fun DurationSelectionElement(){
                     TextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
-                            if(startTimeIsSet(selectedStartTimeText) && durationMinutes != -1)
-                                selectedEndTimeText = calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                            if(dateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1)
+                                selectedEndTimeText = dateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                         } else{
                             durationHours = -1
                         }
@@ -184,8 +184,8 @@ fun DurationSelectionElement(){
                     TextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
-                            if(startTimeIsSet(selectedStartTimeText) && durationHours != -1)
-                                selectedEndTimeText = calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                            if(dateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1)
+                                selectedEndTimeText = dateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                         } else{
                             durationMinutes = -1
                         }
@@ -202,7 +202,7 @@ fun DurationSelectionElement(){
                 Column(horizontalAlignment = Alignment.End) {
                     DisabledTextField(selectedStartTimeText)
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
-                    PrimaryButton(buttonText = "Choose start time", Modifier.width(180.dp),durationIsSet(durationHours,durationMinutes)) {
+                    PrimaryButton(buttonText = "Choose start time", Modifier.width(180.dp),dateTimeManager.durationIsSet(durationHours,durationMinutes)) {
                         showStartTimePicker.value = true
                     }
 
@@ -226,51 +226,13 @@ fun DurationSelectionElement(){
                 onConfirm = {
                     selectedStartTime = it
                     selectedStartTimeText = selectedStartTime.joinToString(separator = ":")
-                    if(durationIsSet(durationHours,durationMinutes))
-                        selectedEndTimeText = calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                    if(dateTimeManager.durationIsSet(durationHours,durationMinutes))
+                        selectedEndTimeText = dateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                     showStartTimePicker.value = false
                 },
                 onCancel =  {showStartTimePicker.value = false})
 
     }
-}
-
-fun calculateEndTime(durationHours: Int, durationMinutes: Int, selectedStartTime: MutableList<Int>): String {
-    var currentHoursSum = selectedStartTime[0] + durationHours
-    var currentMinutesSum = selectedStartTime[1] + durationMinutes
-    var endTimeHours = ""
-    var endTimeMinutes = ""
-    var endTime = ""
-
-    if(currentMinutesSum>=60){
-        currentHoursSum += (currentMinutesSum / 60)
-        currentMinutesSum -= (currentMinutesSum/60) * 60
-    }
-    if(currentHoursSum>=24){
-        currentHoursSum = 0
-        currentMinutesSum = 0
-    }
-
-    endTimeHours = currentHoursSum.toString()
-    endTimeMinutes = currentMinutesSum.toString()
-
-    if(currentHoursSum < 10){
-        endTimeHours = "0$currentHoursSum"
-    }
-    if(currentMinutesSum < 10){
-        endTimeMinutes = "0$currentMinutesSum"
-    }
-
-    endTime = "${endTimeHours}:${endTimeMinutes}"
-    return endTime
-}
-
-private fun startTimeIsSet(selectedStartTimeText: String): Boolean {
-    return selectedStartTimeText.isNotBlank()
-}
-
-private fun durationIsSet(hours: Int, minutes: Int): Boolean {
-    return (hours >= 0 && minutes >= 0)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
