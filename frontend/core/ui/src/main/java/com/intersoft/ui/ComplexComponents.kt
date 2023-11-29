@@ -164,7 +164,7 @@ fun DurationSelectionElement(){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
                             if(startTimeIsSet(selectedStartTimeText) && durationMinutes != -1)
-                                selectedEndTimeText = setEndTime(durationHours,durationMinutes,selectedStartTime)
+                                selectedEndTimeText = calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                         } else{
                             durationHours = -1
                         }
@@ -185,7 +185,7 @@ fun DurationSelectionElement(){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
                             if(startTimeIsSet(selectedStartTimeText) && durationHours != -1)
-                                selectedEndTimeText = setEndTime(durationHours,durationMinutes,selectedStartTime)
+                                selectedEndTimeText = calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                         } else{
                             durationMinutes = -1
                         }
@@ -227,7 +227,7 @@ fun DurationSelectionElement(){
                     selectedStartTime = it
                     selectedStartTimeText = selectedStartTime.joinToString(separator = ":")
                     if(durationIsSet(durationHours,durationMinutes))
-                    selectedEndTimeText = setEndTime(durationHours,durationMinutes,selectedStartTime)
+                        selectedEndTimeText = calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                     showStartTimePicker.value = false
                 },
                 onCancel =  {showStartTimePicker.value = false})
@@ -235,11 +235,34 @@ fun DurationSelectionElement(){
     }
 }
 
-fun setEndTime(durationHours: Int, durationMinutes: Int, selectedStartTime: MutableList<Int>): String {
-    val endTimeHours = selectedStartTime[0] + durationHours
-    val endTimeMinutes = selectedStartTime[1] + durationMinutes
-    val endTime = mutableListOf<Int>(endTimeHours,endTimeMinutes)
-    return endTime.joinToString(separator = ":")
+fun calculateEndTime(durationHours: Int, durationMinutes: Int, selectedStartTime: MutableList<Int>): String {
+    var currentHoursSum = selectedStartTime[0] + durationHours
+    var currentMinutesSum = selectedStartTime[1] + durationMinutes
+    var endTimeHours = ""
+    var endTimeMinutes = ""
+    var endTime = ""
+
+    if(currentMinutesSum>=60){
+        currentHoursSum += (currentMinutesSum / 60)
+        currentMinutesSum -= (currentMinutesSum/60) * 60
+    }
+    if(currentHoursSum>=24){
+        currentHoursSum = 0
+        currentMinutesSum = 0
+    }
+
+    endTimeHours = currentHoursSum.toString()
+    endTimeMinutes = currentMinutesSum.toString()
+
+    if(currentHoursSum < 10){
+        endTimeHours = "0$currentHoursSum"
+    }
+    if(currentMinutesSum < 10){
+        endTimeMinutes = "0$currentMinutesSum"
+    }
+
+    endTime = "${endTimeHours}:${endTimeMinutes}"
+    return endTime
 }
 
 private fun startTimeIsSet(selectedStartTimeText: String): Boolean {
