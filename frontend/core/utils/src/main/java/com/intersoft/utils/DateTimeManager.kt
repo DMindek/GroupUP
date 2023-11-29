@@ -5,7 +5,7 @@ import java.util.Date
 import java.util.Locale
 
 
-class DateTimeManager {
+object DateTimeManager {
     fun formatMilisDatetoString(dateInMilis: Long): String {
         val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return sdf.format(Date(dateInMilis))

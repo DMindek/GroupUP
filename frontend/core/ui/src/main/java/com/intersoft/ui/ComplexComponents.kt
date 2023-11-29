@@ -41,7 +41,6 @@ import androidx.compose.ui.window.DialogProperties
 import java.time.Instant
 import com.intersoft.utils.DateTimeManager
 
-val dateTimeManager = DateTimeManager()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,7 +65,7 @@ fun GeneralDatePicker(label: String){
                 },
                 onConfirm = {
                     showDatePicker.value = false
-                    selectedDateText = dateTimeManager.formatMilisDatetoString(it)
+                    selectedDateText = DateTimeManager.formatMilisDatetoString(it)
 
                 }
             )
@@ -163,8 +162,8 @@ fun DurationSelectionElement(){
                     TextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
-                            if(dateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1)
-                                selectedEndTimeText = dateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1)
+                                selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                         } else{
                             durationHours = -1
                         }
@@ -184,8 +183,8 @@ fun DurationSelectionElement(){
                     TextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
-                            if(dateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1)
-                                selectedEndTimeText = dateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1)
+                                selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                         } else{
                             durationMinutes = -1
                         }
@@ -202,7 +201,7 @@ fun DurationSelectionElement(){
                 Column(horizontalAlignment = Alignment.End) {
                     DisabledTextField(selectedStartTimeText)
                     Spacer(modifier = Modifier.padding(vertical = 5.dp))
-                    PrimaryButton(buttonText = "Choose start time", Modifier.width(180.dp),dateTimeManager.durationIsSet(durationHours,durationMinutes)) {
+                    PrimaryButton(buttonText = "Choose start time", Modifier.width(180.dp),DateTimeManager.durationIsSet(durationHours,durationMinutes)) {
                         showStartTimePicker.value = true
                     }
 
@@ -226,8 +225,8 @@ fun DurationSelectionElement(){
                 onConfirm = {
                     selectedStartTime = it
                     selectedStartTimeText = selectedStartTime.joinToString(separator = ":")
-                    if(dateTimeManager.durationIsSet(durationHours,durationMinutes))
-                        selectedEndTimeText = dateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                    if(DateTimeManager.durationIsSet(durationHours,durationMinutes))
+                        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                     showStartTimePicker.value = false
                 },
                 onCancel =  {showStartTimePicker.value = false})
