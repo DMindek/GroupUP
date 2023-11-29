@@ -20,6 +20,7 @@
             <option value="$PROJECT_DIR$/data/user" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/auth" />
+            <option value="$PROJECT_DIR$/feature/event" />
             <option value="$PROJECT_DIR$/network" />
           </set>
         </option>
