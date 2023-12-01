@@ -93,23 +93,25 @@ class UserRepository: IUserRepository {
             val userModel = UserModel(it.username, it.email, "", it.location)
             onEditSuccess(userModel)
         }, onEditError = {
-            if(it != null){
+            Log.d("UserRepository", "Error occurred: $it")
+            if(!it.isNullOrEmpty()){
                 if(it[0] != '{') {
                     onEditError(it)
                 }
                 else{
-                    val error: SingleError
+                    val error: RegistrationErrorResponse
                     try {
-                        error = Gson().fromJson(it, SingleError::class.java)
-                        if(error.error != null){
-                            onEditError(error.error)
-                        }
+                        error = Gson().fromJson(it, RegistrationErrorResponse::class.java)
+                        if(error.email != null)
+                            onEditError(error.email[0])
+                        else if(error.username != null) onEditError(error.username[0])
+
                     }catch (e: Exception){
                         onEditError("Server returned unknown error")
                     }
 
                 }
-            }
+            } else onEditError("Server returned unknown error")
         })
     }
 }

@@ -66,9 +66,12 @@ object NetworkManager {
             Log.d("NetworkManager", "Response: ${response?.message()}")
             if (response != null) {
                 if (response.code() != successCode) {
-                    Log.d("NetworkManager", "Error: ${response.errorBody()?.string()}")
-                    if (response.code() == errorCode)
-                        onFail(response.errorBody()?.string())
+
+                    if (response.code() == errorCode) {
+                        val errorMessage = response.errorBody()?.string()
+                        Log.d("NetworkManager", "Error: $errorMessage")
+                        onFail(errorMessage)
+                    }
                     else onFail("Unknown error occurred")
                 } else {
                     Log.d("NetworkManager", "Success: ${response.body()}")
