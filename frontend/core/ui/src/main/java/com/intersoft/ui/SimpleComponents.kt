@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -101,3 +103,14 @@ fun ErrorText(text: String){
         modifier = Modifier.fillMaxWidth()
     )
 }
+
+@Composable
+fun NavBar(navBarItems: List<NavBarItem>){
+    NavigationBar(){
+        for (item in navBarItems.indices){
+            NavigationBarItem(selected = (item == 0), onClick = { navBarItems[item].onClick }, icon = { navBarItems[item].icon })
+        }
+    }
+}
+
+data class NavBarItem(val onClick: () -> Unit, val icon: @Composable () -> Unit)

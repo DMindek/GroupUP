@@ -8,12 +8,12 @@ class MockUserRepository : IUserRepository {
 
     override fun addUser(
         newUser: UserModel,
-        onRegisterSucceed: () -> Unit,
+        onRegistrationSucceed: () -> Unit,
         onRegistrationError: (String) -> Unit
     ) {
         if(userList.find { user -> (user.username == newUser.username) || (user.email == newUser.email) } == null){
             userList.add(newUser)
-            onRegisterSucceed()
+            onRegistrationSucceed()
         }
         else{
             onRegistrationError("User already exists")
