@@ -17,7 +17,6 @@ import com.intersoft.auth.RegistrationManager
 import com.intersoft.ui.ErrorText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
-import com.intersoft.ui.TitleText
 import com.intersoft.user.UserModel
 
 @Composable
