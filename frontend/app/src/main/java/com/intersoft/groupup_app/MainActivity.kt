@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
