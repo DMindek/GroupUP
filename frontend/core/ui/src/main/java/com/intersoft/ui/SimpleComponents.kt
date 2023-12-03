@@ -115,15 +115,6 @@ fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
     var currentRoute by remember {
         mutableStateOf(navBarItems[0].route)
     }
-//    val itemColors: NavigationBarItemColors = NavigationBarItemColors(
-//        selectedIconColor = colorResource(id = R.color.secondary),
-//        selectedTextColor = colorResource(id = R.color.secondary),
-//        selectedIndicatorColor = colorResource(id = R.color.secondary),
-//        unselectedIconColor = colorResource(id = R.color.secondary),
-//        unselectedTextColor = colorResource(id = R.color.secondary),
-//        disabledIconColor = colorResource(id = R.color.secondary),
-//        disabledTextColor = colorResource(id = R.color.secondary),
-//    )
 
     NavigationBar(Modifier.height(50.dp)){
         for (item in navBarItems){
@@ -131,7 +122,7 @@ fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
                 selected = currentRoute == item.route,
                 icon = { Icon(item.icon, item.route) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = colorResource(id = R.color.secondary),
+                    selectedIconColor = colorResource(id = R.color.primary),
                     unselectedIconColor = colorResource(id = R.color.secondary),
                 ),
                 onClick = {
