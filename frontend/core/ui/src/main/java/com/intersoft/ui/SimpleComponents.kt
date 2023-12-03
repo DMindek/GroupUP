@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
@@ -123,7 +125,7 @@ fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
 //        disabledTextColor = colorResource(id = R.color.secondary),
 //    )
 
-    NavigationBar{
+    NavigationBar(Modifier.height(50.dp)){
         for (item in navBarItems){
             NavigationBarItem(
                 selected = currentRoute == item.route,
