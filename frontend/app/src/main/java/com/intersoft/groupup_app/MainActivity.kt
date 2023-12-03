@@ -17,6 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,8 +54,21 @@ class MainActivity : ComponentActivity() {
                         NavBarItem("settings", Icons.Filled.Settings),
                     )
 
-                    Scaffold (topBar = {NavBar(navController = navController, navBarItems = navBarItems)}){
-                        NavHost(navController = navController, startDestination = "login", Modifier.padding(top = 50.dp)) {
+                    var showNavbar by remember {
+                        mutableStateOf(false)
+                    }
+                    val topPadding = if(showNavbar) 50.dp
+                    else 0.dp
+
+                    Scaffold (
+                        topBar = {if(showNavbar){
+                            NavBar(navController = navController, navBarItems = navBarItems)
+                        }
+                        }){
+                        NavHost(
+                            navController = navController,
+                            startDestination = "login",
+                            modifier = Modifier.padding(top = topPadding)) {
                             composable("registration") {
                                 RegistrationPage(
                                     onRegister = {
@@ -67,7 +84,10 @@ class MainActivity : ComponentActivity() {
                             composable("login") {
                                 LoginPage(
                                     context = LocalContext.current,
-                                    onLogin = { navController.navigate("main") },
+                                    onLogin = {
+                                        navController.navigate("main")
+                                        showNavbar = true
+                                        },
                                     onRegisterClick = { navController.navigate("registration") }
                                 )
                             }
