@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -33,6 +36,7 @@ import com.intersoft.groupup_app.navigation.RegistrationPage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 import com.intersoft.ui.NavBar
 import com.intersoft.ui.NavBarItem
+import com.intersoft.ui.TitleText
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -54,22 +58,35 @@ class MainActivity : ComponentActivity() {
                         NavBarItem("settings", Icons.Filled.Settings),
                     )
 
+                    var currentTitle by remember {
+                        mutableStateOf("")
+                    }
+
                     var showNavbar by remember {
                         mutableStateOf(false)
                     }
                     val topPadding = if(showNavbar) 50.dp
                     else 0.dp
 
-                    Scaffold (
-                        topBar = {if(showNavbar){
+                    Column {
+                        TitleText(
+                            text = currentTitle,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 20.dp, start = 30.dp, end = 30.dp, bottom = 0.dp)
+                                .height(55.dp)
+                        )
+                        if (showNavbar) {
                             NavBar(navController = navController, navBarItems = navBarItems)
                         }
-                        }){
+
                         NavHost(
                             navController = navController,
                             startDestination = "login",
-                            modifier = Modifier.padding(top = topPadding)) {
+                            modifier = Modifier.padding(top = topPadding)
+                        ) {
                             composable("registration") {
+                                currentTitle = "Register"
                                 RegistrationPage(
                                     onRegister = {
                                         navController.navigate("login")
@@ -82,13 +99,17 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("login") {
+                                currentTitle = "Welcome"
                                 LoginPage(
                                     context = LocalContext.current,
                                     onLogin = {
                                         navController.navigate("main")
                                         showNavbar = true
-                                        },
-                                    onRegisterClick = { navController.navigate("registration") }
+                                    },
+                                    onRegisterClick = {
+                                        navController.navigate("registration")
+                                        showNavbar = true
+                                    }
                                 )
                             }
                             composable("main") {

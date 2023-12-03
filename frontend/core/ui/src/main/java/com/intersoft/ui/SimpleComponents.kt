@@ -24,6 +24,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -88,14 +89,13 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
 }
 
 @Composable
-fun TitleText(text: String){
+fun TitleText(text: String, modifier: Modifier = Modifier.fillMaxWidth()){
     Text(
         text = text,
         fontSize = 40.sp,
         textAlign = TextAlign.Center,
         lineHeight = 50.sp,
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
     )
 }
 
@@ -106,7 +106,8 @@ fun ErrorText(text: String){
         color = colorResource(R.color.errorColor),
         fontSize = 12.sp,
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        maxLines = 1
     )
 }
 

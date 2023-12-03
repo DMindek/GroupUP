@@ -47,7 +47,6 @@ fun RegistrationPage(onRegister: () -> Unit){
             .fillMaxSize()
             .padding(50.dp)
     ){
-        TitleText(text = "Register")
         TextInputField(label = "email") { email = it }
         TextInputField(label = "username") {username = it}
         TextInputField(label = "location") {location = it}
