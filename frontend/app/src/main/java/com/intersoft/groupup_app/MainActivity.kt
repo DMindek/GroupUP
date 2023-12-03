@@ -43,8 +43,8 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     val navBarItems = listOf(
-                        NavBarItem("registration", Icons.Filled.Place),
                         NavBarItem("login", Icons.Filled.DateRange),
+                        NavBarItem("registration", Icons.Filled.Place),
                         NavBarItem("main", Icons.Filled.Person),
                         NavBarItem("settings", Icons.Filled.Settings),
                     )

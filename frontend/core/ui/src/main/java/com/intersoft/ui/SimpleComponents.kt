@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -112,12 +114,25 @@ fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
     var currentRoute by remember {
         mutableStateOf(navBarItems[0].route)
     }
+//    val itemColors: NavigationBarItemColors = NavigationBarItemColors(
+//        selectedIconColor = colorResource(id = R.color.secondary),
+//        selectedTextColor = colorResource(id = R.color.secondary),
+//        selectedIndicatorColor = colorResource(id = R.color.secondary),
+//        unselectedIconColor = colorResource(id = R.color.secondary),
+//        unselectedTextColor = colorResource(id = R.color.secondary),
+//        disabledIconColor = colorResource(id = R.color.secondary),
+//        disabledTextColor = colorResource(id = R.color.secondary),
+//    )
 
     NavigationBar{
         for (item in navBarItems){
             NavigationBarItem(
                 selected = currentRoute == item.route,
-                icon = { item.icon },
+                icon = { Icon(item.icon, item.route) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = colorResource(id = R.color.secondary),
+                    unselectedIconColor = colorResource(id = R.color.secondary),
+                ),
                 onClick = {
                     currentRoute = item.route
                     navController.navigate(item.route)
