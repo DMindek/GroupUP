@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -16,11 +17,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 @Composable
 fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
@@ -105,12 +108,22 @@ fun ErrorText(text: String){
 }
 
 @Composable
-fun NavBar(navBarItems: List<NavBarItem>){
-    NavigationBar(){
-        for (item in navBarItems.indices){
-            NavigationBarItem(selected = (item == 0), onClick = { navBarItems[item].onClick }, icon = { navBarItems[item].icon })
+fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
+    var currentRoute by remember {
+        mutableStateOf(navBarItems[0].route)
+    }
+
+    NavigationBar{
+        for (item in navBarItems){
+            NavigationBarItem(
+                selected = currentRoute == item.route,
+                icon = { item.icon },
+                onClick = {
+                    currentRoute = item.route
+                    navController.navigate(item.route)
+            })
         }
     }
 }
 
-data class NavBarItem(val onClick: () -> Unit, val icon: @Composable () -> Unit)
+data class NavBarItem(val route: String, val icon: ImageVector)
