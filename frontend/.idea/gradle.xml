@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/core/utils/location" />
             <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data/event" />
             <option value="$PROJECT_DIR$/data/user" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/auth" />
