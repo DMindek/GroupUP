@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
 import com.intersoft.network.RequestListener
+import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.RegisterBody
 import com.intersoft.network.models.responses.UserData
@@ -17,6 +18,7 @@ class UserRepository: IUserRepository {
     ) {
         Log.d("UserRepository", newUser.toString())
         val user = UserData(newUser.username, newUser.email, newUser.password, newUser.location)
+        
         NetworkManager.registerUser(RegisterBody(user), object: RequestListener {
             override fun <T> onSuccess(data: T) {
                 Log.d("UserRepository", "User added successfully")
@@ -74,9 +76,46 @@ class UserRepository: IUserRepository {
             }
         }
     }
+
+    override fun editUser(
+        user: UserModel,
+        onEditSuccess: (UserModel) -> Unit,
+        onEditError: (String) -> Unit
+    )
+    {
+        val userData = UserData(user.username, user.email, user.location)
+        val res = NetworkManager.editUser(EditBody(userData), user.id!!, user.token!!, onEditSuccess = {
+            if(it == null){
+                onEditError("Server returned o body")
+                return@editUser
+            }
+            val userModel = UserModel(it.username, it.email, "", it.location)
+            onEditSuccess(userModel)
+        }, onEditError = {
+            Log.d("UserRepository", "Error occurred: $it")
+            if(!it.isNullOrEmpty()){
+                if(it[0] != '{') {
+                    onEditError(it)
+                }
+                else{
+                    val error: RegistrationErrorResponse
+                    try {
+                        error = Gson().fromJson(it, RegistrationErrorResponse::class.java)
+                        if(error.email != null)
+                            onEditError(error.email[0])
+                        else if(error.username != null) onEditError(error.username[0])
+
+                    }catch (e: Exception){
+                        onEditError("Server returned unknown error")
+                    }
+
+                }
+            } else onEditError("Server returned unknown error")
+        })
+    }
 }
 
-class RegistrationErrorResponse{
+class RegistrationErrorResponse {
     val email: Array<String>? = null
     val username: Array<String>? = null
     val password: Array<String>? = null

@@ -30,8 +30,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.intersoft.groupup_app.navigation.EditProfilePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
+import com.intersoft.groupup_app.navigation.UserInformationPage
+import com.intersoft.groupup_app.navigation.UserProfilePage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 import com.intersoft.ui.NavBar
 import com.intersoft.ui.NavBarItem
@@ -110,6 +113,17 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("events") {
                             }
+                        }
+                        composable("home"){
+                            Text("Home page")
+                        }
+                        composable("user_information") {
+                            UserProfilePage {
+                                navController.navigate("edit_profile")
+                            }
+                        }
+                        composable("edit_profile") {
+                            EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
                     }
                 }
