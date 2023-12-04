@@ -11,7 +11,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,10 +34,10 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableStateOf("")
     }
     var duration by remember {
-        mutableLongStateOf(0)
+        mutableStateOf("")
     }
-    var maxNumberOfParticipants by remember {
-        mutableStateOf(0)
+    var numberOfParticipants by remember {
+        mutableStateOf("")
     }
     var location by remember {
         mutableStateOf("")
@@ -57,12 +56,12 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         TitleText(text = "Create an event")
         TextInputField(label = "Name") { name = it }
         MultiLineTextInputField("Description") {description = it}
-        GeneralDatePicker("Event Date"){duration = it}
-        DurationSelectionElement(){duration = it}
-        CounterElement(label = "Max Participants") {maxNumberOfParticipants = it}
+        GeneralDatePicker("Event Date")
+        DurationSelectionElement()
+        CounterElement(label = "Max Participants") {numberOfParticipants = it}
         TextInputField(label = "location") { location = it }
-        Spacer(modifier = Modifier.height(20.dp))
         ErrorText(text = errorText)
+        Spacer(modifier = Modifier.height(20.dp))
 
         Row(
             modifier = Modifier

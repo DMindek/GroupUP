@@ -44,7 +44,7 @@ import com.intersoft.utils.DateTimeManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralDatePicker(label: String, action: (Long) -> Unit){
+fun GeneralDatePicker(label: String){
     val showDatePicker = remember {
         mutableStateOf(false)
     }
@@ -63,10 +63,10 @@ fun GeneralDatePicker(label: String, action: (Long) -> Unit){
                 onDismiss = {
                     showDatePicker.value = false
                 },
-                onConfirm = {selectedDateInMillis ->
+                onConfirm = {
                     showDatePicker.value = false
-                    selectedDateText = DateTimeManager.formatMilisDatetoString(selectedDateInMillis)
-                    action(selectedDateInMillis)
+                    selectedDateText = DateTimeManager.formatMilisDatetoString(it)
+
                 }
             )
         }
@@ -115,7 +115,7 @@ private fun SetupDatePickerDialogue(onDismiss: () -> Unit, onConfirm: (Long) -> 
 }
 
 @Composable
-fun DurationSelectionElement(action: (Long) -> Unit){
+fun DurationSelectionElement(){
 
     val showStartTimePicker = remember {
         mutableStateOf(false)
@@ -222,13 +222,12 @@ fun DurationSelectionElement(action: (Long) -> Unit){
         }
         if(showStartTimePicker.value)
             GeneralTimePicker(
-                onConfirm = {selectedStartTime ->
+                onConfirm = {
+                    selectedStartTime = it
                     selectedStartTimeText = selectedStartTime.joinToString(separator = ":")
                     if(DateTimeManager.durationIsSet(durationHours,durationMinutes))
                         selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                     showStartTimePicker.value = false
-
-                    action(DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1]))
                 },
                 onCancel =  {showStartTimePicker.value = false})
 
@@ -237,7 +236,7 @@ fun DurationSelectionElement(action: (Long) -> Unit){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralTimePicker(onCancel: () -> Unit, onConfirm: ( MutableList<Int>) -> Unit,){
+fun GeneralTimePicker(onCancel: () -> Unit, onConfirm: ( MutableList<Int>) -> Unit){
     val timePickerState = rememberTimePickerState(initialHour = 0, initialMinute = 0,is24Hour = true)
     val selectedTime = mutableListOf<Int>(timePickerState.hour,timePickerState.minute)
 
@@ -318,7 +317,7 @@ private fun SetupTimePickerDialogue(
 
 
 @Composable
-fun CounterElement(label: String, action: (Int) -> Unit = {}){
+fun CounterElement(label: String, action: (String) -> Unit = {}){
     var count by remember {
         mutableStateOf(0)
     }
@@ -339,7 +338,7 @@ fun CounterElement(label: String, action: (Int) -> Unit = {}){
             .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BasicTextField("$count",{action(count)},
+            BasicTextField("$count",{action(it)},
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 25.sp),
                 modifier = Modifier
