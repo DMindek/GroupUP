@@ -15,8 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.intersoft.groupup_app.navigation.EditProfilePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
+import com.intersoft.groupup_app.navigation.UserInformationPage
+import com.intersoft.groupup_app.navigation.UserProfilePage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 
 class MainActivity : ComponentActivity() {
@@ -43,11 +46,22 @@ class MainActivity : ComponentActivity() {
                         composable("login"){
                             LoginPage(
                                 context =LocalContext.current,
-                                onLogin = { navController.navigate("main") },
+                                onLogin = { navController.navigate("user_information") },
                                 onRegisterClick = { navController.navigate("registration") }
                             )
                         }
                         composable("main"){
+                        }
+                        composable("home"){
+                            Text("Home page")
+                        }
+                        composable("user_information") {
+                            UserProfilePage {
+                                navController.navigate("edit_profile")
+                            }
+                        }
+                        composable("edit_profile") {
+                            EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
                     }
                 }

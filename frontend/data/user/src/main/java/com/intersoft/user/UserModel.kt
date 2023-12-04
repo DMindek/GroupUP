@@ -5,4 +5,6 @@ data class UserModel(
     var email: String,
     var password: String,
     var location: String,
+    var token: String? = null,
+    var id: Int? = null
 )
