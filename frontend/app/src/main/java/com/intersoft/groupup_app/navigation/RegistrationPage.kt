@@ -44,7 +44,7 @@ fun RegistrationPage(onRegister: () -> Unit){
         verticalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxSize()
-            .padding(50.dp)
+            .padding(start = 50.dp, end = 50.dp, top = 0.dp, bottom = 50.dp)
     ){
         TextInputField(label = "email") { email = it }
         TextInputField(label = "username") {username = it}
