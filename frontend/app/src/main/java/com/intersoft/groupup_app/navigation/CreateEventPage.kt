@@ -28,7 +28,7 @@ import com.intersoft.ui.TitleText
 
 @Composable
 fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit) {
-    var name by remember {
+    var eventName by remember {
         mutableStateOf("")
     }
     var description by remember {
@@ -60,7 +60,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
             .verticalScroll(rememberScrollState())
     ) {
         TitleText(text = "Create an event")
-        TextInputField(label = "Name") { name = it }
+        TextInputField(label = "Name") { eventName = it }
         MultiLineTextInputField("Description") {description = it}
         GeneralDatePicker("Event Date"){selectedDateInMillis = it}
         DurationSelectionElement(){durationInMillis = it}
