@@ -17,8 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.intersoft.event.EventCreationManager
-import com.intersoft.event.EventModel
 import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DurationSelectionElement
 import com.intersoft.ui.ErrorText
@@ -39,11 +37,6 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
     var duration by remember {
         mutableLongStateOf(0)
     }
-
-    var dateInMillis by remember {
-        mutableLongStateOf(0)
-    }
-
     var maxNumberOfParticipants by remember {
         mutableStateOf(0)
     }
@@ -64,7 +57,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         TitleText(text = "Create an event")
         TextInputField(label = "Name") { name = it }
         MultiLineTextInputField("Description") {description = it}
-        GeneralDatePicker("Event Date"){dateInMillis = it}
+        GeneralDatePicker("Event Date"){duration = it}
         DurationSelectionElement(){duration = it}
         CounterElement(label = "Max Participants") {maxNumberOfParticipants = it}
         TextInputField(label = "location") { location = it }
@@ -77,9 +70,8 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
                 .padding(start = 20.dp)
         ) {
             PrimaryButton(buttonText = "Create") {
-                EventCreationManager.createEvent(EventModel(name,description,dateInMillis,duration,maxNumberOfParticipants,location), { onCreateEvent() }){
-                    errorText = it
-                }
+                // TODO: Implement event creation
+                onCreateEvent()
                 errorText = ""
             }
             Spacer(modifier = Modifier.width(100.dp))
