@@ -51,9 +51,9 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     val navBarItems = listOf(
-                        NavBarItem("login", Icons.Filled.DateRange),
-                        NavBarItem("registration", Icons.Filled.Place),
-                        NavBarItem("main", Icons.Filled.Person),
+                        NavBarItem("events", Icons.Filled.DateRange),
+                        NavBarItem("myEvents", Icons.Filled.Place),
+                        NavBarItem("social", Icons.Filled.Person),
                         NavBarItem("settings", Icons.Filled.Settings),
                     )
 
@@ -102,16 +102,13 @@ class MainActivity : ComponentActivity() {
                                 LoginPage(
                                     context = LocalContext.current,
                                     onLogin = {
-                                        navController.navigate("main")
+                                        navController.navigate("events")
                                         showNavbar = true
                                     },
-                                    onRegisterClick = {
-                                        navController.navigate("registration")
-                                        showNavbar = true
-                                    }
+                                    onRegisterClick = { navController.navigate("registration") }
                                 )
                             }
-                            composable("main") {
+                            composable("events") {
                             }
                         }
                     }
