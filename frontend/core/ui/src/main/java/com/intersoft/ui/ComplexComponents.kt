@@ -82,7 +82,7 @@ fun GeneralDatePicker(label: String, action: (Long) -> Unit){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SetupDatePickerDialogue(onDismiss: () -> Unit, onConfirm: (Long) -> Unit){
-    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = Instant.now().toEpochMilli())
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = Instant.now().toEpochMilli() + 86400000 )
     val selectedDateInMillis = datePickerState.selectedDateMillis!!
 
     DatePickerDialog(
