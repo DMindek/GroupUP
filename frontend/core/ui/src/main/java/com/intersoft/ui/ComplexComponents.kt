@@ -39,8 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import java.time.Instant
 import com.intersoft.utils.DateTimeManager
+import java.time.Instant
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -142,6 +143,8 @@ fun DurationSelectionElement(action: (Long) -> Unit){
         mutableStateOf(selectedStartTimeList)
     }
 
+    var durationInMillis : Long
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp)
@@ -164,8 +167,11 @@ fun DurationSelectionElement(action: (Long) -> Unit){
                     TextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
-                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1)
+                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1){
                                 selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                                durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                                action(durationInMillis)
+                            }
                         } else{
                             durationHours = -1
                         }
@@ -185,8 +191,11 @@ fun DurationSelectionElement(action: (Long) -> Unit){
                     TextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
-                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1)
+                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1){
                                 selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                                durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                                action(durationInMillis)
+                            }
                         } else{
                             durationMinutes = -1
                         }
@@ -230,13 +239,14 @@ fun DurationSelectionElement(action: (Long) -> Unit){
                     if(DateTimeManager.durationIsSet(durationHours,durationMinutes))
                         selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedTime)
                     showStartTimePicker.value = false
-                    val durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedTime[0],selectedTime[1])
+                     durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedTime[0],selectedTime[1])
                     action(durationInMillis)
                 },
                 onCancel =  {showStartTimePicker.value = false})
 
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
