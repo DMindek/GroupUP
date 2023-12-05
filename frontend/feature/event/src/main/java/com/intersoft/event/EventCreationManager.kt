@@ -1,14 +1,21 @@
 package com.intersoft.event
 
 object EventCreationManager {
+    private var eventRepository: IEventRepository = EventRepository()
 
+    fun setEventRepository(repo: IEventRepository){
+        eventRepository = repo
+    }
     fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,maxNumberOfParticipants: Int,location: String , onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
-        val event = EventModel(name= eventName, description = description, dateInMillis =  selectedDateInMillis, durationInMillis = durationInMillis , maxParticipants = maxNumberOfParticipants,location = location)
+        val newEvent = EventModel(name= eventName, description = description, dateInMillis =  selectedDateInMillis, durationInMillis = durationInMillis , maxParticipants = maxNumberOfParticipants,location = location)
 
-        val errorText = validateInput(event)
+        val errorText = validateInput(newEvent)
 
-        if(errorText == "")
-            onCreateEventSuccess()
+        if(errorText == ""){
+            eventRepository.createEvent(newEvent,{error -> onCreateEventFailure(error)}){
+                onCreateEventSuccess()
+            }
+        }
         else{
             onCreateEventFailure(errorText)
         }
