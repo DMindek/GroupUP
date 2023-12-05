@@ -191,3 +191,15 @@ fun ErrorText(text: String){
         modifier = Modifier.fillMaxWidth()
     )
 }
+
+@Composable
+fun WarningText(text: String){
+    Text(
+        text = text,
+        color = colorResource(R.color.foregroundText),
+        fontSize = 12.sp,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+

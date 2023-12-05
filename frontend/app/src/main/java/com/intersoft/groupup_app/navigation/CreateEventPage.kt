@@ -26,6 +26,7 @@ import com.intersoft.ui.MultiLineTextInputField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
+import com.intersoft.ui.WarningText
 
 @Composable
 fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit) {
@@ -53,6 +54,9 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
     var errorText by remember {
         mutableStateOf("")
     }
+    var warningText by remember {
+        mutableStateOf("")
+    }
 
     Column(
         modifier = Modifier
@@ -64,7 +68,8 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         TextInputField(label = "Name") { eventName = it }
         MultiLineTextInputField("Description") {description = it}
         GeneralDatePicker("Event Date"){selectedDateInMillis = it}
-        DurationSelectionElement(){durationInMillis = it}
+        DurationSelectionElement({warningText = it}){durationInMillis = it}
+        WarningText(text = warningText)
         CounterElement(label = "Max Participants") {maxNumberOfParticipants = it}
         TextInputField(label = "location") { location = it }
         ErrorText(text = errorText)

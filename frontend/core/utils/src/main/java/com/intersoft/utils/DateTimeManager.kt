@@ -14,7 +14,11 @@ object DateTimeManager {
     fun calculateMillisFromHoursAndMinutes(hours: Int, minutes: Int): Long {
         return  (hours * 3600000).toLong() + (minutes * 60000).toLong()
     }
-
+    fun datePassesMidnight( selectedStartTimeHours: Int,durationHours: Int): Boolean{
+        if(selectedStartTimeHours + durationHours >=24)
+            return true
+        return false
+    }
     fun calculateEndTime(
         durationHours: Int,
         durationMinutes: Int,
@@ -30,8 +34,7 @@ object DateTimeManager {
             currentMinutesSum -= (currentMinutesSum / 60) * 60
         }
         if (currentHoursSum >= 24) {
-            currentHoursSum = 0
-            currentMinutesSum = 0
+            currentHoursSum -= 24
         }
 
         endTimeHours = currentHoursSum.toString()
