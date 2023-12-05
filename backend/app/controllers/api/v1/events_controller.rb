@@ -43,7 +43,7 @@ class Api::V1::EventsController < ApplicationController
     private
     
     def show_event(event)
-        return event.to_json(except: [:created_at, :updated_at])
+        return event.to_json(include: [:participants], except: [:created_at, :updated_at])
     end
     
     def set_event
