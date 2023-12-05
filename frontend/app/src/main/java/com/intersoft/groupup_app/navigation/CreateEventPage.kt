@@ -88,8 +88,8 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
                     durationInMillis = durationInMillis,
                     maxNumberOfParticipants = maxNumberOfParticipants,
                     location = location,{onCreateEvent()}
-                ){
-                    errorText = it
+                ){error ->
+                    errorText = error
                 }
             }
             Spacer(modifier = Modifier.width(100.dp))
