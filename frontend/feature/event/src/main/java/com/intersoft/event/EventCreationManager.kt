@@ -6,8 +6,16 @@ object EventCreationManager {
     fun setEventRepository(repo: IEventRepository){
         eventRepository = repo
     }
-    fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,maxNumberOfParticipants: Int,location: String , onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
-        val newEvent = EventModel(name= eventName, description = description, dateInMillis =  selectedDateInMillis, durationInMillis = durationInMillis , maxParticipants = maxNumberOfParticipants,location = location)
+    fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
+        val newEvent = EventModel(
+            name= eventName,
+            description = description,
+            dateInMillis =  selectedDateInMillis,
+            durationInMillis = durationInMillis ,
+            maxParticipants = maxNumberOfParticipants,
+            location = location,
+            ownerId = ownerId
+        )
 
         val errorText = validateInput(newEvent)
 

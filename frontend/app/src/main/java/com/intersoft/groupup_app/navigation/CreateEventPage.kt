@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventCreationManager
 import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DurationSelectionElement
@@ -87,7 +88,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
                     selectedDateInMillis = selectedDateInMillis,
                     durationInMillis = durationInMillis,
                     maxNumberOfParticipants = maxNumberOfParticipants,
-                    location = location,{onCreateEvent()}
+                    location = location,AuthContext.id!!,{onCreateEvent()}
                 ){error ->
                     errorText = error
                 }
