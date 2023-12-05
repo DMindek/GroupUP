@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -17,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -110,24 +113,28 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
 }
 
 @Composable
-fun TextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, paddingAmount: Int, action: (String) -> Unit = {}){
+fun NumericTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, paddingAmount: Int, action: (String) -> Unit = {}){
     var textValue by remember{
         mutableStateOf("")
     }
-    Column(modifier = Modifier.padding(paddingAmount.dp)){
+    val pattern = remember {Regex("^[0-9]{0,2}\$")}
+    Column(modifier = Modifier.padding(paddingAmount.dp).width(50.dp)){
         Text(text = label,
             fontSize = 16.sp,
             color = colorResource(R.color.foregroundText)
         )
         BasicTextField(textValue,
             {
-                textValue = it
-                action(it)
+                if(it.matches(pattern)){
+                    textValue = it
+                    action(it)
+                }
             },
             singleLine = true,
             visualTransformation = visualTransformation,
             textStyle = TextStyle(fontSize = 25.sp),
             modifier = Modifier.background(color = colorResource(R.color.inputField)),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             decorationBox = {innerTextField ->
                 Row(modifier = Modifier.fillMaxWidth()){}
                 innerTextField()

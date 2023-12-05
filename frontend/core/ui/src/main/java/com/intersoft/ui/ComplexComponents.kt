@@ -164,7 +164,7 @@ fun DurationSelectionElement(action: (Long) -> Unit){
                     LabelText(text = "Hours")
                 }
                 Column(modifier = Modifier.width(80.dp)) {
-                    TextInputField("", paddingAmount = 0){
+                    NumericTextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
                             if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1){
@@ -188,7 +188,7 @@ fun DurationSelectionElement(action: (Long) -> Unit){
                     LabelText(text = "Minutes")
                 }
                 Column(modifier = Modifier.width(80.dp)) {
-                    TextInputField("", paddingAmount = 0){
+                    NumericTextInputField("", paddingAmount = 0){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
                             if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1){
