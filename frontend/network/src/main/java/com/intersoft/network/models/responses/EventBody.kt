@@ -1,6 +1,6 @@
 package com.intersoft.network.models.responses
 
-import androidx.test.services.events.TimeStamp
+import java.sql.Timestamp
 
 data class EventBody (
     val event : EventData
@@ -9,7 +9,7 @@ data class EventBody (
 data class EventData(
     val name: String,
     val description : String,
-    val date : TimeStamp,
+    val date : Timestamp,
     val duration : Int,
     val maxParticipants : Int,
     val location : String,
