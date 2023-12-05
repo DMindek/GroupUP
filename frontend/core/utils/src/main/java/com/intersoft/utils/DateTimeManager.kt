@@ -47,6 +47,21 @@ object DateTimeManager {
         return "${endTimeHours}:${endTimeMinutes}"
     }
 
+    fun formatStartTime(selectedStartTime: MutableList<Int>): String{
+        val currentHours = selectedStartTime[0]
+        val currentMinutes = selectedStartTime[1]
+        var hours = "$currentHours"
+        var minutes = "$currentMinutes"
+
+        if(currentHours < 10){
+            hours = "0$currentHours"
+        }
+        if(currentMinutes < 10){
+            minutes = "0$currentMinutes"
+        }
+
+        return "${hours}:${minutes}"
+    }
     fun startTimeIsSet(selectedStartTimeText: String): Boolean {
         return selectedStartTimeText.isNotBlank()
     }

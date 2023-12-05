@@ -1,5 +1,6 @@
 package com.intersoft.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -114,6 +115,7 @@ private fun SetupDatePickerDialogue(onDismiss: () -> Unit, onConfirm: (Long) -> 
     }
 }
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun DurationSelectionElement(action: (Long) -> Unit){
 
@@ -222,12 +224,13 @@ fun DurationSelectionElement(action: (Long) -> Unit){
         }
         if(showStartTimePicker.value)
             GeneralTimePicker(
-                onConfirm = { selectedStartTime ->
-                    selectedStartTimeText = selectedStartTime.joinToString(separator = ":")
+                onConfirm = { selectedTime ->
+                    selectedStartTime = selectedTime
+                    selectedStartTimeText = DateTimeManager.formatStartTime(selectedTime)
                     if(DateTimeManager.durationIsSet(durationHours,durationMinutes))
-                        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedTime)
                     showStartTimePicker.value = false
-                    val durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                    val durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedTime[0],selectedTime[1])
                     action(durationInMillis)
                 },
                 onCancel =  {showStartTimePicker.value = false})
