@@ -118,7 +118,7 @@ private fun SetupDatePickerDialogue(onDismiss: () -> Unit, onConfirm: (Long) -> 
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit, startTimeInput: (Long) -> Unit){
+fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDurationInput: (Long) -> Unit ,onStartTimeInput: (Long) -> Unit){
 
     val showStartTimePicker = remember {
         mutableStateOf(false)
@@ -145,6 +145,8 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit, startTime
 
     var startTimeInMillis : Long
 
+    var durationInMillis : Long
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp)
@@ -170,13 +172,15 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit, startTime
                             if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1){
                                 selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                                 startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                                durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
 
                                 if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
                                     onDurationPastMidnight("Warning: Set duration passes midnight and the end date is different from the start date")
                                 else
                                     onDurationPastMidnight("")
 
-                                startTimeInput(startTimeInMillis)
+                                onStartTimeInput(startTimeInMillis)
+                                onDurationInput(durationInMillis)
                             }
                         } else{
                             durationHours = -1
@@ -200,13 +204,16 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit, startTime
                             if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1){
                                 selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
                                 startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                                durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
 
                                 if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
                                     onDurationPastMidnight("Warning: Set duration passes midnight and the end date is different from the start date")
                                 else
                                     onDurationPastMidnight("")
 
-                                startTimeInput(startTimeInMillis)
+                                onStartTimeInput(startTimeInMillis)
+                                onDurationInput(durationInMillis)
+
                             }
                         } else{
                             durationMinutes = -1
@@ -249,9 +256,11 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit, startTime
                     selectedStartTime = selectedTime
                     selectedStartTimeText = DateTimeManager.formatStartTime(selectedTime)
 
-                    if(DateTimeManager.durationIsSet(durationHours,durationMinutes))
+                    if(DateTimeManager.durationIsSet(durationHours,durationMinutes)){
                         selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedTime)
-                    showStartTimePicker.value = false
+                        durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
+                        onDurationInput(durationInMillis)
+                    }
 
                     if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
                         onDurationPastMidnight("Warning: Set duration passes midnight and the end date is different from the start date")
@@ -260,7 +269,9 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit, startTime
 
 
                     startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedTime[0],selectedTime[1])
-                    startTimeInput(startTimeInMillis)
+                    onStartTimeInput(startTimeInMillis)
+
+                    showStartTimePicker.value = false
                 },
                 onCancel =  {showStartTimePicker.value = false})
 
