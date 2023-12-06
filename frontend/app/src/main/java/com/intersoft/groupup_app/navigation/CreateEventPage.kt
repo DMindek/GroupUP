@@ -42,6 +42,10 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableLongStateOf(0)
     }
 
+    var startTimeInMillis by remember {
+        mutableLongStateOf(0)
+    }
+
     var durationInMillis by remember {
         mutableLongStateOf(0)
     }
@@ -69,12 +73,13 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         TextInputField(label = "Name") { eventName = it }
         MultiLineTextInputField("Description") {description = it}
         GeneralDatePicker("Event Date"){selectedDateInMillis = it}
-        DurationSelectionElement({warningText = it}){durationInMillis = it}
+        DurationSelectionElement({warningText = it},{durationInMillis = it}){startTimeInMillis = it}
         WarningText(text = warningText)
         CounterElement(label = "Max Participants") {maxNumberOfParticipants = it}
         TextInputField(label = "location") { location = it }
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
+
 
         Row(
             modifier = Modifier
@@ -86,7 +91,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
                     eventName = eventName,
                     description = description,
                     selectedDateInMillis = selectedDateInMillis,
-                    durationInMillis = durationInMillis,
+                    durationInMillis = startTimeInMillis,
                     maxNumberOfParticipants = maxNumberOfParticipants,
                     location = location,AuthContext.id!!,{onCreateEvent()}
                 ){error ->
