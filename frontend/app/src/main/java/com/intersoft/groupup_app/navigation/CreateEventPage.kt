@@ -91,7 +91,8 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
                     eventName = eventName,
                     description = description,
                     selectedDateInMillis = selectedDateInMillis,
-                    durationInMillis = startTimeInMillis,
+                    durationInMillis = durationInMillis,
+                    startTimeInMillis = startTimeInMillis,
                     maxNumberOfParticipants = maxNumberOfParticipants,
                     location = location,AuthContext.id!!,{onCreateEvent()}
                 ){error ->

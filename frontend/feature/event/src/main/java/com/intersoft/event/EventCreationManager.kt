@@ -6,7 +6,7 @@ object EventCreationManager {
     fun setEventRepository(repo: IEventRepository){
         eventRepository = repo
     }
-    fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
+    fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,startTimeInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
         val newEvent = EventModel(
             name= eventName,
             description = description,
