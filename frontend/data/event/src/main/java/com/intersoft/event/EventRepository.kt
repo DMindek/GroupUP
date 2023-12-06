@@ -1,6 +1,7 @@
 package com.intersoft.event
 
 import android.util.Log
+import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
 import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.EventData
@@ -25,20 +26,38 @@ class EventRepository: IEventRepository {
             ownerId =  newEvent.ownerId
         )
 
-        val res = NetworkManager.createEvent(
+        NetworkManager.createEvent(
             eventData = EventBody(event),
             onCreateEventSuccess= {eventSuccessResponse ->
-                val successMessage = eventSuccessResponse.message
-                onCreateEventSuccess(successMessage)
+                onCreateEventSuccess(eventSuccessResponse.message)
             },
             onCreateEventFail = {
-
+                Log.d("EventRepository", "Error occurred: $it")
+                if(!it.isNullOrEmpty())if(it[0] != '{') {
+                    onCreateEventError(it)
+                }
+                else{
+                    val error: CreateEventFailResponse
+                    try {
+                        error = Gson().fromJson(it, CreateEventFailResponse::class.java)
+                        Log.d("EventRepository", "Error occurred $error")
+                    }catch (e: Exception){
+                        onCreateEventError("Server returned unknown error")
+                        return@createEvent
+                    }
+                }
             }
         )
     }
 }
 
 
-data class CreateEventSuccessResponse(
-    val message : String? = null
+data class CreateEventFailResponse(
+    val name: String?,
+    val description : String?,
+    val date : String?,
+    val duration : String?,
+    val maxParticipants : String?,
+    val location : String?,
+    val ownerId : String?
 )
