@@ -1,6 +1,8 @@
 package com.intersoft.network
 
 import com.intersoft.network.models.responses.EditBody
+import com.intersoft.network.models.responses.EventBody
+import com.intersoft.network.models.responses.EventData
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
@@ -29,4 +31,8 @@ interface ServerService {
         @Path("id") id: Int,
         @Body user: EditBody,
         @Header("Authorization") authToken: String ) : Call<UserData>
+
+    @Headers("Content-Type: application/json")
+    @POST("/api/v1/events")
+    fun createEvent(@Body event: EventBody): Call<EventData>
 }
