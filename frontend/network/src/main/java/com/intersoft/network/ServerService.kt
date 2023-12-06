@@ -2,7 +2,7 @@ package com.intersoft.network
 
 import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.EventBody
-import com.intersoft.network.models.responses.EventData
+import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
@@ -12,7 +12,6 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.Headers
-
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -34,5 +33,5 @@ interface ServerService {
 
     @Headers("Content-Type: application/json")
     @POST("/api/v1/events")
-    fun createEvent(@Body event: EventBody): Call<EventData>
+    fun createEvent(@Body event: EventBody): Call<EventSuccessResponse>
 }

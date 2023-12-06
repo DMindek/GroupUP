@@ -3,7 +3,7 @@ package com.intersoft.network
 import android.util.Log
 import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.EventBody
-import com.intersoft.network.models.responses.EventData
+import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
@@ -60,8 +60,9 @@ object NetworkManager {
         )
     }
 
-    fun createEvent(eventData: EventBody, onCreateEventSuccess: (EventData) ->Unit, onCreateEventFail: (String?) -> Unit){
-        serverService.createEvent(eventData).enqueue(ResponseHandler<EventData>(successCode = 201, errorCode = 422, onCreateEventSuccess, onCreateEventFail))
+    fun createEvent(eventData: EventBody, onCreateEventSuccess: (EventSuccessResponse) ->Unit, onCreateEventFail: (String?) -> Unit){
+        val res =serverService.createEvent(eventData)
+        res.enqueue(ResponseHandler<EventSuccessResponse>(successCode = 201, errorCode = 422, onCreateEventSuccess, onCreateEventFail))
     }
 
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,
@@ -95,5 +96,7 @@ object NetworkManager {
         }
 
     }
+
+
 
 }
