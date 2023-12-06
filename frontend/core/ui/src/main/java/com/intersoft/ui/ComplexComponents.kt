@@ -148,6 +148,8 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
 
     var durationInMillis : Long
 
+    val warningMessage = "Note: Set duration passes midnight and the end date is different from the start date"
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp)
@@ -176,7 +178,7 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
                                 durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
 
                                 if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
-                                    onDurationPastMidnight("Warning: Set duration passes midnight and the end date is different from the start date")
+                                    onDurationPastMidnight(warningMessage)
                                 else
                                     onDurationPastMidnight("")
 
@@ -208,7 +210,7 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
                                 durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
 
                                 if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
-                                    onDurationPastMidnight("Warning: Set duration passes midnight and the end date is different from the start date")
+                                    onDurationPastMidnight(warningMessage)
                                 else
                                     onDurationPastMidnight("")
 
@@ -264,7 +266,7 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
                     }
 
                     if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
-                        onDurationPastMidnight("Warning: Set duration passes midnight and the end date is different from the start date")
+                        onDurationPastMidnight(warningMessage)
                     else
                         onDurationPastMidnight("")
 
@@ -300,7 +302,6 @@ fun GeneralTimePicker(onCancel: () -> Unit, onConfirm: ( MutableList<Int>) -> Un
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SetupTimePickerDialogue(
     title: String = "Select Time",
