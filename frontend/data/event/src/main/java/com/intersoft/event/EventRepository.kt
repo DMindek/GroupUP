@@ -1,11 +1,13 @@
 package com.intersoft.event
 
 import android.util.Log
+import com.intersoft.network.NetworkManager
+import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.EventData
 
 class EventRepository: IEventRepository {
 
-    override fun createEvent(newEvent: EventModel, onCreateEventError: (String) -> Unit, onCreateEventSuccess: () -> Unit) {
+    override fun createEvent(newEvent: EventModel, onCreateEventError: (String) -> Unit, onCreateEventSuccess: (String) -> Unit) {
         Log.d("EventRepository", newEvent.toString())
         // Timestamp automatically adjusts to local time which is +1 offset for us, so we have to decrease the time by one hour in millis "3600000 ms" because it does not make sense to adjust starting time by 1 hour offset
         val dateTimestamp = java.sql.Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
@@ -22,5 +24,21 @@ class EventRepository: IEventRepository {
             location = newEvent.location,
             ownerId =  newEvent.ownerId
         )
+
+        val res = NetworkManager.createEvent(
+            eventData = EventBody(event),
+            onCreateEventSuccess= {eventSuccessResponse ->
+                val successMessage = eventSuccessResponse.message
+                onCreateEventSuccess(successMessage)
+            },
+            onCreateEventFail = {
+
+            }
+        )
     }
 }
+
+
+data class CreateEventSuccessResponse(
+    val message : String? = null
+)
