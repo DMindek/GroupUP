@@ -12,6 +12,7 @@ object EventCreationManager {
             description = description,
             dateInMillis =  selectedDateInMillis,
             durationInMillis = durationInMillis ,
+            startTimeInMillis = startTimeInMillis,
             maxParticipants = maxNumberOfParticipants,
             location = location,
             ownerId = ownerId
