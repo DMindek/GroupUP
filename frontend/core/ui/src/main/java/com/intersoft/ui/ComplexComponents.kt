@@ -28,6 +28,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -363,9 +364,9 @@ private fun SetupTimePickerDialogue(
 
 
 @Composable
-fun CounterElement(label: String, action: (Int) -> Unit = {}){
+fun CounterElement(label: String, onNumberOfParticipantsSet: (Int) -> Unit = {}){
     var count by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
 
     Column(modifier = Modifier
@@ -384,7 +385,7 @@ fun CounterElement(label: String, action: (Int) -> Unit = {}){
             .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BasicTextField("$count",{action(count)},
+            BasicTextField("$count",{onNumberOfParticipantsSet(count)},
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 25.sp),
                 modifier = Modifier
@@ -400,7 +401,12 @@ fun CounterElement(label: String, action: (Int) -> Unit = {}){
             Spacer(modifier = Modifier.width(15.dp))
 
             Button(
-                onClick ={if(count>0)count--} ,
+                onClick = {
+                    if(count>0){
+                        count--
+                        onNumberOfParticipantsSet(count)
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.primary),
                 contentColor = colorResource(R.color.primaryText),
@@ -414,7 +420,10 @@ fun CounterElement(label: String, action: (Int) -> Unit = {}){
             Spacer(modifier = Modifier.width(15.dp))
 
             Button(
-                onClick = { count++ },
+                onClick = {
+                    count++
+                    onNumberOfParticipantsSet(count)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.primary),
                     contentColor = colorResource(R.color.primaryText),
