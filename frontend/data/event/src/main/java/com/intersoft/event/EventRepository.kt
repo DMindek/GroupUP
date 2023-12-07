@@ -21,9 +21,9 @@ class EventRepository: IEventRepository {
             description = newEvent.description,
             date = dateTimestamp,
             duration =durationInMinutes,
-            maxParticipants = newEvent.maxParticipants,
+            max_participants = newEvent.maxParticipants,
             location = newEvent.location,
-            ownerId =  newEvent.ownerId
+            owner_id =  newEvent.ownerId
         )
 
         NetworkManager.createEvent(

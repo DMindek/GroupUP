@@ -11,7 +11,7 @@ data class EventData(
     val description : String,
     val date : Timestamp,
     val duration : Int,
-    val maxParticipants : Int,
+    val max_participants : Int,
     val location : String,
-    val ownerId : Int
+    val owner_id : Int
 )
