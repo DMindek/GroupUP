@@ -30,10 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
+import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
-import com.intersoft.groupup_app.navigation.UserInformationPage
+import com.intersoft.groupup_app.navigation.UserCreatedEventsPage
 import com.intersoft.groupup_app.navigation.UserProfilePage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 import com.intersoft.ui.NavBar
@@ -84,7 +86,7 @@ class MainActivity : ComponentActivity() {
 
                         NavHost(
                             navController = navController,
-                            startDestination = "login",
+                            startDestination = "home",
                             modifier = Modifier.padding(top = topPadding)
                         ) {
                             composable("registration") {
@@ -92,11 +94,7 @@ class MainActivity : ComponentActivity() {
                                 RegistrationPage(
                                     onRegister = {
                                         navController.navigate("login")
-                                        Toast.makeText(
-                                            applicationContext,
-                                            "account has been registered",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                        Toast.makeText(applicationContext, "account has been registered", Toast.LENGTH_SHORT).show()
                                     }
                                 )
                             }
@@ -115,7 +113,23 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable("home"){
-                            Text("Home page")
+                            HomePage(
+                                onCreateEventButtonPress = {navController.navigate("createEvent")},
+                                onUserInformationPressed = {navController.navigate("user_information")}
+                            )
+                        }
+                        composable("createEvent"){
+                            CreateEventPage(
+                                onCreateEvent = {
+                                    navController.navigate("userCreatedEvents")
+                                },
+                                onCancelEventCreation = {
+                                    navController.navigate("home")
+                                }
+                            )
+                        }
+                        composable("userCreatedEvents"){
+                            UserCreatedEventsPage()
                         }
                         composable("user_information") {
                             UserProfilePage {
