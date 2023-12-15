@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shared_prefs_file">com.intersoft.groupup_app.auth</string>
+    <string name="shared_prefs_user_id">com.intersoft.groupup_app.auth.id</string>
+    <string name="shared_prefs_user_token">com.intersoft.groupup_app.auth.token</string>
+    <string name="shared_prefs_user_email">com.intersoft.groupup_app.auth.email</string>
+    <string name="shared_prefs_user_location">com.intersoft.groupup_app.auth.location</string>
+    <string name="shared_prefs_user_username">com.intersoft.groupup_app.auth.username</string>
+</resources>

@@ -7,6 +7,7 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$PROJECT_DIR$/../../../../../../../Gradle/gradle-5.1" />
         <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
@@ -17,9 +18,11 @@
             <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/core/utils/location" />
             <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data/event" />
             <option value="$PROJECT_DIR$/data/user" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/auth" />
+            <option value="$PROJECT_DIR$/feature/event" />
             <option value="$PROJECT_DIR$/network" />
           </set>
         </option>

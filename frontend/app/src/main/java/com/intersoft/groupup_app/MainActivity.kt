@@ -10,12 +10,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.intersoft.groupup_app.navigation.CreateEventPage
+import com.intersoft.groupup_app.navigation.EditProfilePage
+import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
+import com.intersoft.groupup_app.navigation.UserCreatedEventsPage
+import com.intersoft.groupup_app.navigation.UserProfilePage
 import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "registration"){
+                    NavHost(navController = navController, startDestination = "home"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -40,7 +46,40 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("login"){
-                            LoginPage()
+                            LoginPage(
+                                context =LocalContext.current,
+                                onLogin = { navController.navigate("user_information") },
+                                onRegisterClick = { navController.navigate("registration") }
+                            )
+                        }
+                        composable("main"){
+                        }
+                        composable("home"){
+                            HomePage(
+                                onCreateEventButtonPress = {navController.navigate("createEvent")},
+                                onUserInformationPressed = {navController.navigate("user_information")}
+                            )
+                        }
+                        composable("createEvent"){
+                            CreateEventPage(
+                                onCreateEvent = {
+                                    navController.navigate("userCreatedEvents")
+                                },
+                                onCancelEventCreation = {
+                                    navController.navigate("home")
+                                }
+                            )
+                        }
+                        composable("userCreatedEvents"){
+                            UserCreatedEventsPage()
+                        }
+                        composable("user_information") {
+                            UserProfilePage {
+                                navController.navigate("edit_profile")
+                            }
+                        }
+                        composable("edit_profile") {
+                            EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
                     }
                 }

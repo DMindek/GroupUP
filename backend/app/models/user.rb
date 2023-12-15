@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+
+    has_many :owned_events, class_name: 'Event', foreign_key: 'owner_id', dependent: :destroy
+    has_and_belongs_to_many :events, join_table: 'event_attendances', foreign_key: 'user_id'
     
     has_secure_password
 
