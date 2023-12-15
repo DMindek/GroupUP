@@ -2,6 +2,7 @@ package com.intersoft.network
 
 import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.EventBody
+import com.intersoft.network.models.responses.EventData
 import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
@@ -34,4 +35,8 @@ interface ServerService {
     @Headers("Content-Type: application/json")
     @POST("/api/v1/events")
     fun createEvent(@Body event: EventBody): Call<EventSuccessResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("/api/v1/users/{user_id}/owned_events")
+    fun getUserEvents(@Path("user_id") userId: Int): Call<List<EventData>>
 }

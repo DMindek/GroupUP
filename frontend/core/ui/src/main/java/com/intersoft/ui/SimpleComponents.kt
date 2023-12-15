@@ -20,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 
@@ -30,8 +31,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
@@ -228,110 +229,54 @@ fun ErrorText(text: String){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListOfObjects(objects: List<IListSerializable>){
-    LazyColumn(
+fun ObjectCard(data : IIterableObject, interaction: () -> Unit){
+    Card (
+        onClick = interaction,
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
     ){
-        items(objects.size){index ->
-            Card (
-                onClick = objects[index].getInteraction(),
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = colorResource(R.color.primary))
+        ) {
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth(0.5F)
+                    .padding(10.dp)
+
+            ) {
+                Text(
+                    text = data.getMainText(),
+                    fontSize = 20.sp,
+                    color = colorResource(R.color.primaryText)
+                )
+                Text(
+                    text = data.getSecondaryText(),
+                    fontSize = 15.sp,
+                    color = colorResource(R.color.primaryText)
+                )
+            }
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
             ){
-                Row (
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    tint = colorResource(R.color.primaryText),
+                    contentDescription = "Click to view details",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = colorResource(R.color.primary))
-                ) {
-                    Column (
-                        modifier = Modifier
-                            .fillMaxWidth(0.5F)
-                            .padding(10.dp)
+                        .padding(10.dp)
+                        .wrapContentWidth(Alignment.End)
 
-                    ) {
-                        Text(
-                            text = objects[index].getMainField(),
-                            fontSize = 20.sp,
-                            color = colorResource(R.color.primaryText)
-                        )
-                        Text(
-                            text = objects[index].getSubField(),
-                            fontSize = 15.sp,
-                            color = colorResource(R.color.primaryText)
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
-                    ){
-                        Icon(
-                            imageVector = Icons.Default.Info,
-                            tint = colorResource(R.color.primaryText),
-                            contentDescription = "Click to view details",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp)
-                                .wrapContentWidth(Alignment.End)
-
-                        )
-                    }
-                }
-
+                )
             }
         }
+
     }
-}
-
-@Preview
-@Composable
-fun PreviewListOfObjects(){
-    ListOfObjects(
-        objects = listOf(
-            object : IListSerializable {
-                override fun getMainField(): String {
-                    return "Main field 1"
-                }
-
-                override fun getSubField(): String {
-                    return "Sub field 1"
-                }
-
-                override fun getInteraction(): () -> Unit {
-                    return {}
-                }
-            },
-            object : IListSerializable {
-                override fun getMainField(): String {
-                    return "Main field 2"
-                }
-
-                override fun getSubField(): String {
-                    return "Sub field 2"
-                }
-
-                override fun getInteraction(): () -> Unit {
-                    return {}
-                }
-            },
-            object : IListSerializable {
-                override fun getMainField(): String {
-                    return "Main field 3"
-                }
-
-                override fun getSubField(): String {
-                    return "Sub field 3"
-                }
-
-                override fun getInteraction(): () -> Unit {
-                    return {}
-                }
-            }
-        )
-    )
 }
 
 
@@ -360,4 +305,17 @@ fun WarningText(text: String){
         modifier = Modifier.fillMaxWidth()
     )
 }
+
+@Composable
+fun LoadingScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = Color.Gray)
+    }
+}
+
 

@@ -64,11 +64,14 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation(project(mapOf("path" to ":data:user")))
     implementation(project(mapOf("path" to ":core:utils")))
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.2")
     implementation(project(mapOf("path" to ":feature:event")))
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
+
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

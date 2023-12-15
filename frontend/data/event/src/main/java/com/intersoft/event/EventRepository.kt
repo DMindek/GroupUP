@@ -23,7 +23,8 @@ class EventRepository: IEventRepository {
             duration =durationInMinutes,
             max_participants = newEvent.maxParticipants,
             location = newEvent.location,
-            owner_id =  newEvent.ownerId
+            owner_id =  newEvent.ownerId,
+            id = newEvent.id
         )
 
         NetworkManager.createEvent(
@@ -49,7 +50,45 @@ class EventRepository: IEventRepository {
             }
         )
     }
+
+    override fun getUserEvents(
+        userId: Int,
+        onGetUserEventsError: (String) -> Unit,
+        onGetUserEventsSuccess: (List<EventModel>) -> Unit
+    ) {
+        NetworkManager.getUserEvents(
+            userId = userId,
+            onGetUserEventsSuccess = {events ->
+                val eventModels = events.map { event ->
+                    EventModel(
+                        name = event.name,
+                        description = event.description,
+                        dateInMillis = event.date.time,
+                        durationInMillis = event.duration.toLong() * 60000,
+                        startTimeInMillis = event.date.time - event.duration.toLong() * 60000,
+                        maxParticipants = event.max_participants,
+                        location = event.location,
+                        ownerId = event.owner_id,
+                        id = event.id!!
+                    )
+                }
+                onGetUserEventsSuccess(eventModels)
+            },
+            onGetUserEventsFail = {
+                if(it!= null){
+                    onGetUserEventsError(it)
+                }
+                else{
+                    onGetUserEventsError("Unknown error occurred")
+                }
+
+            }
+        )
+
+    }
 }
+
+
 
 
 data class CreateEventFailResponse(

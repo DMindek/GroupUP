@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
 import com.intersoft.groupup_app.navigation.HomePage
@@ -71,7 +73,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("userCreatedEvents"){
-                            UserCreatedEventsPage()
+                            UserCreatedEventsPage(
+                                onEventClick = { navController.navigate("eventDetail/$it") },
+                                onCreateEventButtonPress = { navController.navigate("createEvent") }
+                            )
                         }
                         composable("user_information") {
                             UserProfilePage {
@@ -80,6 +85,11 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("edit_profile") {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
+                        }
+                        composable("eventDetail/{eventId}"){ backStackEntry ->
+                            val eventId = backStackEntry.arguments?.getInt("eventId")
+                            //TODO add event detail Page
+
                         }
                     }
                 }
