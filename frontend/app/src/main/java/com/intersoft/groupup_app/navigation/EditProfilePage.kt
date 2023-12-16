@@ -42,13 +42,17 @@ fun EditProfilePage(
     var email by remember { mutableStateOf("test123@gmail.com") }
     var location by remember { mutableStateOf("Maia, 23th") }
     var error by remember { mutableStateOf("") }
-    var coordinates: Pair<Double?,Double?> = Pair(null, null)
+    var coordinates: Pair<Double?,Double?>? = Pair(null, null)
 
     if(AuthContext.token != null){
         username = AuthContext.username!!
         email = AuthContext.email!!
         location = AuthContext.location!!
         coordinates = LocationUtils.coordinatesFromString(AuthContext.location!!)
+    }
+
+    if(coordinates == null){
+        coordinates = Pair(null, null)
     }
 
     LazyColumn(modifier = Modifier
@@ -100,8 +104,8 @@ fun EditProfilePage(
                         Text(text = "Location")
                         AppContext.LocationService.LocationPicker(
                             {lat,lon -> location = "$lat,$lon"},
-                            latitude = coordinates.first!!,
-                            longitude = coordinates.second!!,
+                            latitude = coordinates!!.first,
+                            longitude = coordinates.second,
                             true
                         )
                     }

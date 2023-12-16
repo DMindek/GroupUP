@@ -33,15 +33,17 @@ fun UserProfilePage(onEditPress: () -> Unit){
 
     var username by remember { mutableStateOf("John Smith") }
     var email by remember { mutableStateOf("test123@gmail.com") }
-    var latitude by remember { mutableStateOf(1.2423) }
-    var longitude by remember { mutableStateOf(61.1234) }
+    var latitude by remember { mutableStateOf<Double?>(null) }
+    var longitude by remember { mutableStateOf<Double?>(null) }
 
     if(AuthContext.token != null){
         username = AuthContext.username!!
         email = AuthContext.email!!
         val coordinates = LocationUtils.coordinatesFromString(AuthContext.location!!)
-        latitude = coordinates.first
-        longitude = coordinates.second
+        if(coordinates != null){
+            latitude = coordinates.first
+            longitude = coordinates.second
+        }
     }
 
     LazyColumn(
