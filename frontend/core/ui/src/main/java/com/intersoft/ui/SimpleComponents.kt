@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
@@ -27,10 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 
 @Composable
 fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
@@ -64,6 +67,49 @@ fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: (
         Text(text = buttonText)
     }
 }
+@Composable
+fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, isEnabled: Boolean, action: () -> Unit ){
+    Button(
+        onClick = action,
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.primary),
+            contentColor = colorResource(R.color.primaryText),
+            disabledContainerColor = colorResource(R.color.primary),
+            disabledContentColor = colorResource(R.color.primaryText)
+        ),
+        enabled = isEnabled
+    ){
+        Text(text = buttonText)
+    }
+}
+
+@Composable
+fun MultiLineTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, action: (String) -> Unit = {}){
+    var textValue by remember{
+        mutableStateOf("")
+    }
+    Column(modifier = Modifier.padding(20.dp)){
+        Text(text = label,
+            fontSize = 16.sp,
+            color = colorResource(R.color.foregroundText)
+        )
+        BasicTextField(textValue,
+            {
+                textValue = it
+                action(it)
+            },
+            singleLine = false,
+            visualTransformation = visualTransformation,
+            textStyle = TextStyle(fontSize = 25.sp),
+            modifier = Modifier.background(color = colorResource(R.color.inputField)),
+            decorationBox = {innerTextField ->
+                Row(modifier = Modifier.fillMaxWidth()){}
+                innerTextField()
+            }
+        )
+    }
+}
 
 @Composable
 fun TextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None,placeholder: String = "", action: (String) -> Unit = {}){
@@ -93,6 +139,53 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
 }
 
 @Composable
+fun NumericTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, paddingAmount: Int, action: (String) -> Unit = {}){
+    var textValue by remember{
+        mutableStateOf("")
+    }
+    val pattern = remember {Regex("^[0-9]{0,2}\$")}
+    Column(modifier = Modifier.padding(paddingAmount.dp).width(50.dp)){
+        Text(text = label,
+            fontSize = 16.sp,
+            color = colorResource(R.color.foregroundText)
+        )
+        BasicTextField(textValue,
+            {
+                if(it.matches(pattern)){
+                    textValue = it
+                    action(it)
+                }
+            },
+            singleLine = true,
+            visualTransformation = visualTransformation,
+            textStyle = TextStyle(fontSize = 25.sp),
+            modifier = Modifier.background(color = colorResource(R.color.inputField)),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            decorationBox = {innerTextField ->
+                Row(modifier = Modifier.fillMaxWidth()){}
+                innerTextField()
+            }
+        )
+    }
+}
+
+
+@Composable
+fun DisabledTextField(textvalue:String, visualTransformation: VisualTransformation = VisualTransformation.None){
+        BasicTextField(textvalue, {},
+            singleLine = true,
+            visualTransformation = visualTransformation,
+            textStyle = TextStyle(fontSize = 25.sp),
+            modifier = Modifier.background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark)),
+            decorationBox = {innerTextField ->
+                Row(modifier = Modifier.fillMaxWidth()){}
+                innerTextField()
+            },
+            enabled = false
+        )
+}
+
+@Composable
 fun TitleText(text: String){
     Text(
         text = text,
@@ -101,6 +194,16 @@ fun TitleText(text: String){
         lineHeight = 50.sp,
         modifier = Modifier
             .fillMaxWidth()
+    )
+}
+
+@Composable
+fun LabelText(text: String){
+    Text(
+        text = text,
+        fontSize = 16.sp,
+        textAlign = TextAlign.Start,
+        color = colorResource(R.color.foregroundText)
     )
 }
 
@@ -129,3 +232,15 @@ fun IconInformationText(icon: ImageVector, text: String){
     }
 
 }
+
+@Composable
+fun WarningText(text: String){
+    Text(
+        text = text,
+        color = colorResource(R.color.foregroundText),
+        fontSize = 12.sp,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
