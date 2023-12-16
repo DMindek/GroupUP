@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
+import com.intersoft.groupup_app.AppContext
+import com.intersoft.location.LocationUtils
 import com.intersoft.ui.PrimaryButton
 
 enum class UserProfileFields{
@@ -32,11 +34,13 @@ fun UserProfilePage(onEditPress: () -> Unit){
     var username by remember { mutableStateOf("John Smith") }
     var email by remember { mutableStateOf("test123@gmail.com") }
     var location by remember { mutableStateOf("Maia, 23th") }
+    var coordinates: Pair<Double?,Double?> = Pair(null, null)
 
     if(AuthContext.token != null){
         username = AuthContext.username!!
         email = AuthContext.email!!
         location = AuthContext.location!!
+        coordinates = LocationUtils.coordinatesFromString(location)
     }
 
     LazyColumn(
@@ -69,7 +73,21 @@ fun UserProfilePage(onEditPress: () -> Unit){
             UserTextInformation(UserProfileFields.EMAIL, email)
         }
         item {
-            UserTextInformation(UserProfileFields.LOCATION, location)
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp, start = 32.dp, end = 32.dp)
+            ) {
+                Text(
+                    text = "Location",
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier
+                        .padding(bottom = 4.dp)
+                )
+                AppContext.LocationService.LocationDisplay(
+                    latitude = coordinates.first!!,
+                    longitude = coordinates.second!!
+                )
+            }
         }
     }
 }
