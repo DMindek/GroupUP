@@ -33,14 +33,15 @@ fun UserProfilePage(onEditPress: () -> Unit){
 
     var username by remember { mutableStateOf("John Smith") }
     var email by remember { mutableStateOf("test123@gmail.com") }
-    var location by remember { mutableStateOf("Maia, 23th") }
-    var coordinates: Pair<Double?,Double?> = Pair(null, null)
+    var latitude by remember { mutableStateOf(1.2423) }
+    var longitude by remember { mutableStateOf(61.1234) }
 
     if(AuthContext.token != null){
         username = AuthContext.username!!
         email = AuthContext.email!!
-        location = AuthContext.location!!
-        coordinates = LocationUtils.coordinatesFromString(location)
+        val coordinates = LocationUtils.coordinatesFromString(AuthContext.location!!)
+        latitude = coordinates.first
+        longitude = coordinates.second
     }
 
     LazyColumn(
@@ -84,8 +85,8 @@ fun UserProfilePage(onEditPress: () -> Unit){
                         .padding(bottom = 4.dp)
                 )
                 AppContext.LocationService.LocationDisplay(
-                    latitude = coordinates.first!!,
-                    longitude = coordinates.second!!
+                    latitude = latitude,
+                    longitude = longitude
                 )
             }
         }

@@ -48,7 +48,7 @@ fun EditProfilePage(
         username = AuthContext.username!!
         email = AuthContext.email!!
         location = AuthContext.location!!
-        coordinates = LocationUtils.coordinatesFromString(location)
+        coordinates = LocationUtils.coordinatesFromString(AuthContext.location!!)
     }
 
     LazyColumn(modifier = Modifier
