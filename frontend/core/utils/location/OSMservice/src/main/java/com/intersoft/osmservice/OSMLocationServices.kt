@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.intersoft.location.ILocationServices
 import com.utsman.osmandcompose.Marker
@@ -46,25 +48,30 @@ object OSMLocationServices: ILocationServices {
     }
 
     @Composable
-    override fun LocationDisplay(latitude: Double, longitude: Double) {
-        val location = GeoPoint(latitude, longitude)
+    override fun LocationDisplay(latitude: Double?, longitude: Double?) {
+        if(latitude != null && longitude != null) {
+            val location = GeoPoint(latitude, longitude)
 
-        val markerState = rememberMarkerState(
-            geoPoint = location
-        )
+            val markerState = rememberMarkerState(
+                geoPoint = location
+            )
 
-        val cameraState = rememberCameraState{
-            geoPoint = location
-            zoom = 18.0
-        }
-
-        Surface(modifier = Modifier.fillMaxWidth().height(250.dp)) {
-            OpenStreetMap(
-                modifier = Modifier.fillMaxWidth(),
-                cameraState = cameraState,
-            ) {
-                Marker(state = markerState)
+            val cameraState = rememberCameraState {
+                geoPoint = location
+                zoom = 18.0
             }
+
+            Surface(modifier = Modifier.fillMaxWidth().height(250.dp)) {
+                OpenStreetMap(
+                    modifier = Modifier.fillMaxWidth(),
+                    cameraState = cameraState,
+                ) {
+                    Marker(state = markerState)
+                }
+            }
+        }
+        else{
+            Text(text = "Location not found", color = Color.Red)
         }
     }
 
