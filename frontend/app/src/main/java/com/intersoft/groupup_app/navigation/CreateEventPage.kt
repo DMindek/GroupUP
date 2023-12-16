@@ -79,7 +79,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         WarningText(text = warningText)
         CounterElement(label = "Max Participants") {maxNumberOfParticipants = it}
         LabelText(text = "Location")
-        AppContext.LocationService.LocationPicker(
+        AppContext.getLocationService().LocationPicker(
             onLocationChanged = {lat, lon -> location = "$lat,$lon"},
             latitude = null,
             longitude = null,

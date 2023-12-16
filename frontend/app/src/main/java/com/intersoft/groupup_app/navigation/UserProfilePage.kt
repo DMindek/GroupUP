@@ -86,7 +86,7 @@ fun UserProfilePage(onEditPress: () -> Unit){
                     modifier = Modifier
                         .padding(bottom = 4.dp)
                 )
-                AppContext.LocationService.LocationDisplay(
+                AppContext.getLocationService().LocationDisplay(
                     latitude = latitude,
                     longitude = longitude
                 )

@@ -54,7 +54,7 @@ fun RegistrationPage(onRegister: () -> Unit){
         TextInputField(label = "email") { email = it }
         TextInputField(label = "username") {username = it}
         Text(text = "Location")
-        AppContext.LocationService.LocationPicker(
+        AppContext.getLocationService().LocationPicker(
             onLocationChanged = {lat,lon -> location = "$lat,$lon" },
             latitude = null,
             longitude = null,

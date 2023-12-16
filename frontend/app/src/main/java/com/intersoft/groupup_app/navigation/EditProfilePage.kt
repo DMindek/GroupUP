@@ -102,9 +102,9 @@ fun EditProfilePage(
                             .fillMaxWidth(0.90f)
                     ){
                         Text(text = "Location")
-                        AppContext.LocationService.LocationPicker(
+                        AppContext.getLocationService().LocationPicker(
                             {lat,lon -> location = "$lat,$lon"},
-                            latitude = coordinates!!.first,
+                            latitude = coordinates.first,
                             longitude = coordinates.second,
                             true
                         )
