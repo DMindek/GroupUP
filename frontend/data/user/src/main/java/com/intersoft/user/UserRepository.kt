@@ -6,24 +6,23 @@ import com.intersoft.network.NetworkManager
 import com.intersoft.network.RequestListener
 import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.LoginBody
-import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
 import com.intersoft.network.models.responses.UserData
-import org.json.JSONObject
 
 class UserRepository: IUserRepository {
 
     override fun addUser(
         newUser: UserModel,
-        onRegisterSucceed: () -> Unit,
+        onRegistrationSucceed: () -> Unit,
         onRegistrationError: (String) -> Unit
     ) {
         Log.d("UserRepository", newUser.toString())
-        val user = UserData(newUser.username, newUser.email, newUser.location, newUser.password,)
-        val res = NetworkManager.registerUser(RegisterBody(user), object: RequestListener {
+        val user = UserData(newUser.username, newUser.email, newUser.password, newUser.location)
+        
+        NetworkManager.registerUser(RegisterBody(user), object: RequestListener {
             override fun <T> onSuccess(data: T) {
                 Log.d("UserRepository", "User added successfully")
-                onRegisterSucceed()
+                onRegistrationSucceed()
             }
 
             override fun onError(error: String?) {

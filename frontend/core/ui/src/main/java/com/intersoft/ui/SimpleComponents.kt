@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
@@ -15,8 +16,10 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.MaterialTheme
-
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +36,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 
 @Composable
@@ -186,14 +190,13 @@ fun DisabledTextField(textvalue:String, visualTransformation: VisualTransformati
 }
 
 @Composable
-fun TitleText(text: String){
+fun TitleText(text: String, modifier: Modifier = Modifier){
     Text(
         text = text,
         fontSize = 40.sp,
         textAlign = TextAlign.Center,
         lineHeight = 50.sp,
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
     )
 }
 
@@ -214,9 +217,35 @@ fun ErrorText(text: String){
         color = colorResource(R.color.errorColor),
         fontSize = 12.sp,
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        maxLines = 1
     )
 }
+
+@Composable
+fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
+    var currentRoute by remember {
+        mutableStateOf(navBarItems[0].route)
+    }
+
+    NavigationBar(Modifier.height(50.dp)){
+        for (item in navBarItems){
+            NavigationBarItem(
+                selected = currentRoute == item.route,
+                icon = { Icon(item.icon, item.route) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = colorResource(id = R.color.primary),
+                    unselectedIconColor = colorResource(id = R.color.secondary),
+                ),
+                onClick = {
+                    currentRoute = item.route
+                    navController.navigate(item.route)
+            })
+        }
+    }
+}
+
+data class NavBarItem(val route: String, val icon: ImageVector)
 
 @Composable
 fun IconInformationText(icon: ImageVector, text: String){
@@ -230,7 +259,6 @@ fun IconInformationText(icon: ImageVector, text: String){
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = text, style = MaterialTheme.typography.bodyLarge )
     }
-
 }
 
 @Composable
@@ -243,4 +271,3 @@ fun WarningText(text: String){
         modifier = Modifier.fillMaxWidth()
     )
 }
-
