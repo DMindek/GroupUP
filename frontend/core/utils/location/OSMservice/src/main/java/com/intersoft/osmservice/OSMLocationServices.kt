@@ -71,6 +71,6 @@ object OSMLocationServices: ILocationServices {
     override fun calculateDistance(myLatitude: Double, myLongitude: Double, latitude: Double, longitude: Double): Float {
         val results = FloatArray(size = 3)
         Location.distanceBetween(myLatitude, myLongitude, latitude, longitude, results)
-        return results[0]
+        return results[0] / 1000
     }
 }
