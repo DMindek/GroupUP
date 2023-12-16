@@ -14,6 +14,11 @@ class Api::V1::UsersController < ApplicationController
     render json: show_user(@user)
   end
 
+  # GET /users/1/owned_events
+  def owned_events
+    render json: @user.owned_events
+  end
+
   # POST /users
   def create
     @user = User.new(user_params)
