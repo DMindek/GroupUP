@@ -1,10 +1,15 @@
 package com.intersoft.location
 
-object LocationUtils {
-    fun coordinatesFromString(text: String): Pair<Double,Double>{
-        val first: Double = text.substringBefore(',').toDouble()
-        val second: Double = text.substringAfter(',').toDouble()
+import java.lang.Exception
 
-        return Pair(first, second)
+object LocationUtils {
+    fun coordinatesFromString(text: String): Pair<Double,Double>?{
+        return try {
+            val first: Double = text.substringBefore(',').toDouble()
+            val second: Double = text.substringAfter(',').toDouble()
+            Pair(first, second)
+        }catch (e: Exception){
+            null
+        }
     }
 }
