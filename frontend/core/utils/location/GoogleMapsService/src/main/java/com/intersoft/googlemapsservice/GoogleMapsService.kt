@@ -17,6 +17,10 @@ import com.google.maps.android.compose.rememberMarkerState
 import com.intersoft.location.ILocationServices
 
 object GoogleMapsService: ILocationServices {
+    override fun getName(): String{
+        return "Google maps"
+    }
+
     @Composable
     override fun LocationPicker(
         onLocationChanged: (latitude: Double, longitude: Double) -> Unit,

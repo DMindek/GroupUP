@@ -9,4 +9,6 @@ interface ILocationServices {
     fun LocationDisplay(latitude: Double?, longitude: Double?)
 
     fun calculateDistance(myLatitude: Double, myLongitude: Double, latitude: Double, longitude: Double): Float
+
+    fun getName(): String
 }

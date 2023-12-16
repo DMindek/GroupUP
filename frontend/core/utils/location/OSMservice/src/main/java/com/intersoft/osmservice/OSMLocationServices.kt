@@ -18,6 +18,10 @@ import com.utsman.osmandcompose.rememberMarkerState
 import org.osmdroid.util.GeoPoint
 
 object OSMLocationServices: ILocationServices {
+    override fun getName(): String{
+        return "OpenStreetMaps"
+    }
+
     @Composable
     override fun LocationPicker(onLocationChanged: (latitude: Double, longitude: Double) -> Unit, latitude: Double?, longitude: Double?, isEdit: Boolean) {
         val currentLocation = if(longitude != null && latitude != null) GeoPoint(latitude, longitude)
