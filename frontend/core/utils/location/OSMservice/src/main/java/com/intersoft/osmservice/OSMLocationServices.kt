@@ -1,9 +1,13 @@
 package com.intersoft.osmservice
 
 import android.location.Location
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.intersoft.location.ILocationServices
 import com.utsman.osmandcompose.Marker
 import com.utsman.osmandcompose.OpenStreetMap
@@ -11,7 +15,7 @@ import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
 import org.osmdroid.util.GeoPoint
 
-class OSMLocationServices: ILocationServices {
+object OSMLocationServices: ILocationServices {
     @Composable
     override fun LocationPicker(onLocationChanged: (latitude: Double, longitude: Double) -> Unit, latitude: Double?, longitude: Double?) {
         val currentLocation = if(longitude != null && latitude != null) GeoPoint(latitude, longitude)
@@ -21,14 +25,21 @@ class OSMLocationServices: ILocationServices {
 
         val cameraState = rememberCameraState{
             geoPoint = currentLocation
-            zoom = 15.0
+            zoom = 18.0
         }
 
-        OpenStreetMap(
-            modifier = Modifier.fillMaxWidth(),
-            cameraState = cameraState,
-            onMapClick = {}
-        )
+        Surface(modifier = Modifier.fillMaxWidth().height(250.dp)){
+            OpenStreetMap(
+                modifier = Modifier.fillMaxSize(),
+                cameraState = cameraState,
+                onMapClick = {
+                    marker.geoPoint = it
+                    onLocationChanged(it.latitude, it.longitude)
+                }
+            ){
+                Marker(state = marker)
+            }
+        }
     }
 
     @Composable
@@ -41,14 +52,16 @@ class OSMLocationServices: ILocationServices {
 
         val cameraState = rememberCameraState{
             geoPoint = location
-            zoom = 15.0
+            zoom = 18.0
         }
 
-        OpenStreetMap(
-            modifier = Modifier.fillMaxWidth(),
-            cameraState = cameraState,
-        ){
-            Marker(state = markerState)
+        Surface(modifier = Modifier.fillMaxWidth().height(250.dp)) {
+            OpenStreetMap(
+                modifier = Modifier.fillMaxWidth(),
+                cameraState = cameraState,
+            ) {
+                Marker(state = markerState)
+            }
         }
     }
 

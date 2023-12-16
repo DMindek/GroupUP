@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +53,7 @@ fun RegistrationPage(onRegister: () -> Unit){
         TitleText(text = "Register")
         TextInputField(label = "email") { email = it }
         TextInputField(label = "username") {username = it}
+        Text(text = "Location")
         AppContext.LocationService.LocationPicker(
             onLocationChanged = {lat,lon -> location = "$lat,$lon" },
             latitude = null,
@@ -60,9 +62,9 @@ fun RegistrationPage(onRegister: () -> Unit){
         TextInputField(label = "password", PasswordVisualTransformation()) {password = it}
         TextInputField(label = "confirm password", PasswordVisualTransformation()) {passwordRetype = it}
         ErrorText(text = errorText)
-        PrimaryButton(buttonText = "Sign up", modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .padding(top = 30.dp)) {
+        PrimaryButton(buttonText = "Sign up",
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
             RegistrationManager.registerUser(UserModel(username, email, password, location), passwordRetype,
                 onRegisterSuccess = onRegister,
                 onRegisterFail = {
