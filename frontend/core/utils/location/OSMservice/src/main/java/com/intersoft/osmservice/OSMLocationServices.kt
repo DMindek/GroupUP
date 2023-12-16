@@ -17,11 +17,14 @@ import org.osmdroid.util.GeoPoint
 
 object OSMLocationServices: ILocationServices {
     @Composable
-    override fun LocationPicker(onLocationChanged: (latitude: Double, longitude: Double) -> Unit, latitude: Double?, longitude: Double?) {
+    override fun LocationPicker(onLocationChanged: (latitude: Double, longitude: Double) -> Unit, latitude: Double?, longitude: Double?, isEdit: Boolean) {
         val currentLocation = if(longitude != null && latitude != null) GeoPoint(latitude, longitude)
         else GeoPoint(46.307833, 16.338050)
 
         val marker = rememberMarkerState()
+        if(isEdit){
+            marker.geoPoint = GeoPoint(latitude!!, longitude!!)
+        }
 
         val cameraState = rememberCameraState{
             geoPoint = currentLocation

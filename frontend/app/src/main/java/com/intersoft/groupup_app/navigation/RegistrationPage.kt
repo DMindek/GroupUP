@@ -57,7 +57,8 @@ fun RegistrationPage(onRegister: () -> Unit){
         AppContext.LocationService.LocationPicker(
             onLocationChanged = {lat,lon -> location = "$lat,$lon" },
             latitude = null,
-            longitude = null
+            longitude = null,
+            false
         )
         TextInputField(label = "password", PasswordVisualTransformation()) {password = it}
         TextInputField(label = "confirm password", PasswordVisualTransformation()) {passwordRetype = it}

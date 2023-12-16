@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.auth.EditUserInfoManager
+import com.intersoft.groupup_app.AppContext
+import com.intersoft.location.LocationUtils
 import com.intersoft.ui.ErrorText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.SecondaryButton
@@ -40,11 +42,13 @@ fun EditProfilePage(
     var email by remember { mutableStateOf("test123@gmail.com") }
     var location by remember { mutableStateOf("Maia, 23th") }
     var error by remember { mutableStateOf("") }
+    var coordinates: Pair<Double?,Double?> = Pair(null, null)
 
     if(AuthContext.token != null){
         username = AuthContext.username!!
         email = AuthContext.email!!
         location = AuthContext.location!!
+        coordinates = LocationUtils.coordinatesFromString(location)
     }
 
     LazyColumn(modifier = Modifier
@@ -77,8 +81,40 @@ fun EditProfilePage(
             }
         }
         item {
-            EditProfileField(field = UserProfileFields.LOCATION, value = location) {
-                location = it
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp, start = 32.dp, end = 32.dp)
+            )
+            {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+
+                ){
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(0.90f)
+                    ){
+                        Text(text = "Location")
+                        AppContext.LocationService.LocationPicker(
+                            {lat,lon -> location = "$lat,$lon"},
+                            latitude = coordinates.first!!,
+                            longitude = coordinates.second!!,
+                            true
+                        )
+                    }
+
+
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit",
+                        modifier = Modifier.padding(start = 8.dp, end= 4.dp)
+                    )
+                }
+
+
             }
         }
 
