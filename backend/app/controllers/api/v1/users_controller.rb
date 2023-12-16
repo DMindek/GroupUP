@@ -64,7 +64,7 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def show_user(user)
-      return user.to_json(except: [:password_digest, :created_at, :updated_at])
+      return user.to_json()
     end
 
 
