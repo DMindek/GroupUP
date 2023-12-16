@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.intersoft.groupup_app"
         minSdk = 27
-        targetSdk = 34
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
