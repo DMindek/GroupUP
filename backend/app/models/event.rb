@@ -9,4 +9,18 @@ class Event < ApplicationRecord
     validates :date, presence: true, comparison: { greater_than: Date.current }
     validates :location, presence: true
 
+    def as_json(options = {})
+        super(options.merge(
+            except: [:created_at, :updated_at],
+            include: {
+            owner: {
+                except: [:created_at, :updated_at, :password_digest]
+            },
+            participants: {
+
+            }
+            }
+        ))
+    end
+
 end
