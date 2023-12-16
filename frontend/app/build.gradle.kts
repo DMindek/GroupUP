@@ -65,6 +65,8 @@ dependencies {
     implementation(project(mapOf("path" to ":data:user")))
     implementation(project(mapOf("path" to ":core:utils")))
     implementation(project(mapOf("path" to ":feature:event")))
+    implementation(project(":core:utils:location"))
+    implementation(project(":core:utils:location:OSMservice"))
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
