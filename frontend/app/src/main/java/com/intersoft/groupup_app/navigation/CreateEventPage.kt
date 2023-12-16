@@ -19,10 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventCreationManager
+import com.intersoft.groupup_app.AppContext
 import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DurationSelectionElement
 import com.intersoft.ui.ErrorText
 import com.intersoft.ui.GeneralDatePicker
+import com.intersoft.ui.LabelText
 import com.intersoft.ui.MultiLineTextInputField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
@@ -76,7 +78,13 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         DurationSelectionElement({warningText = it},{durationInMillis = it}){startTimeInMillis = it}
         WarningText(text = warningText)
         CounterElement(label = "Max Participants") {maxNumberOfParticipants = it}
-        TextInputField(label = "location") { location = it }
+        LabelText(text = "Location")
+        AppContext.LocationService.LocationPicker(
+            onLocationChanged = {lat, lon -> location = "$lat,$lon"},
+            latitude = null,
+            longitude = null,
+            isEdit = false
+        )
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
 
