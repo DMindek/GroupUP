@@ -36,21 +36,21 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
-     Button(
-         onClick = action,
-         modifier = modifier,
-         colors = ButtonDefaults.buttonColors(
-             containerColor = colorResource(R.color.primary),
-             contentColor = colorResource(R.color.primaryText),
-             disabledContainerColor = colorResource(R.color.primary),
-             disabledContentColor = colorResource(R.color.primaryText)
-         )
+fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, isEnabled: Boolean = true, action: () -> Unit ){
+    Button(
+        onClick = action,
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.primary),
+            contentColor = colorResource(R.color.primaryText),
+            disabledContainerColor = colorResource(R.color.primary),
+            disabledContentColor = colorResource(R.color.primaryText)
+        ),
+        enabled = isEnabled
     ){
-         Text(text = buttonText)
-     }
+        Text(text = buttonText)
+    }
 }
-
 
 @Composable
 fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
@@ -63,22 +63,6 @@ fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: (
             disabledContainerColor = colorResource(R.color.secondary),
             disabledContentColor = colorResource(R.color.secondaryText)
         )
-    ){
-        Text(text = buttonText)
-    }
-}
-@Composable
-fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, isEnabled: Boolean, action: () -> Unit ){
-    Button(
-        onClick = action,
-        modifier = modifier,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.primary),
-            contentColor = colorResource(R.color.primaryText),
-            disabledContainerColor = colorResource(R.color.primary),
-            disabledContentColor = colorResource(R.color.primaryText)
-        ),
-        enabled = isEnabled
     ){
         Text(text = buttonText)
     }
