@@ -90,9 +90,10 @@ class EventRepository: IEventRepository {
             })
     }
 
-    override fun getHostname(hostId: Int, onGetHostnameError: (String?) -> Unit, onGetHostNameSuccess: (String) -> Unit) {
+    override fun getHostname(hostId: Int, authToken: String,onGetHostnameError: (String?) -> Unit, onGetHostNameSuccess: (String) -> Unit) {
         NetworkManager.getUser(
             hostId,
+            authToken,
             onGetUserSuccess = {
                 val hostName = it.username
                 Log.d("EventRepository", "Recieved hostname: $hostName")

@@ -67,8 +67,10 @@ object EventManager {
         )
     }
 
-    fun getHostname(hostId: Int, onGetHostnameError: (String?) -> Unit, onGetHostnameSuccess: (String) -> Unit) {
-        eventRepository.getHostname(hostId,
+    fun getHostname(hostId: Int, authToken: String, onGetHostnameError: (String?) -> Unit, onGetHostnameSuccess: (String) -> Unit) {
+        eventRepository.getHostname(
+            hostId,
+            authToken,
             onGetHostNameSuccess = {onGetHostnameSuccess(it)},
             onGetHostnameError = {onGetHostnameError(it) }
         )

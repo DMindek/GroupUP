@@ -43,5 +43,5 @@ interface ServerService {
 
     @Headers("Content-Type: application/json")
     @GET("/api/v1/users/{user_id}")
-    fun getUser(@Path("user_id")userId: Int): Call<UserData>
+    fun getUser(@Path("user_id") userId: Int, @Header("Authorization") authToken: String): Call<UserData>
 }

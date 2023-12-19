@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.LabelText
@@ -74,6 +75,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
          location = it.location
          EventManager.getHostname(
              it.owner_id,
+             AuthContext.token!!,
              onGetHostnameError = {},
              onGetHostnameSuccess = {hostname -> host = hostname }
          )
