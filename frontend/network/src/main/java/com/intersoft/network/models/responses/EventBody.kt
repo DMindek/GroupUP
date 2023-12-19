@@ -3,10 +3,10 @@ package com.intersoft.network.models.responses
 import java.sql.Timestamp
 
 data class EventBody (
-    val event : EventData
+    val event : NewEventData
 )
 
-data class EventData(
+data class NewEventData(
     val name: String,
     val description : String,
     val date : Timestamp,
@@ -14,4 +14,16 @@ data class EventData(
     val max_participants : Int,
     val location : String,
     val owner_id : Int
+)
+
+data class StoredEventData(
+    val id : Int,
+    val name: String,
+    val description : String,
+    val date : Timestamp,
+    val duration : Int,
+    val max_participants : Int,
+    val location : String,
+    val owner_id : Int,
+    val participants : String
 )

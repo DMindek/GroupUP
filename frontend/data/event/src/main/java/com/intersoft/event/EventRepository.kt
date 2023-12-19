@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
 import com.intersoft.network.models.responses.EventBody
-import com.intersoft.network.models.responses.EventData
+import com.intersoft.network.models.responses.NewEventData
 
 class EventRepository: IEventRepository {
 
@@ -16,7 +16,7 @@ class EventRepository: IEventRepository {
         val durationInMinutes = (newEvent.durationInMillis / 60000).toInt()
         Log.d("EventRepository", durationInMinutes.toString())
 
-        val event = EventData(
+        val event = NewEventData(
             name= newEvent.name,
             description = newEvent.description,
             date = dateTimestamp,
