@@ -62,7 +62,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
         mutableStateOf(false)
     }
 
-     EventManager.getEvent(7,{onGetEventFail()}){
+     EventManager.getEvent(1,{onGetEventFail()}){
 
          eventName = it.name
          description = it.description
