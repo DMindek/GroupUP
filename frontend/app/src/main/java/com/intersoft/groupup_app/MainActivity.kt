@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                         composable("login"){
                             LoginPage(
                                 context =LocalContext.current,
-                                onLogin = { navController.navigate("user_information") },
+                                onLogin = { navController.navigate("home") },
                                 onRegisterClick = { navController.navigate("registration") }
                             )
                         }
@@ -80,6 +80,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("edit_profile") {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
+                        }
+                        composable("event_details"){
+
                         }
                     }
                 }
