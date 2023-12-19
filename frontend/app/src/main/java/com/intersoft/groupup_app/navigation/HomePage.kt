@@ -31,7 +31,7 @@ fun HomePage(onUserInformationPressed: () -> Unit,onCreateEventButtonPress: () -
             Modifier.align(Alignment.CenterHorizontally)){
             onUserInformationPressed()
         }
-        PrimaryButton("User information",
+        PrimaryButton("Event Details test page",
             Modifier.align(Alignment.CenterHorizontally)){
             onEventDetailsPressed()
         }
