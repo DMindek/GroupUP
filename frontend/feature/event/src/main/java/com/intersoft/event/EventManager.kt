@@ -33,10 +33,10 @@ object EventManager {
 
     }
 
-    fun getEvent(eventId: Int, onGetEventError: (String?) -> Unit, onGetEventSuccess: (StoredEventData) -> Unit){
+     fun getEvent(eventId: Int, onGetEventError: (String?) -> Unit, onGetEventSuccess: (RecievedEventData) -> Unit){
         eventRepository.getEvent(eventId,
             onGetEventSuccess = {
-                val eventData = StoredEventData(
+                val eventData = RecievedEventData(
                     id = it.id,
                     name = it.name,
                     description = it.description,
@@ -67,8 +67,7 @@ object EventManager {
         return ""
     }
 
-
-    data class StoredEventData (
+    data class RecievedEventData (
         val id : Int,
         val name: String,
         val description : String,
@@ -77,6 +76,7 @@ object EventManager {
         val max_participants : Int,
         val location : String,
         val owner_id : Int,
-        val participants : String?
+        val participants : List<String>?
     )
+
 }
