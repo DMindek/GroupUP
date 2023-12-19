@@ -6,6 +6,7 @@ import com.intersoft.network.NetworkManager
 import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.NewEventData
 import com.intersoft.network.models.responses.StoredEventData
+import java.sql.Timestamp
 
 class EventRepository: IEventRepository {
 
@@ -64,9 +65,9 @@ class EventRepository: IEventRepository {
                     onGetEventError(it)
                 }
                 else{
-                    val error: CreateEventFailResponse
+                    val error: GetEventFailResponse
                     try {
-                        error = Gson().fromJson(it, CreateEventFailResponse::class.java)
+                        error = Gson().fromJson(it, GetEventFailResponse::class.java)
                         Log.d("EventRepository", "Error occurred $error")
                     }catch (e: Exception){
                         onGetEventError("Server returned unknown error")
@@ -87,4 +88,16 @@ data class CreateEventFailResponse(
     val maxParticipants : String?,
     val location : String?,
     val ownerId : String?
+)
+
+data class GetEventFailResponse(
+    val id : Int?,
+    val name: String?,
+    val description : String?,
+    val date : Timestamp?,
+    val duration : Int?,
+    val max_participants : Int?,
+    val location : String?,
+    val owner_id : Int?,
+    val participants : String?
 )
