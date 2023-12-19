@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -62,7 +63,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
         mutableStateOf(false)
     }
 
-     EventManager.getEvent(9,{onGetEventFail()}){
+     EventManager.getEvent(1,{onGetEventFail()}){
 
          eventName = it.name
          description = it.description
@@ -99,7 +100,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row{
-                LabelText(text = "Event Date:")
+                LabelText(text = "Event start:")
                 Spacer(modifier = Modifier.width(30.dp))
                 DisabledTextField(textvalue = eventDate)
             }
@@ -128,6 +129,8 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
                 PrimaryButton(buttonText = "Request to Join ") {}
             }
         }
+    } else{
+        Text(text = "Something went wrong and no event data was recieved. Try to create an event first before viewing details.")
     }
 
 }
