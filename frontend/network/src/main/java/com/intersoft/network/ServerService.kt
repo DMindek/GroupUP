@@ -40,4 +40,8 @@ interface ServerService {
     @Headers("Content-Type: application/json")
     @GET("/api/v1/events/{event_id}")
     fun getEvent(@Path("event_id") eventId: Int) : Call<StoredEventData>
+
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/users/{user_id}")
+    fun getUser(@Path("user_id")userId: Int): Call<UserData>
 }
