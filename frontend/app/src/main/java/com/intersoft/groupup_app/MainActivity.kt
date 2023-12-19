@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
                         composable("event_details"){
-                            EventDetailsPage(onExitEventDetails = {navController.navigate("home")})
+                            EventDetailsPage()
                         }
                     }
                 }

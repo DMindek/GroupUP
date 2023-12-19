@@ -1,9 +1,11 @@
 package com.intersoft.groupup_app.navigation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,8 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.intersoft.auth.AuthContext
-import com.intersoft.event.EventCreationManager
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.LabelText
 import com.intersoft.ui.ParticipantNumberDisplayField
@@ -25,7 +25,7 @@ import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TitleText
 
 @Composable
-fun EventDetailsPage(onExitEventDetails: () -> Unit){
+fun EventDetailsPage(){
     val eventName by remember {
         mutableStateOf("Event name")
     }
@@ -85,28 +85,13 @@ fun EventDetailsPage(onExitEventDetails: () -> Unit){
         DisabledTextField(textvalue = host)
         Spacer(modifier = Modifier.height(20.dp))
 
-
         Row(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 20.dp)
+                .fillMaxWidth()
+                .padding(start = 20.dp),
+            horizontalArrangement = Arrangement.Center
         ) {
-            PrimaryButton(buttonText = "Create") {
-                EventCreationManager.createEvent(
-                    eventName = eventName,
-                    description = description,
-                    selectedDateInMillis = eventDate,
-                    durationInMillis = eventDuration,
-                    startTimeInMillis = eventStartTime,
-                    maxNumberOfParticipants = maxNumberOfParticipants,
-                    location = location,AuthContext.id!!,{}
-                ){
-                }
-            }
-            Spacer(modifier = Modifier.width(100.dp))
-            PrimaryButton(buttonText = "Cancel") {
-                onExitEventDetails()
-            }
+            PrimaryButton(buttonText = "Request to Join ") {}
         }
     }
 }
