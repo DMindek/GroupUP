@@ -33,6 +33,17 @@ object EventManager {
 
     }
 
+    private fun validateInput(event: EventModel): String {
+        if(event.name.isEmpty()) return "Please enter event name"
+        if(event.name.length >= 20) return "Event name must contain less than 20 characters"
+        if(event.description.isEmpty()) return "Please enter event description"
+        if(event.description.length >= 256) return "Event description must contain less than 256 characters"
+        if(event.dateInMillis <= 0) return "Please enter event date"
+        if(event.location.isBlank()) return "Please enter event location"
+
+        return ""
+    }
+
      fun getEvent(eventId: Int, onGetEventError: (String?) -> Unit, onGetEventSuccess: (RecievedEventData) -> Unit){
         eventRepository.getEvent(eventId,
             onGetEventSuccess = {
@@ -56,15 +67,11 @@ object EventManager {
         )
     }
 
-    private fun validateInput(event: EventModel): String {
-        if(event.name.isEmpty()) return "Please enter event name"
-        if(event.name.length >= 20) return "Event name must contain less than 20 characters"
-        if(event.description.isEmpty()) return "Please enter event description"
-        if(event.description.length >= 256) return "Event description must contain less than 256 characters"
-        if(event.dateInMillis <= 0) return "Please enter event date"
-        if(event.location.isBlank()) return "Please enter event location"
-
-        return ""
+    fun getHostname(hostId: Int, onGetHostnameError: (String?) -> Unit, onGetHostnameSuccess: (String) -> Unit) {
+        eventRepository.getHostname(hostId,
+            onGetHostNameSuccess = {onGetHostnameSuccess(it)},
+            onGetHostnameError = {onGetHostnameError(it) }
+        )
     }
 
     data class RecievedEventData (
