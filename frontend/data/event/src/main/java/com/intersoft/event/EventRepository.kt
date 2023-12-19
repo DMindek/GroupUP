@@ -52,7 +52,7 @@ class EventRepository: IEventRepository {
         )
     }
 
-    fun getEvent(eventId: Int, onGetEventSuccess: (StoredEventData) -> Unit, onGetEventError: (String?) -> Unit){
+    override fun getEvent(eventId: Int, onGetEventSuccess: (StoredEventData) -> Unit, onGetEventError: (String?) -> Unit){
 
         NetworkManager.getEvent(
             eventId = eventId,
