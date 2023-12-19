@@ -71,6 +71,11 @@ object NetworkManager {
         res.enqueue(ResponseHandler<StoredEventData>(successCode = 200, errorCode = 404, onGetEventSuccess, onGetEventFail))
     }
 
+    fun getUser(userId: Int, onGetUserSuccess: (UserData) -> Unit, onGetUserError: (String?) -> Unit) {
+        val res = serverService.getUser(userId)
+        res.enqueue(ResponseHandler<UserData>(successCode = 200, errorCode = 401, onGetUserSuccess,onGetUserError))
+    }
+
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,
                                   val onSuccess : (T) -> Unit,
                                   val onFail: (String?) -> Unit): Callback<T>{
