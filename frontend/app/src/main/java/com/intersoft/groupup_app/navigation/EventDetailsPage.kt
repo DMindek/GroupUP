@@ -62,7 +62,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
         mutableStateOf(false)
     }
 
-     EventManager.getEvent(1,{onGetEventFail()}){
+     EventManager.getEvent(9,{onGetEventFail()}){
 
          eventName = it.name
          description = it.description
@@ -102,6 +102,12 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
                 LabelText(text = "Event Date:")
                 Spacer(modifier = Modifier.width(30.dp))
                 DisabledTextField(textvalue = eventDate)
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row{
+                LabelText(text = "Event duration:")
+                Spacer(modifier = Modifier.width(30.dp))
+                DisabledTextField(textvalue = "$eventDuration minutes")
             }
             Spacer(modifier = Modifier.height(20.dp))
             LabelText(text = "Description: ")
