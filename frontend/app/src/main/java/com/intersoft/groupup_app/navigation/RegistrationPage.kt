@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.RegistrationManager
+import com.intersoft.groupup_app.AppContext
 import com.intersoft.ui.ErrorText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
 import com.intersoft.user.UserModel
+
 
 @Composable
 fun RegistrationPage(onRegister: () -> Unit){
@@ -50,13 +53,19 @@ fun RegistrationPage(onRegister: () -> Unit){
         TitleText(text = "Register")
         TextInputField(label = "email") { email = it }
         TextInputField(label = "username") {username = it}
-        TextInputField(label = "location") {location = it}
+        Text(text = "Location")
+        AppContext.getLocationService().LocationPicker(
+            onLocationChanged = {lat,lon -> location = "$lat,$lon" },
+            latitude = null,
+            longitude = null,
+            false
+        )
         TextInputField(label = "password", PasswordVisualTransformation()) {password = it}
         TextInputField(label = "confirm password", PasswordVisualTransformation()) {passwordRetype = it}
         ErrorText(text = errorText)
-        PrimaryButton(buttonText = "Sign up", modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .padding(top = 30.dp)) {
+        PrimaryButton(buttonText = "Sign up",
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
             RegistrationManager.registerUser(UserModel(username, email, password, location), passwordRetype,
                 onRegisterSuccess = onRegister,
                 onRegisterFail = {
