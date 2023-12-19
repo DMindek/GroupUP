@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
 import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.NewEventData
-import com.intersoft.network.models.responses.StoredEventData
 import java.sql.Timestamp
 
 class EventRepository: IEventRepository {
@@ -52,12 +51,26 @@ class EventRepository: IEventRepository {
         )
     }
 
-    override fun getEvent(eventId: Int, onGetEventSuccess: (StoredEventData) -> Unit, onGetEventError: (String?) -> Unit){
+    override fun getEvent(eventId: Int,onGetEventError: (String?) -> Unit, onGetEventSuccess: (GetEventResponse) -> Unit){
 
         NetworkManager.getEvent(
             eventId = eventId,
-            onGetEventSuccess = {storedEventData ->
-                onGetEventSuccess(storedEventData)
+            onGetEventSuccess = {
+               val response = GetEventResponse (
+                    id = it.id,
+                    name = it.name,
+                    description = it.description,
+                    date = it.date,
+                    duration = it.duration,
+                    max_participants = it.max_participants,
+                    location = it.location,
+                    owner_id = it.owner_id,
+                    participants = it.participants
+                )
+
+                Log.d("EventRepository", "Recieved event: $response")
+
+                onGetEventSuccess(response)
             },
             onGetEventFail = {
                 Log.d("EventRepository", "Error occurred: $it")
@@ -65,9 +78,9 @@ class EventRepository: IEventRepository {
                     onGetEventError(it)
                 }
                 else{
-                    val error: GetEventFailResponse
+                    val error: GetEventResponse
                     try {
-                        error = Gson().fromJson(it, GetEventFailResponse::class.java)
+                        error = Gson().fromJson(it, GetEventResponse::class.java)
                         Log.d("EventRepository", "Error occurred $error")
                     }catch (e: Exception){
                         onGetEventError("Server returned unknown error")
@@ -90,14 +103,14 @@ data class CreateEventFailResponse(
     val ownerId : String?
 )
 
-data class GetEventFailResponse(
-    val id : Int?,
-    val name: String?,
-    val description : String?,
-    val date : Timestamp?,
-    val duration : Int?,
-    val max_participants : Int?,
-    val location : String?,
-    val owner_id : Int?,
-    val participants : String?
+data class GetEventResponse(
+    val id : Int,
+    val name: String,
+    val description : String,
+    val date : Timestamp,
+    val duration : Int,
+    val max_participants : Int,
+    val location : String,
+    val owner_id : Int,
+    val participants : List<String>?
 )
