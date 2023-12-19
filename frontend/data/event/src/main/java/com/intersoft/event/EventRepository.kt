@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
 import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.NewEventData
+import com.intersoft.network.models.responses.StoredEventData
 
 class EventRepository: IEventRepository {
 
@@ -48,6 +49,32 @@ class EventRepository: IEventRepository {
                 }
             }
         )
+    }
+
+    fun getEvent(eventId: Int, onGetEventSuccess: (StoredEventData) -> Unit, onGetEventError: (String?) -> Unit){
+
+        NetworkManager.getEvent(
+            eventId = eventId,
+            onGetEventSuccess = {storedEventData ->
+                onGetEventSuccess(storedEventData)
+            },
+            onGetEventFail = {
+                Log.d("EventRepository", "Error occurred: $it")
+                if(!it.isNullOrEmpty())if(it[0] != '{') {
+                    onGetEventError(it)
+                }
+                else{
+                    val error: CreateEventFailResponse
+                    try {
+                        error = Gson().fromJson(it, CreateEventFailResponse::class.java)
+                        Log.d("EventRepository", "Error occurred $error")
+                    }catch (e: Exception){
+                        onGetEventError("Server returned unknown error")
+                        return@getEvent
+                    }
+                }
+            })
+
     }
 }
 
