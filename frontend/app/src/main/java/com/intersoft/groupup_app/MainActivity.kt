@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
+import com.intersoft.groupup_app.navigation.EventDetailsPage
 import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "login"){
+                    NavHost(navController = navController, startDestination = "event_details"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -80,6 +81,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("edit_profile") {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
+                        }
+                        composable("event_details"){
+                            EventDetailsPage(onExitEventDetails = {navController.navigate("home")})
                         }
                     }
                 }
