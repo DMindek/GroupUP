@@ -68,7 +68,7 @@ object NetworkManager {
 
     fun getEvent(eventId: Int, onGetEventSuccess: (StoredEventData) -> Unit, onGetEventFail: (String?) -> Unit){
         val res = serverService.getEvent(eventId)
-        res.enqueue(ResponseHandler<StoredEventData>(successCode = 201, errorCode = 422, onGetEventSuccess, onGetEventFail))
+        res.enqueue(ResponseHandler<StoredEventData>(successCode = 200, errorCode = 404, onGetEventSuccess, onGetEventFail))
     }
 
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,
