@@ -11,6 +11,11 @@ object DateTimeManager {
         return sdf.format(Date(dateInMilis))
     }
 
+    fun formatMillisToDateTime(dateInMilis: Long): String{
+        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+
+        return  simpleDateFormat.format(dateInMilis)
+    }
     fun calculateMillisFromHoursAndMinutes(hours: Int, minutes: Int): Long {
         return  (hours * 3600000).toLong() + (minutes * 60000).toLong()
     }

@@ -25,7 +25,7 @@ import com.intersoft.ui.LabelText
 import com.intersoft.ui.ParticipantNumberDisplayField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TitleText
-import java.sql.Timestamp
+import com.intersoft.utils.DateTimeManager
 
 @Composable
 fun EventDetailsPage(onGetEventFail: () -> Unit){
@@ -37,7 +37,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
     }
 
     var eventDate by remember {
-        mutableStateOf(Timestamp(0))
+        mutableStateOf("")
     }
 
 
@@ -65,7 +65,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
 
          eventName = it.name
          description = it.description
-         eventDate = it.date
+         eventDate = DateTimeManager.formatMillisToDateTime(it.date.toInstant().toEpochMilli())
          eventDuration = it.duration
          maxNumberOfParticipants = it.max_participants
          val participantsNumber = it.participants?.count()
@@ -99,7 +99,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
             Row{
                 LabelText(text = "Event Date:")
                 Spacer(modifier = Modifier.width(30.dp))
-                DisabledTextField(textvalue = eventDate.toString())
+                DisabledTextField(textvalue = eventDate)
             }
             Spacer(modifier = Modifier.height(20.dp))
             LabelText(text = "Description: ")
