@@ -1,6 +1,6 @@
 package com.intersoft.event
 
-object EventCreationManager {
+object EventManager {
     private var eventRepository: IEventRepository = EventRepository()
 
     fun setEventRepository(repo: IEventRepository){
