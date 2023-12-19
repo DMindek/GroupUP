@@ -25,5 +25,5 @@ data class StoredEventData(
     val max_participants : Int,
     val location : String,
     val owner_id : Int,
-    val participants : String
+    val participants : String?
 )
