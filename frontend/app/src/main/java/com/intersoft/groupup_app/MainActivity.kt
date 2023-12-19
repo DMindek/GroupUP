@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "event_details"){
+                    NavHost(navController = navController, startDestination = "login"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -58,7 +58,8 @@ class MainActivity : ComponentActivity() {
                         composable("home"){
                             HomePage(
                                 onCreateEventButtonPress = {navController.navigate("createEvent")},
-                                onUserInformationPressed = {navController.navigate("user_information")}
+                                onUserInformationPressed = {navController.navigate("user_information")},
+                                onEventDetailsPressed = {navController.navigate("event_details")}
                             )
                         }
                         composable("createEvent"){
