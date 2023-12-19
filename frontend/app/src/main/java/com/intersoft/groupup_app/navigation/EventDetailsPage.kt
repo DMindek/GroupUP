@@ -39,7 +39,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
     var eventDate by remember {
         mutableStateOf(Timestamp(0))
     }
-    
+
 
     var eventDuration by remember {
         mutableIntStateOf(0)
@@ -54,7 +54,9 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
         mutableStateOf("")
     }
 
-    var host = "hostname"
+    var host by remember {
+        mutableStateOf("")
+    }
     var eventDataWasRecieved by remember{
         mutableStateOf(false)
     }
@@ -70,7 +72,11 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
          if(participantsNumber != null)
             currentNumberOfParticipants = participantsNumber
          location = it.location
-         host = it.owner_id.toString()
+         EventManager.getHostname(
+             it.owner_id,
+             onGetHostnameError = {},
+             onGetHostnameSuccess = {hostname -> host = hostname }
+         )
 
          eventDataWasRecieved = true
     }
