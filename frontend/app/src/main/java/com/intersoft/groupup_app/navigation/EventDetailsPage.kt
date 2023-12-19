@@ -13,85 +13,107 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.intersoft.event.EventManager
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.LabelText
 import com.intersoft.ui.ParticipantNumberDisplayField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TitleText
+import java.sql.Timestamp
 
 @Composable
-fun EventDetailsPage(){
-    val eventName by remember {
-        mutableStateOf("Event name")
+fun EventDetailsPage(onGetEventFail: () -> Unit){
+    var eventName by remember {
+        mutableStateOf("")
     }
-    val description by remember {
+    var description by remember {
         mutableStateOf("description")
     }
 
-    val eventDate by remember{
-        mutableLongStateOf(0)
+    var eventDate by remember {
+        mutableStateOf(Timestamp(0))
     }
+    
 
-    val eventStartTime by remember {
-        mutableLongStateOf(0)
+    var eventDuration by remember {
+        mutableIntStateOf(0)
     }
-
-    val eventDuration by remember {
-        mutableLongStateOf(0)
-    }
-    val maxNumberOfParticipants by remember {
+    var maxNumberOfParticipants by remember {
         mutableStateOf(10)
     }
 
-    val currentNumberOfParticipants = 0
+    var currentNumberOfParticipants = 0
 
-    val location by remember {
+    var location by remember {
         mutableStateOf("")
     }
 
-    val host = "hostname"
+    var host = "hostname"
+    var eventDataWasRecieved by remember{
+        mutableStateOf(false)
+    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(30.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        TitleText(text = eventName)
-        Spacer(modifier = Modifier.height(20.dp))
-        Row {
-            LabelText(text = "Location:")
-            Spacer(modifier = Modifier.width(45.dp))
-            DisabledTextField(textvalue = location)
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Row{
-            LabelText(text = "Event Date:")
-            Spacer(modifier = Modifier.width(30.dp))
-            DisabledTextField(textvalue = eventDate.toString())
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        LabelText(text = "Description: ")
-        DisabledTextField(textvalue = description, isMultiline = true)
-        Spacer(modifier = Modifier.height(20.dp))
-        ParticipantNumberDisplayField("Participants joined: ",currentNumber = currentNumberOfParticipants, maxNumber = maxNumberOfParticipants)
-        Spacer(modifier = Modifier.height(20.dp))
-        LabelText(text = "Host: ")
-        DisabledTextField(textvalue = host)
-        Spacer(modifier = Modifier.height(20.dp))
+     EventManager.getEvent(7,{onGetEventFail()}){
 
-        Row(
+         eventName = it.name
+         description = it.description
+         eventDate = it.date
+         eventDuration = it.duration
+         maxNumberOfParticipants = it.max_participants
+         val participantsNumber = it.participants?.count()
+         if(participantsNumber != null)
+            currentNumberOfParticipants = participantsNumber
+         location = it.location
+         host = it.owner_id.toString()
+
+         eventDataWasRecieved = true
+    }
+
+    if(eventDataWasRecieved){
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp),
-            horizontalArrangement = Arrangement.Center
+                .fillMaxSize()
+                .padding(30.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            PrimaryButton(buttonText = "Request to Join ") {}
+            TitleText(text = eventName)
+            Spacer(modifier = Modifier.height(20.dp))
+            Row {
+                LabelText(text = "Location:")
+                Spacer(modifier = Modifier.width(45.dp))
+                DisabledTextField(textvalue = location)
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Row{
+                LabelText(text = "Event Date:")
+                Spacer(modifier = Modifier.width(30.dp))
+                DisabledTextField(textvalue = eventDate.toString())
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            LabelText(text = "Description: ")
+            DisabledTextField(textvalue = description, isMultiline = true)
+            Spacer(modifier = Modifier.height(20.dp))
+            ParticipantNumberDisplayField("Participants joined: ",currentNumber = currentNumberOfParticipants, maxNumber = maxNumberOfParticipants)
+            Spacer(modifier = Modifier.height(20.dp))
+            LabelText(text = "Host: ")
+            DisabledTextField(textvalue = host)
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                PrimaryButton(buttonText = "Request to Join ") {}
+            }
         }
     }
+
 }
