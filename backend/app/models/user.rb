@@ -22,4 +22,9 @@ class User < ApplicationRecord
     
     validates :password, length: { minimum: 10, maximum: 20 }, if: :password_digest_changed?
     validates :password, format: { with: PASSWORD_FORMAT }, if: :password_digest_changed?
+
+    # Exclude sensitive data from json output
+    def as_json(options={})
+        super(:except => [:created_at, :updated_at, :password_digest])
+    end
 end
