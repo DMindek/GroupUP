@@ -14,5 +14,6 @@ data class EventData(
     val max_participants : Int,
     val location : String,
     val owner_id : Int,
-    val id: Int?
+    val id: Int?,
+    val participants : List<UserData>?
 )

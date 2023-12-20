@@ -17,4 +17,13 @@ class MockEventRepository : IEventRepository {
             onCreateEventError("Event already exists")
         }
     }
+
+    override fun getUserEvents(
+        userId: Int,
+        authtoken: String,
+        onGetUserEventsError: (String) -> Unit,
+        onGetUserEventsSuccess: (List<EventModel>) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
 }

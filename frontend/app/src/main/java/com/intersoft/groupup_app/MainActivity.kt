@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("home"){
                             HomePage(
-                                onCreateEventButtonPress = {navController.navigate("createEvent")},
+                                onCreateEventButtonPress = {navController.navigate("userCreatedEvents")},
                                 onUserInformationPressed = {navController.navigate("user_information")}
                             )
                         }

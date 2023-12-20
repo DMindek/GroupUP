@@ -68,10 +68,11 @@ object NetworkManager {
 
     fun getUserEvents(
         userId: Int,
+        authtoken: String,
         onGetUserEventsSuccess: (List<EventData>) ->Unit,
         onGetUserEventsFail: (String?)-> Unit)
     {
-        serverService.getUserEvents(userId)
+        serverService.getUserEvents(userId, authtoken)
             .enqueue(
                 ResponseHandler<List<EventData>>(
                     200,

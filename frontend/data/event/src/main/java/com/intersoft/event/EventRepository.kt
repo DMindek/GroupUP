@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
 import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.EventData
+import com.intersoft.user.UserModel
 
 class EventRepository: IEventRepository {
 
@@ -24,7 +25,8 @@ class EventRepository: IEventRepository {
             max_participants = newEvent.maxParticipants,
             location = newEvent.location,
             owner_id =  newEvent.ownerId,
-            id = newEvent.id
+            id = newEvent.id,
+            participants = emptyList()
         )
 
         NetworkManager.createEvent(
@@ -53,11 +55,13 @@ class EventRepository: IEventRepository {
 
     override fun getUserEvents(
         userId: Int,
+        authtoken: String,
         onGetUserEventsError: (String) -> Unit,
         onGetUserEventsSuccess: (List<EventModel>) -> Unit
     ) {
         NetworkManager.getUserEvents(
             userId = userId,
+            authtoken = authtoken,
             onGetUserEventsSuccess = {events ->
                 val eventModels = events.map { event ->
                     EventModel(
@@ -69,7 +73,16 @@ class EventRepository: IEventRepository {
                         maxParticipants = event.max_participants,
                         location = event.location,
                         ownerId = event.owner_id,
-                        id = event.id!!
+                        id = event.id!!,
+                        participants = event.participants?.map { participant ->
+                            UserModel(
+                                username = participant.username,
+                                email = participant.email,
+                                password = participant.password!!,
+                                location = participant.location,
+                                id = participant.id,
+                            )
+                        }
                     )
                 }
                 onGetUserEventsSuccess(eventModels)

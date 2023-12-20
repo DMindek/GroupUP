@@ -5,6 +5,7 @@ interface IEventRepository {
     }
     fun getUserEvents(
         userId: Int,
+        authtoken: String,
         onGetUserEventsError: (String) -> Unit,
         onGetUserEventsSuccess: (List<EventModel>) -> Unit)
 }
