@@ -14,6 +14,9 @@ class EventsViewModel : ViewModel(){
     val error: LiveData<String> get() = _error
 
     fun fetchUserCurrentEvents(userId: Int){
+        _error.value = ""
+        _events.value = emptyList()
+
         eventRepository.getUserEvents(userId,{error ->
             _error.value = error
         }){events ->
