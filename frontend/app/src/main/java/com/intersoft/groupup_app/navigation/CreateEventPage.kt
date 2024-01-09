@@ -73,7 +73,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         TextInputField(label = "Name") { eventName = it }
         MultiLineTextInputField("Description") {description = it}
         GeneralDatePicker("Event Date"){selectedDateInMillis = it}
-        DurationSelectionElement({warningText = it},{durationInMillis = it}){startTimeInMillis = it}
+        DurationSelectionElement(placeholderStartTime = "", placeholderHours = "", placeholderMinutes = "", {text -> warningText = text},{duration -> durationInMillis = duration}){startTime -> startTimeInMillis = startTime}
         WarningText(text = warningText)
         CounterElement(label = "Max Participants") {maxNumberOfParticipants = it}
         TextInputField(label = "location") { location = it }

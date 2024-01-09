@@ -47,12 +47,12 @@ import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralDatePicker(label: String, action: (Long) -> Unit){
+fun GeneralDatePicker(label: String,placeholder: String = "" ,action: (Long) -> Unit){
     val showDatePicker = remember {
         mutableStateOf(false)
     }
     var selectedDateText by remember {
-        mutableStateOf("")
+        mutableStateOf(placeholder)
     }
 
 
@@ -119,14 +119,14 @@ private fun SetupDatePickerDialogue(onDismiss: () -> Unit, onConfirm: (Long) -> 
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDurationInput: (Long) -> Unit ,onStartTimeInput: (Long) -> Unit){
+fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours: String = "" , placeholderMinutes: String = "", onDurationPastMidnight: (String) -> Unit,onDurationInput: (Long) -> Unit ,onStartTimeInput: (Long) -> Unit){
 
     val showStartTimePicker = remember {
         mutableStateOf(false)
     }
 
     var selectedStartTimeText by remember {
-        mutableStateOf("")
+        mutableStateOf(placeholderStartTime)
     }
     var durationHours by remember {
         mutableStateOf(-1)
@@ -150,6 +150,18 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
 
     val warningMessage = "Note: Set duration passes midnight and the end date is different from the start date"
 
+    if(placeholderHours != "" && placeholderMinutes != "" ){
+        durationHours = placeholderHours.toInt()
+        durationMinutes = placeholderMinutes.toInt()
+    }
+
+    if(placeholderStartTime != "" && placeholderHours != "" && placeholderMinutes != ""){
+        val tempStartTime = placeholderStartTime.split(":")
+        val tempStartTimeList: MutableList<Int> = mutableListOf(tempStartTime[0].toInt(), tempStartTime[1].toInt())
+        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,tempStartTimeList)
+    }
+
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(20.dp)
@@ -169,7 +181,7 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
                     LabelText(text = "Hours")
                 }
                 Column(modifier = Modifier.width(80.dp)) {
-                    NumericTextInputField("", paddingAmount = 0){
+                    NumericTextInputField("", paddingAmount = 0, placeholder = placeholderHours){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
                             if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1){
@@ -201,7 +213,7 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
                     LabelText(text = "Minutes")
                 }
                 Column(modifier = Modifier.width(80.dp)) {
-                    NumericTextInputField("", paddingAmount = 0){
+                    NumericTextInputField("", paddingAmount = 0, placeholder = placeholderMinutes){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
                             if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1){
@@ -365,9 +377,9 @@ private fun SetupTimePickerDialogue(
 
 
 @Composable
-fun CounterElement(label: String, onNumberOfParticipantsSet: (Int) -> Unit = {}){
+fun CounterElement(label: String,placeholder: Int = 0 ,onNumberOfParticipantsSet: (Int) -> Unit = {}){
     var count by remember {
-        mutableIntStateOf(0)
+        mutableIntStateOf(placeholder)
     }
 
     Column(modifier = Modifier
