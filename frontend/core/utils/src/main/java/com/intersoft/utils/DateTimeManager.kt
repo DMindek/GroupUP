@@ -3,6 +3,7 @@ package com.intersoft.utils
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 
 object DateTimeManager {
@@ -14,6 +15,16 @@ object DateTimeManager {
     fun calculateMillisFromHoursAndMinutes(hours: Int, minutes: Int): Long {
         return  (hours * 3600000).toLong() + (minutes * 60000).toLong()
     }
+
+    fun calculateHoursFromMillis(timeInMillis: Long): Long {
+        return TimeUnit.MILLISECONDS.toHours(timeInMillis)
+    }
+    fun calculateMinutesFromMillis(timeInMillis: Long): Long {
+        return TimeUnit.MILLISECONDS.toMinutes(timeInMillis)
+    }
+
+
+
     fun datePassesMidnight( selectedStartTimeHours: Int,durationHours: Int): Boolean{
         if(selectedStartTimeHours + durationHours >=24)
             return true
