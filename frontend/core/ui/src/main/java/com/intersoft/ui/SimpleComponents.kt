@@ -10,13 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -85,9 +82,9 @@ fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, isEnabled: 
 }
 
 @Composable
-fun MultiLineTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, action: (String) -> Unit = {}){
+fun MultiLineTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, placeholder: String = "", action: (String) -> Unit = {}){
     var textValue by remember{
-        mutableStateOf("")
+        mutableStateOf(placeholder)
     }
     Column(modifier = Modifier.padding(20.dp)){
         Text(text = label,
@@ -139,9 +136,9 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
 }
 
 @Composable
-fun NumericTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, paddingAmount: Int, action: (String) -> Unit = {}){
+fun NumericTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, placeholder: String = "",paddingAmount: Int, action: (String) -> Unit = {}){
     var textValue by remember{
-        mutableStateOf("")
+        mutableStateOf(placeholder)
     }
     val pattern = remember {Regex("^[0-9]{0,2}\$")}
     Column(modifier = Modifier.padding(paddingAmount.dp).width(50.dp)){
