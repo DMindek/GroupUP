@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.intersoft.groupup_app.navigation.CreateEventPage
+import com.intersoft.groupup_app.navigation.EditEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
 import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.LoginPage
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "login"){
+                    NavHost(navController = navController, startDestination = "home"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -57,7 +58,9 @@ class MainActivity : ComponentActivity() {
                         composable("home"){
                             HomePage(
                                 onCreateEventButtonPress = {navController.navigate("createEvent")},
-                                onUserInformationPressed = {navController.navigate("user_information")}
+                                onUserInformationPressed = {navController.navigate("user_information")},
+                               // onEventDetailsPressed = {navController.navigate("event_details")}
+                                onEditEventButtonPressed = {navController.navigate("editEvent")}
                             )
                         }
                         composable("createEvent"){
@@ -82,7 +85,20 @@ class MainActivity : ComponentActivity() {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
                         composable("event_details"){
-
+                           // EventDetailsPage {}
+                        }
+                        composable("editEvent"){
+                            EditEventPage(
+                                eventName = "Event TestName",
+                                description = "Test description ovo je text koji tu pise u descriptionu",
+                                selectedDateInMillis = 1704827329310,
+                                startTimeInMillis = 55800000,
+                                durationInMillis = 5400000,
+                                maxNumberOfParticipants = 5,
+                                location = "AAAAAAA",
+                                onEditEvent = { /*TODO*/ }) {
+                                
+                            }
                         }
                     }
                 }
