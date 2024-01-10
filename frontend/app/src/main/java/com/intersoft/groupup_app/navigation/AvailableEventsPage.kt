@@ -40,7 +40,7 @@ fun AvailableEventsPage(
             if (events == null) {
                 viewModel.fetchAvailableEvents(AuthContext.token!!)
             }
-        }
+}
     )
 
 

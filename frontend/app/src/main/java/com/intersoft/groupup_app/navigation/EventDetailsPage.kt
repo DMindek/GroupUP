@@ -42,12 +42,15 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
         mutableStateOf("")
     }
 
-
     var eventDuration by remember {
         mutableIntStateOf(0)
     }
     var maxNumberOfParticipants by remember {
         mutableStateOf(10)
+    }
+
+    var isParticipant by remember {
+        mutableStateOf(false)
     }
 
     var currentNumberOfParticipants = 0
@@ -59,6 +62,11 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
     var host by remember {
         mutableStateOf("")
     }
+
+    var hostId by remember{
+        mutableIntStateOf(-1)
+    }
+
     var eventDataWasRecieved by remember{
         mutableStateOf(false)
     }
@@ -70,6 +78,8 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
          eventDate = DateTimeManager.formatMillisToDateTime(it.date.toInstant().toEpochMilli())
          eventDuration = it.duration
          maxNumberOfParticipants = it.max_participants
+         hostId = it.owner_id
+
          val participantsNumber = it.participants?.count()
          if(participantsNumber != null)
             currentNumberOfParticipants = participantsNumber
@@ -80,6 +90,9 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
              onGetHostnameError = {},
              onGetHostnameSuccess = {hostname -> host = hostname }
          )
+
+         isParticipant = it.participants!!.any{user -> user == AuthContext.username} &&
+                 it.owner_id != AuthContext.id
 
          eventDataWasRecieved = true
     }
@@ -120,14 +133,43 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
             DisabledTextField(textvalue = host)
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                PrimaryButton(buttonText = "Request to Join ") {}
+
+            when{
+                hostId != AuthContext.id &&
+                currentNumberOfParticipants < maxNumberOfParticipants &&
+                !isParticipant -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        PrimaryButton(buttonText = "Join Event ") {/*TODO: Add join event functionality*/}
+                    }
+                }
+                hostId != AuthContext.id &&
+                        isParticipant-> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        PrimaryButton(buttonText = "Leave Event ") {/*TODO: Add leave event functionality*/}
+                    }
+                }
+                hostId == AuthContext.id -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 20.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        PrimaryButton(buttonText = "Edit Event ") {/*TODO: Add edit event functionality*/}
+                    }
+                }
             }
+
         }
     } else{
         Text(text = "Something went wrong and no event data was recieved. Try to create an event first before viewing details.")
