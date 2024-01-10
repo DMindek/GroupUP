@@ -9,10 +9,11 @@ import com.intersoft.ui.IIterableObject
 class EventsViewModel : ViewModel(){
 
     private var eventRepository: IEventRepository = EventRepository()
-    private val _events = MutableLiveData<List<IIterableObject>> (null)
-    private val _error = MutableLiveData("")
-    val events: LiveData<List<IIterableObject>> get() = _events
-    val error: LiveData<String> get() = _error
+
+    private val _events: MutableLiveData<List<IIterableObject>> = MutableLiveData(null)
+    private val _error : MutableLiveData<String> = MutableLiveData("")
+    val events: LiveData<List<IIterableObject>> = _events
+    val error: LiveData<String> = _error
 
     fun fetchUserCurrentEvents(userId: Int, authtoken: String){
         eventRepository.getUserEvents(userId, authtoken, {error ->
