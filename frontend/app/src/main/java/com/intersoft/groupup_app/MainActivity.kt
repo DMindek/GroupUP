@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.intersoft.groupup_app.navigation.AvailableEventsPage
 import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
 import com.intersoft.groupup_app.navigation.EventDetailsPage
@@ -60,7 +61,9 @@ class MainActivity : ComponentActivity() {
                         composable("home"){
                             HomePage(
                                 onCreateEventButtonPress = {navController.navigate("userCreatedEvents")},
-                                onUserInformationPressed = {navController.navigate("user_information")}
+                                onUserInformationPressed = {navController.navigate("user_information")},
+                                onEventDetailsPressed = {navController.navigate("eventDetail/1")},
+                                onAvailableEventsButtonPressed = {navController.navigate("availableEvents")}
                             )
                         }
                         composable("createEvent"){
@@ -69,7 +72,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate("userCreatedEvents")
                                 },
                                 onCancelEventCreation = {
-                                    navController.navigate("home")
+                                    navController.navigate("goBack")
                                 }
                             )
                         }
@@ -77,6 +80,11 @@ class MainActivity : ComponentActivity() {
                             UserCreatedEventsPage(
                                 onEventClick = { navController.navigate("eventDetail/$it") },
                                 onCreateEventButtonPress = { navController.navigate("createEvent") }
+                            )
+                        }
+                        composable("availableEvents"){
+                            AvailableEventsPage(
+                                onEventClick = { navController.navigate("eventDetail/$it") }
                             )
                         }
                         composable("user_information") {
@@ -87,11 +95,25 @@ class MainActivity : ComponentActivity() {
                         composable("edit_profile") {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
-                        composable("eventDetail/{eventId}"){ backStackEntry ->
-                            val eventId = backStackEntry.arguments?.getInt("eventId")
-                            //TODO add event detail Page
+                        composable(
+                            "eventDetail/{eventId}",
+                            arguments = listOf(navArgument("eventId") {
+                                type = NavType.IntType
+                            })
+                        ) { backStackEntry ->
+                            EventDetailsPage(
+                                onGetEventFail = {
+                                    Toast.makeText(applicationContext, "Event not found", Toast.LENGTH_SHORT).show()
+                                    navController.navigate("home")
+                                },
+                                eventId = backStackEntry.arguments?.getInt("eventId") ?: 0
+                            )
 
                         }
+                        composable("goBack"){
+                            navController.popBackStack()
+                        }
+
                     }
                 }
             }

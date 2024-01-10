@@ -29,3 +29,4 @@ data class StoredEventData(
     val owner_id : Int,
     val participants : List<String>?
 )
+

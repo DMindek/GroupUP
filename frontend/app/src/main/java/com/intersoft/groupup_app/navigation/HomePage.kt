@@ -14,7 +14,11 @@ import androidx.compose.ui.unit.dp
 import com.intersoft.ui.PrimaryButton
 
 @Composable
-fun HomePage(onUserInformationPressed: () -> Unit,onCreateEventButtonPress: () -> Unit , onEventDetailsPressed: () -> Unit) {
+fun HomePage(
+    onUserInformationPressed: () -> Unit,
+    onCreateEventButtonPress: () -> Unit,
+    onEventDetailsPressed: () -> Unit,
+    onAvailableEventsButtonPressed: () -> Unit) {
     Column (modifier = Modifier
         .fillMaxSize()
         .padding(30.dp)
@@ -35,11 +39,19 @@ fun HomePage(onUserInformationPressed: () -> Unit,onCreateEventButtonPress: () -
             Modifier.align(Alignment.CenterHorizontally)){
             onEventDetailsPressed()
         }
+        PrimaryButton("Available Events test page",
+            Modifier.align(Alignment.CenterHorizontally)){
+            onAvailableEventsButtonPressed()
+        }
     }
 }
 
 @Preview
 @Composable
 fun HomePagePreview() {
-    HomePage(onUserInformationPressed = {}, onCreateEventButtonPress = {}, onEventDetailsPressed = {})
+    HomePage(
+        onUserInformationPressed = {},
+        onCreateEventButtonPress = {},
+        onEventDetailsPressed = {},
+        onAvailableEventsButtonPressed = {})
 }

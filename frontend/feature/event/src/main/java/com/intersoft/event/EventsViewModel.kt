@@ -30,4 +30,19 @@ class EventsViewModel : ViewModel(){
         }
     }
 
+    fun fetchAvailableEvents(authToken: String){
+        eventRepository.getAvailableEvents( authToken, {error ->
+            _error.value = error
+        }){events ->
+            if(events.isEmpty()){
+                _error.value = "NO_EVENTS"
+            }
+            val listOfEvents = events.map { event ->
+                event.processIntoIInterableObject()
+            }
+
+            _events.value = listOfEvents
+        }
+    }
+
 }

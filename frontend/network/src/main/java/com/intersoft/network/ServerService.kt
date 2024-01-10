@@ -2,7 +2,7 @@ package com.intersoft.network
 
 import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.EventBody
-import com.intersoft.network.models.responses.EventData
+import com.intersoft.network.models.responses.NewEventData
 import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
@@ -38,15 +38,21 @@ interface ServerService {
     @POST("/api/v1/events")
     fun createEvent(@Body event: EventBody): Call<EventSuccessResponse>
 
-    @Headers("Content-Type: application/json")
-    @GET("/api/v1/users/{user_id}/owned_events")
-    fun getUserEvents(
-        @Path("user_id") userId: Int,
-        @Header("Authorization") authToken: String): Call<List<EventData>>
     @GET("/api/v1/events/{event_id}")
     fun getEvent(@Path("event_id") eventId: Int) : Call<StoredEventData>
 
     @Headers("Content-Type: application/json")
     @GET("/api/v1/users/{user_id}")
     fun getUser(@Path("user_id") userId: Int, @Header("Authorization") authToken: String): Call<UserData>
+
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/users/{user_id}/owned_events")
+    fun getUserEvents(
+        @Path("user_id") userId: Int,
+        @Header("Authorization") authToken: String): Call<List<NewEventData>>
+
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/events")
+    fun getAvailableEvents(
+        @Header("Authorization") authToken: String): Call<List<NewEventData>>
 }

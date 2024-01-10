@@ -121,6 +121,51 @@ class EventRepository: IEventRepository {
         )
     }
 
+    override fun getAvailableEvents(
+        authToken: String,
+        onGetUserEventsError: (String) -> Unit,
+        onGetUserEventsSuccess: (List<EventModel>) -> Unit
+    ) {
+        NetworkManager.getAvailableEvents(
+            authToken = authToken,
+            onGetUserEventsSuccess = {events ->
+                val eventModels = events.map { event ->
+                    EventModel(
+                        name = event.name,
+                        description = event.description,
+                        dateInMillis = event.date.time,
+                        durationInMillis = event.duration.toLong() * 60000,
+                        startTimeInMillis = event.date.time - event.duration.toLong() * 60000,
+                        maxParticipants = event.max_participants,
+                        location = event.location,
+                        ownerId = event.owner_id,
+                        id = event.id!!,
+                        participants = event.participants?.map { participant ->
+                            UserModel(
+                                username = participant.username,
+                                email = participant.email,
+                                password = participant.password!!,
+                                location = participant.location,
+                                id = participant.id,
+                            )
+                        }
+                    )
+                }
+                onGetUserEventsSuccess(eventModels)
+            },
+            onGetUserEventsFail = {
+                if(it!= null){
+                    onGetUserEventsError(it)
+                }
+                else{
+                    onGetUserEventsError("Unknown error occurred")
+                }
+
+            }
+        )
+
+    }
+
 
     override fun getUserEvents(
         userId: Int,

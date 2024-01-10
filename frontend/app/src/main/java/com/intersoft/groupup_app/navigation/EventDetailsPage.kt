@@ -30,7 +30,7 @@ import com.intersoft.ui.TitleText
 import com.intersoft.utils.DateTimeManager
 
 @Composable
-fun EventDetailsPage(onGetEventFail: () -> Unit){
+fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
     var eventName by remember {
         mutableStateOf("")
     }
@@ -63,7 +63,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
         mutableStateOf(false)
     }
 
-     EventManager.getEvent(1,{onGetEventFail()}){
+     EventManager.getEvent(eventId ,{onGetEventFail()}){
 
          eventName = it.name
          description = it.description

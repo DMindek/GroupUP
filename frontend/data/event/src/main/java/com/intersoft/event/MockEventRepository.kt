@@ -26,4 +26,12 @@ class MockEventRepository : IEventRepository {
     ) {
         TODO("Not yet implemented")
     }
+
+    override fun getAvailableEvents(
+        authtoken: String,
+        onGetUserEventsError: (String) -> Unit,
+        onGetUserEventsSuccess: (List<EventModel>) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
 }
