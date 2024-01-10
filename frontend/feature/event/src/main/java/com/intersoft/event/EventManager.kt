@@ -1,6 +1,8 @@
 package com.intersoft.event
 
-object EventCreationManager {
+import java.sql.Timestamp
+
+object EventManager {
     private var eventRepository: IEventRepository = EventRepository()
 
     fun setEventRepository(repo: IEventRepository){
@@ -41,4 +43,49 @@ object EventCreationManager {
 
         return ""
     }
+
+     fun getEvent(eventId: Int, onGetEventError: (String?) -> Unit, onGetEventSuccess: (RecievedEventData) -> Unit){
+        eventRepository.getEvent(eventId,
+            onGetEventSuccess = {
+                val eventData = RecievedEventData(
+                    id = it.id,
+                    name = it.name,
+                    description = it.description,
+                    date = it.date,
+                    duration = it.duration,
+                    max_participants = it.max_participants,
+                    location = it.location,
+                    owner_id = it.owner_id,
+                    participants = it.participants
+                )
+
+                onGetEventSuccess(eventData)
+            },
+            onGetEventError = {
+                onGetEventError(it)
+            }
+        )
+    }
+
+    fun getHostname(hostId: Int, authToken: String, onGetHostnameError: (String?) -> Unit, onGetHostnameSuccess: (String) -> Unit) {
+        eventRepository.getHostname(
+            hostId,
+            authToken,
+            onGetHostNameSuccess = {onGetHostnameSuccess(it)},
+            onGetHostnameError = {onGetHostnameError(it) }
+        )
+    }
+
+    data class RecievedEventData (
+        val id : Int,
+        val name: String,
+        val description : String,
+        val date : Timestamp,
+        val duration : Int,
+        val max_participants : Int,
+        val location : String,
+        val owner_id : Int,
+        val participants : List<String>?
+    )
+
 }

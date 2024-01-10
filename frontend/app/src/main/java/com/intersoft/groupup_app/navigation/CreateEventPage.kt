@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
-import com.intersoft.event.EventCreationManager
+import com.intersoft.event.EventManager
 import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DurationSelectionElement
 import com.intersoft.ui.ErrorText
@@ -87,7 +87,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
                 .padding(start = 20.dp)
         ) {
             PrimaryButton(buttonText = "Create") {
-                EventCreationManager.createEvent(
+                EventManager.createEvent(
                     eventName = eventName,
                     description = description,
                     selectedDateInMillis = selectedDateInMillis,

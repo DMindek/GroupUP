@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
+import com.intersoft.groupup_app.navigation.EventDetailsPage
 import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage

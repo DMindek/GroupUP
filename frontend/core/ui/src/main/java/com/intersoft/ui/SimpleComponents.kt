@@ -115,7 +115,7 @@ fun MultiLineTextInputField(label: String, visualTransformation: VisualTransform
             decorationBox = {innerTextField ->
                 Row(modifier = Modifier.fillMaxWidth()){}
                 innerTextField()
-            }
+            },
         )
     }
 }
@@ -153,7 +153,9 @@ fun NumericTextInputField(label: String, visualTransformation: VisualTransformat
         mutableStateOf("")
     }
     val pattern = remember {Regex("^[0-9]{0,2}\$")}
-    Column(modifier = Modifier.padding(paddingAmount.dp).width(50.dp)){
+    Column(modifier = Modifier
+        .padding(paddingAmount.dp)
+        .width(50.dp)){
         Text(text = label,
             fontSize = 16.sp,
             color = colorResource(R.color.foregroundText)
@@ -193,6 +195,42 @@ fun DisabledTextField(textvalue:String, visualTransformation: VisualTransformati
             enabled = false
         )
 }
+
+@Composable
+fun DisabledTextField(textvalue:String, isMultiline: Boolean, visualTransformation: VisualTransformation = VisualTransformation.None){
+    BasicTextField(textvalue, {},
+        singleLine = isMultiline,
+        visualTransformation = visualTransformation,
+        textStyle = TextStyle(fontSize = 25.sp),
+        modifier = Modifier.background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark)),
+        decorationBox = {innerTextField ->
+            Row(modifier = Modifier.fillMaxWidth()){}
+            innerTextField()
+        },
+        enabled = false
+    )
+}
+
+
+@Composable
+fun ParticipantNumberDisplayField(label: String, currentNumber: Int, maxNumber: Int){
+    LabelText(text = label)
+    BasicTextField("$currentNumber / $maxNumber", {},
+        singleLine = true,
+        visualTransformation = VisualTransformation.None,
+        textStyle = TextStyle(fontSize = 25.sp),
+        modifier = Modifier
+            .background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark))
+            .width(110.dp),
+        decorationBox = {innerTextField ->
+            Row(modifier = Modifier.width(30.dp)){}
+            innerTextField()
+        },
+        enabled = false
+    )
+}
+
+
 
 @Composable
 fun TitleText(text: String){
