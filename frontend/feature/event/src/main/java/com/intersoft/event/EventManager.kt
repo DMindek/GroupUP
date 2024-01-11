@@ -1,5 +1,7 @@
 package com.intersoft.event
 
+import com.intersoft.user.IUserRepository
+import com.intersoft.user.UserRepository
 import java.sql.Timestamp
 
 object EventManager {
@@ -8,6 +10,7 @@ object EventManager {
     fun setEventRepository(repo: IEventRepository){
         eventRepository = repo
     }
+
     fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,startTimeInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
         val newEvent = EventModel(
             name= eventName,
@@ -68,7 +71,9 @@ object EventManager {
     }
 
     fun getHostname(hostId: Int, authToken: String, onGetHostnameError: (String?) -> Unit, onGetHostnameSuccess: (String) -> Unit) {
-        eventRepository.getHostname(
+        val userRepository:IUserRepository = UserRepository()
+
+        userRepository.getHostname(
             hostId,
             authToken,
             onGetHostNameSuccess = {onGetHostnameSuccess(it)},

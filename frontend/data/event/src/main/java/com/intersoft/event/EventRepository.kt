@@ -90,34 +90,6 @@ class EventRepository: IEventRepository {
             })
     }
 
-    override fun getHostname(hostId: Int, authToken: String,onGetHostnameError: (String?) -> Unit, onGetHostNameSuccess: (String) -> Unit) {
-        NetworkManager.getUser(
-            hostId,
-            authToken,
-            onGetUserSuccess = {
-                val hostName = it.username
-                Log.d("EventRepository", "Recieved hostname: $hostName")
-                onGetHostNameSuccess(hostName)
-            },
-            onGetUserError = {
-                Log.d("EventRepository", "Error occurred: $it")
-                if(!it.isNullOrEmpty())if(it[0] != '{') {
-                    onGetHostnameError(it)
-                }
-                else{
-                    val error: GetHostnameFailResponse
-                    try {
-                        error = Gson().fromJson(it, GetHostnameFailResponse::class.java)
-                        Log.d("EventRepository", "Error occurred $error")
-                    }catch (e: Exception){
-                        onGetHostnameError("Server returned unknown error")
-                        return@getUser
-                    }
-                }
-            }
-        )
-    }
-
 }
 
 
@@ -143,6 +115,4 @@ data class GetEventResponse(
     val participants : List<String>?
 )
 
-data class GetHostnameFailResponse(
-    val message: String?
-)
+

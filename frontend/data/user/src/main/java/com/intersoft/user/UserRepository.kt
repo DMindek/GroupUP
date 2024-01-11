@@ -6,10 +6,8 @@ import com.intersoft.network.NetworkManager
 import com.intersoft.network.RequestListener
 import com.intersoft.network.models.responses.EditBody
 import com.intersoft.network.models.responses.LoginBody
-import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
 import com.intersoft.network.models.responses.UserData
-import org.json.JSONObject
 
 class UserRepository: IUserRepository {
 
@@ -114,6 +112,36 @@ class UserRepository: IUserRepository {
             } else onEditError("Server returned unknown error")
         })
     }
+
+    override fun getHostname(hostId: Int, authToken: String,onGetHostnameError: (String?) -> Unit, onGetHostNameSuccess: (String) -> Unit) {
+        NetworkManager.getUser(
+            hostId,
+            authToken,
+            onGetUserSuccess = {
+                val hostName = it.username
+                Log.d("EventRepository", "Recieved hostname: $hostName")
+                onGetHostNameSuccess(hostName)
+            },
+            onGetUserError = {
+                Log.d("EventRepository", "Error occurred: $it")
+                if(!it.isNullOrEmpty())if(it[0] != '{') {
+                    onGetHostnameError(it)
+                }
+                else{
+                    val error: GetHostnameFailResponse
+                    try {
+                        error = Gson().fromJson(it, GetHostnameFailResponse::class.java)
+                        Log.d("EventRepository", "Error occurred $error")
+                    }catch (e: Exception){
+                        onGetHostnameError("Server returned unknown error")
+                        return@getUser
+                    }
+                }
+            }
+        )
+    }
+
+
 }
 
 class RegistrationErrorResponse {
@@ -132,4 +160,8 @@ data class LoginSuccessResponse(
     val id: Int? = null,
     val username: String? = null,
     val location: String? = null
+)
+
+data class GetHostnameFailResponse(
+    val message: String?
 )
