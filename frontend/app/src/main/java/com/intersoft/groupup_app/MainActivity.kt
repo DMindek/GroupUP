@@ -53,8 +53,6 @@ class MainActivity : ComponentActivity() {
                                 onRegisterClick = { navController.navigate("registration") }
                             )
                         }
-                        composable("main"){
-                        }
                         composable("home"){
                             HomePage(
                                 onCreateEventButtonPress = {navController.navigate("createEvent")},
