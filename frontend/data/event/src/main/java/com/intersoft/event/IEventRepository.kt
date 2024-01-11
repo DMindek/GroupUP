@@ -16,4 +16,11 @@ interface IEventRepository {
         onGetUserEventsSuccess: (List<EventModel>) -> Unit
     )
 
+    fun getJoinedEvents(
+        userId: Int,
+        authToken: String,
+        onGetJoinedEventsError: (String) -> Unit,
+        onGetJoinedEventsSuccess: (List<EventModel>) -> Unit
+    )
+
 }

@@ -112,6 +112,19 @@ object NetworkManager {
 
     }
 
+    fun getJoinedEvents(userId: Int, authToken: String, onGetUserEventsSuccess: (List<NewEventData>) -> Unit, onGetUserEventsFail: (String?)-> Unit) {
+        serverService.getJoinedEvents(userId, authToken)
+            .enqueue(
+                ResponseHandler<List<NewEventData>>(
+                    200,
+                    422,
+                    onGetUserEventsSuccess,
+                    onGetUserEventsFail
+                )
+            )
+
+    }
+
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,
                                   val onSuccess : (T) -> Unit,
                                   val onFail: (String?) -> Unit): Callback<T>{

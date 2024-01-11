@@ -22,6 +22,7 @@ import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
 import com.intersoft.groupup_app.navigation.EventDetailsPage
 import com.intersoft.groupup_app.navigation.HomePage
+import com.intersoft.groupup_app.navigation.JoinedEventsPage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
 import com.intersoft.groupup_app.navigation.UserCreatedEventsPage
@@ -84,6 +85,11 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("availableEvents"){
                             AvailableEventsPage(
+                                onEventClick = { navController.navigate("eventDetail/$it") }
+                            )
+                        }
+                        composable("joinedEvents"){
+                            JoinedEventsPage(
                                 onEventClick = { navController.navigate("eventDetail/$it") }
                             )
                         }

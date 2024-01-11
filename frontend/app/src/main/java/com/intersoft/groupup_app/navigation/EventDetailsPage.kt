@@ -24,6 +24,7 @@ import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.LabelText
+import com.intersoft.ui.LoadingScreen
 import com.intersoft.ui.ParticipantNumberDisplayField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TitleText
@@ -137,42 +138,38 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
             when{
                 hostId != AuthContext.id &&
                 currentNumberOfParticipants < maxNumberOfParticipants &&
-                !isParticipant -> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        PrimaryButton(buttonText = "Join Event ") {/*TODO: Add join event functionality*/}
-                    }
+                !isParticipant -> EventDetailsButton(buttonName = "Join Event") {
+                    /*TODO Add join event functionality*/
                 }
+
                 hostId != AuthContext.id &&
-                        isParticipant-> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        PrimaryButton(buttonText = "Leave Event ") {/*TODO: Add leave event functionality*/}
-                    }
+                        isParticipant-> EventDetailsButton(buttonName = "Leave Event") {
+                    /*TODO Add leave event functionality*/
                 }
-                hostId == AuthContext.id -> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 20.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        PrimaryButton(buttonText = "Edit Event ") {/*TODO: Add edit event functionality*/}
-                    }
+                hostId == AuthContext.id -> EventDetailsButton(buttonName = "Delete Event") {
+                    /*TODO Add delete event functionality*/
                 }
             }
 
         }
     } else{
-        Text(text = "Something went wrong and no event data was recieved. Try to create an event first before viewing details.")
+        LoadingScreen()
     }
 
+}
+
+
+@Composable
+fun EventDetailsButton(
+    buttonName: String,
+    onButtonPress: () -> Unit
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        PrimaryButton(buttonText = buttonName) {onButtonPress()}
+    }
 }

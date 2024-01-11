@@ -45,4 +45,19 @@ class EventsViewModel : ViewModel(){
         }
     }
 
+    fun fetchJoinedEvents(userId: Int, authToken: String) {
+        eventRepository.getJoinedEvents(userId, authToken, {error ->
+            _error.value = error
+        }){events ->
+            if(events.isEmpty()){
+                _error.value = "NO_EVENTS"
+            }
+            val listOfEvents = events.map { event ->
+                event.processIntoIInterableObject()
+            }
+
+            _events.value = listOfEvents
+        }
+    }
+
 }
