@@ -6,7 +6,21 @@ class Event < ApplicationRecord
     validates :name, presence: true, length: {maximum: 25 }
     validates :description, presence: true, length: {maximum: 256 }
     validates :date, presence: true
-    validates :date, presence: true, comparison: { greater_than: Date.current }
+    validates :date, presence: true, comparison: { greater_than: Date.current }, on: :create
     validates :location, presence: true
+
+    def as_json(options = {})
+        super(options.merge(
+            except: [:created_at, :updated_at],
+            include: {
+            owner: {
+                except: [:created_at, :updated_at, :password_digest]
+            },
+            participants: {
+                except: [:created_at, :updated_at, :password_digest]
+            }
+            }
+        ))
+    end
 
 end

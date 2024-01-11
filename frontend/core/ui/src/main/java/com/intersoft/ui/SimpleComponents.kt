@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -40,21 +38,21 @@ import androidx.navigation.NavController
 
 
 @Composable
-fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
-     Button(
-         onClick = action,
-         modifier = modifier,
-         colors = ButtonDefaults.buttonColors(
-             containerColor = colorResource(R.color.primary),
-             contentColor = colorResource(R.color.primaryText),
-             disabledContainerColor = colorResource(R.color.primary),
-             disabledContentColor = colorResource(R.color.primaryText)
-         )
+fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, isEnabled: Boolean = true, action: () -> Unit ){
+    Button(
+        onClick = action,
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.primary),
+            contentColor = colorResource(R.color.primaryText),
+            disabledContainerColor = colorResource(R.color.primary),
+            disabledContentColor = colorResource(R.color.primaryText)
+        ),
+        enabled = isEnabled
     ){
-         Text(text = buttonText)
-     }
+        Text(text = buttonText)
+    }
 }
-
 
 @Composable
 fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: () -> Unit){
@@ -67,22 +65,6 @@ fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: (
             disabledContainerColor = colorResource(R.color.secondary),
             disabledContentColor = colorResource(R.color.secondaryText)
         )
-    ){
-        Text(text = buttonText)
-    }
-}
-@Composable
-fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, isEnabled: Boolean, action: () -> Unit ){
-    Button(
-        onClick = action,
-        modifier = modifier,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(R.color.primary),
-            contentColor = colorResource(R.color.primaryText),
-            disabledContainerColor = colorResource(R.color.primary),
-            disabledContentColor = colorResource(R.color.primaryText)
-        ),
-        enabled = isEnabled
     ){
         Text(text = buttonText)
     }

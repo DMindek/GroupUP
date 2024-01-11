@@ -139,6 +139,9 @@ class MainActivity : ComponentActivity() {
                         composable("edit_profile") {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
+                        composable("event_details"){
+
+                        }
                     }
                 }
             }
