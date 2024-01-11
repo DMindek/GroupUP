@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
+import com.intersoft.ui.ConfirmationDialog
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.LabelText
 import com.intersoft.ui.LoadingScreen
@@ -69,6 +70,10 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
     }
 
     var eventDataWasRecieved by remember{
+        mutableStateOf(false)
+    }
+
+    var isShowingLeaveConfirmationDialog by remember{
         mutableStateOf(false)
     }
 
@@ -144,16 +149,37 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
 
                 hostId != AuthContext.id &&
                         isParticipant-> EventDetailsButton(buttonName = "Leave Event") {
-                    /*TODO Add leave event functionality*/
+                    isShowingLeaveConfirmationDialog = true
                 }
-                hostId == AuthContext.id -> EventDetailsButton(buttonName = "Delete Event") {
-                    /*TODO Add delete event functionality*/
+
+                hostId == AuthContext.id -> {
+                    EventDetailsButton(buttonName = "Delete Event") {
+                        /*TODO Add delete event functionality*/
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
+                    EventDetailsButton(buttonName = "Edit Event") {
+                        /*TODO Add edit event functionality*/
+                    }
                 }
             }
 
         }
     } else{
         LoadingScreen()
+    }
+
+    if(isShowingLeaveConfirmationDialog){
+        ConfirmationDialog(
+            title = "Leave Event",
+            dialogText = "Are you sure you want to leave this event?",
+            onConfirmButton = {
+                /*TODO Add leave event functionality*/
+            },
+            onDismissButton = {
+                isShowingLeaveConfirmationDialog = false
+            }
+
+        )
     }
 
 }
@@ -173,3 +199,6 @@ fun EventDetailsButton(
         PrimaryButton(buttonText = buttonName) {onButtonPress()}
     }
 }
+
+
+

@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -354,6 +355,34 @@ fun LoadingScreen() {
     ) {
         CircularProgressIndicator(color = Color.Gray)
     }
+}
+
+
+@Composable
+fun ConfirmationDialog(
+    title: String,
+    dialogText: String,
+    onConfirmButton: () -> Unit,
+    onDismissButton: () -> Unit,
+){
+    AlertDialog(onDismissRequest = onDismissButton,
+        title = {
+            Text(text = title)
+        },
+        text = {
+            Text(text = dialogText)
+        },
+        confirmButton = {
+            Button(onClick = onConfirmButton) {
+                Text(text = "Confirm")
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDismissButton) {
+                Text(text = "Cancel")
+            }
+        }
+    )
 }
 
 
