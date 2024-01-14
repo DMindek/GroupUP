@@ -31,7 +31,7 @@ object NetworkManager {
         Log.d("NetworkManager", "Request ${res.request().body()}")
 
         res.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 Log.d("NetworkManager", "Response: ${response?.body()}")
                 if(response?.code() != 201){
                     if(response?.code() == 422)
@@ -129,7 +129,7 @@ object NetworkManager {
                                   val onSuccess : (T) -> Unit,
                                   val onFail: (String?) -> Unit): Callback<T>{
 
-        override fun onResponse(call: Call<T>?, response: Response<T>?) {
+        override fun onResponse(call: Call<T>, response: Response<T>) {
             Log.d("NetworkManager", "Response: ${response?.message()}")
             if (response != null) {
                 if (response.code() != successCode) {

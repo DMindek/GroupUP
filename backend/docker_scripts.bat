@@ -1,3 +1,4 @@
+@echo off
 if "%1"=="build" (
     docker build -t groupup .
 ) else if "%1"=="run" (

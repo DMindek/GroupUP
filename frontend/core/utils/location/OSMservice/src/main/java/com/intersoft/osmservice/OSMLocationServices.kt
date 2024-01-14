@@ -28,8 +28,8 @@ object OSMLocationServices: ILocationServices {
         else GeoPoint(46.307833, 16.338050)
 
         val marker = rememberMarkerState()
-        if(isEdit){
-            marker.geoPoint = GeoPoint(latitude!!, longitude!!)
+        if(isEdit && latitude != null && longitude != null){
+            marker.geoPoint = GeoPoint(latitude, longitude)
         }
 
         val cameraState = rememberCameraState{

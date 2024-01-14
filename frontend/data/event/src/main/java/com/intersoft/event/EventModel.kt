@@ -3,6 +3,7 @@ package com.intersoft.event
 
 import com.intersoft.ui.IIterableObject
 import com.intersoft.user.UserModel
+import com.intersoft.utils.DateTimeManager
 
 data class EventModel(
     var name : String,
@@ -25,7 +26,7 @@ data class EventModel(
     }
 
     override fun getSecondaryText(): String {
-        return location;
+        return DateTimeManager.formatMillisDateToString(dateInMillis);
     }
 
     fun processIntoIInterableObject(): IIterableObject {
@@ -39,7 +40,7 @@ data class EventModel(
             }
 
             override fun getSecondaryText(): String {
-                return location;
+                return DateTimeManager.formatMillisDateToString(dateInMillis);
             }
         }
     }
