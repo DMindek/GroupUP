@@ -26,7 +26,7 @@ data class EventModel(
     }
 
     override fun getSecondaryText(): String {
-        return DateTimeManager.formatMillisDateToString(dateInMillis);
+        return DateTimeManager.formatMillisDateToString(startTimeInMillis);
     }
 
     fun processIntoIInterableObject(): IIterableObject {
@@ -40,7 +40,7 @@ data class EventModel(
             }
 
             override fun getSecondaryText(): String {
-                return DateTimeManager.formatMillisDateToString(dateInMillis);
+                return DateTimeManager.formatMillisDateToString(startTimeInMillis);
             }
         }
     }
