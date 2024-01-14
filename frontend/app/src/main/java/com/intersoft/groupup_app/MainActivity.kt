@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
+import com.intersoft.groupup_app.navigation.EventDetailsPage
 import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.LoginPage
 import com.intersoft.groupup_app.navigation.RegistrationPage
@@ -55,7 +56,8 @@ class MainActivity : ComponentActivity() {
                         composable("home"){
                             HomePage(
                                 onCreateEventButtonPress = {navController.navigate("createEvent")},
-                                onUserInformationPressed = {navController.navigate("user_information")}
+                                onUserInformationPressed = {navController.navigate("user_information")},
+                                onEventDetailsPressed = {navController.navigate("event_details")}
                             )
                         }
                         composable("createEvent"){
@@ -80,7 +82,7 @@ class MainActivity : ComponentActivity() {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
                         }
                         composable("event_details"){
-
+                            EventDetailsPage {}
                         }
                     }
                 }

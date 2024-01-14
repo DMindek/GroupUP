@@ -6,10 +6,12 @@ import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
+import com.intersoft.network.models.responses.StoredEventData
 import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -34,4 +36,12 @@ interface ServerService {
     @Headers("Content-Type: application/json")
     @POST("/api/v1/events")
     fun createEvent(@Body event: EventBody): Call<EventSuccessResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/events/{event_id}")
+    fun getEvent(@Path("event_id") eventId: Int) : Call<StoredEventData>
+
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/users/{user_id}")
+    fun getUser(@Path("user_id") userId: Int, @Header("Authorization") authToken: String): Call<UserData>
 }

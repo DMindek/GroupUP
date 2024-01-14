@@ -1,11 +1,16 @@
 package com.intersoft.event
 
-object EventCreationManager {
+import com.intersoft.user.IUserRepository
+import com.intersoft.user.UserRepository
+import java.sql.Timestamp
+
+object EventManager {
     private var eventRepository: IEventRepository = EventRepository()
 
     fun setEventRepository(repo: IEventRepository){
         eventRepository = repo
     }
+
     fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,startTimeInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
         val newEvent = EventModel(
             name= eventName,
@@ -41,4 +46,51 @@ object EventCreationManager {
 
         return ""
     }
+
+     fun getEvent(eventId: Int, onGetEventError: (String?) -> Unit, onGetEventSuccess: (RecievedEventData) -> Unit){
+        eventRepository.getEvent(eventId,
+            onGetEventSuccess = {
+                val eventData = RecievedEventData(
+                    id = it.id,
+                    name = it.name,
+                    description = it.description,
+                    date = it.date,
+                    duration = it.duration,
+                    max_participants = it.max_participants,
+                    location = it.location,
+                    owner_id = it.owner_id,
+                    participants = it.participants
+                )
+
+                onGetEventSuccess(eventData)
+            },
+            onGetEventError = {
+                onGetEventError(it)
+            }
+        )
+    }
+
+    fun getHostname(hostId: Int, authToken: String, onGetHostnameError: (String?) -> Unit, onGetHostnameSuccess: (String) -> Unit) {
+        val userRepository:IUserRepository = UserRepository()
+
+        userRepository.getHostname(
+            hostId,
+            authToken,
+            onGetHostNameSuccess = {onGetHostnameSuccess(it)},
+            onGetHostnameError = {onGetHostnameError(it) }
+        )
+    }
+
+    data class RecievedEventData (
+        val id : Int,
+        val name: String,
+        val description : String,
+        val date : Timestamp,
+        val duration : Int,
+        val max_participants : Int,
+        val location : String,
+        val owner_id : Int,
+        val participants : List<String>?
+    )
+
 }
