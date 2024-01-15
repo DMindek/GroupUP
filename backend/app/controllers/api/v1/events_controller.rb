@@ -1,6 +1,6 @@
 class Api::V1::EventsController < ApplicationController
     #before_action :authenticate_user, except: [:index, :show]
-    before_action :set_event, only: %i[ show update destroy join ]
+    before_action :set_event, only: %i[ show update destroy join leave ]
     
     # GET /events
     def index
@@ -33,6 +33,18 @@ class Api::V1::EventsController < ApplicationController
 
         if event_attendance.save
             render json: {message: "Successfully joined the Event."}, status: :created
+        else
+            render json: event_attendance.errors, status: :unprocessable_entity
+        end
+    end
+
+    # POST /events/1/leave
+    def leave
+        user = User.find(params[:user_id])
+        event_attendance = EventAttendance.where(user: user, event: @event).first
+
+        if event_attendance.destroy
+            render json: {message: "Successfully left the Event."}, status: :created
         else
             render json: event_attendance.errors, status: :unprocessable_entity
         end

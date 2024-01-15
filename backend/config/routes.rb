@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       resources :events
       post "/events/:id/edit", to: "events#update"
       post "/events/:id/join", to: "events#join"
+      post "/events/:id/leave", to: "events#leave"
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
