@@ -13,7 +13,9 @@ data class NewEventData(
     val duration : Int,
     val max_participants : Int,
     val location : String,
-    val owner_id : Int
+    val owner_id : Int,
+    val id: Int?,
+    val participants : List<UserData>?
 )
 
 data class StoredEventData(
@@ -27,3 +29,4 @@ data class StoredEventData(
     val owner_id : Int,
     val participants : List<String>?
 )
+

@@ -22,15 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
+import com.intersoft.ui.ConfirmationDialog
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.LabelText
+import com.intersoft.ui.LoadingScreen
 import com.intersoft.ui.ParticipantNumberDisplayField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TitleText
 import com.intersoft.utils.DateTimeManager
 
 @Composable
-fun EventDetailsPage(onGetEventFail: () -> Unit){
+fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
     var eventName by remember {
         mutableStateOf("")
     }
@@ -42,12 +44,15 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
         mutableStateOf("")
     }
 
-
     var eventDuration by remember {
         mutableIntStateOf(0)
     }
     var maxNumberOfParticipants by remember {
         mutableStateOf(10)
+    }
+
+    var isParticipant by remember {
+        mutableStateOf(false)
     }
 
     var currentNumberOfParticipants = 0
@@ -59,17 +64,28 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
     var host by remember {
         mutableStateOf("")
     }
+
+    var hostId by remember{
+        mutableIntStateOf(-1)
+    }
+
     var eventDataWasRecieved by remember{
         mutableStateOf(false)
     }
 
-     EventManager.getEvent(1,{onGetEventFail()}){
+    var isShowingLeaveConfirmationDialog by remember{
+        mutableStateOf(false)
+    }
+
+     EventManager.getEvent(eventId ,{onGetEventFail()}){
 
          eventName = it.name
          description = it.description
          eventDate = DateTimeManager.formatMillisToDateTime(it.date.toInstant().toEpochMilli())
          eventDuration = it.duration
          maxNumberOfParticipants = it.max_participants
+         hostId = it.owner_id
+
          val participantsNumber = it.participants?.count()
          if(participantsNumber != null)
             currentNumberOfParticipants = participantsNumber
@@ -80,6 +96,9 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
              onGetHostnameError = {},
              onGetHostnameSuccess = {hostname -> host = hostname }
          )
+
+         isParticipant = it.participants!!.any{user -> user == AuthContext.username} &&
+                 it.owner_id != AuthContext.id
 
          eventDataWasRecieved = true
     }
@@ -120,17 +139,66 @@ fun EventDetailsPage(onGetEventFail: () -> Unit){
             DisabledTextField(textvalue = host)
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                PrimaryButton(buttonText = "Request to Join ") {}
+
+            when{
+                hostId != AuthContext.id &&
+                currentNumberOfParticipants < maxNumberOfParticipants &&
+                !isParticipant -> EventDetailsButton(buttonName = "Join Event") {
+                    /*TODO Add join event functionality*/
+                }
+
+                hostId != AuthContext.id &&
+                        isParticipant-> EventDetailsButton(buttonName = "Leave Event") {
+                    isShowingLeaveConfirmationDialog = true
+                }
+
+                hostId == AuthContext.id -> {
+                    EventDetailsButton(buttonName = "Delete Event") {
+                        /*TODO Add delete event functionality*/
+                    }
+                    Spacer(modifier = Modifier.height(20.dp))
+                    EventDetailsButton(buttonName = "Edit Event") {
+                        /*TODO Add edit event functionality*/
+                    }
+                }
             }
+
         }
     } else{
-        Text(text = "Something went wrong and no event data was recieved. Try to create an event first before viewing details.")
+        LoadingScreen()
+    }
+
+    if(isShowingLeaveConfirmationDialog){
+        ConfirmationDialog(
+            title = "Leave Event",
+            dialogText = "Are you sure you want to leave this event?",
+            onConfirmButton = {
+                /*TODO Add leave event functionality*/
+            },
+            onDismissButton = {
+                isShowingLeaveConfirmationDialog = false
+            }
+
+        )
     }
 
 }
+
+
+@Composable
+fun EventDetailsButton(
+    buttonName: String,
+    onButtonPress: () -> Unit
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        PrimaryButton(buttonText = buttonName) {onButtonPress()}
+    }
+}
+
+
+

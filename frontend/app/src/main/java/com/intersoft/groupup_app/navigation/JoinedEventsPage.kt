@@ -37,9 +37,8 @@ import com.intersoft.ui.TitleText
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun UserCreatedEventsPage(
+fun JoinedEventsPage(
     onEventClick: (Int) -> Unit,
-    onCreateEventButtonPress: () -> Unit,
     viewModel: EventsViewModel = viewModel()
 ) {
     val events by viewModel.events.observeAsState()
@@ -49,7 +48,7 @@ fun UserCreatedEventsPage(
         key1 = events,
         block = {
             if (events == null) {
-                viewModel.fetchUserCurrentEvents(AuthContext.id!!, AuthContext.token!!)
+                viewModel.fetchJoinedEvents(AuthContext.id!!, AuthContext.token!!)
             }
         }
     )
@@ -82,18 +81,6 @@ fun UserCreatedEventsPage(
                 }
 
                 // Display loading screen, no events message, or error message based on state
-
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    PrimaryButton(buttonText = "Create Event") {
-                        onCreateEventButtonPress()
-                    }
-                }
             }
         )
 
@@ -103,24 +90,5 @@ fun UserCreatedEventsPage(
 }
 
 
-@Composable
-fun DataScreen(data: List<IIterableObject>, onEventClick: (Int) -> Unit) {
-    Column(content = {
-
-        for(event in data) {
-                EventCard(
-                    event = event,
-                    onEventClick = onEventClick
-                )
-        }
-    })
-}
-
-@Composable
-fun EventCard(event: IIterableObject, onEventClick: (Int) -> Unit) {
-    ObjectCard(data = event, interaction = {
-        onEventClick(event.getIdentifier())
-    })
-}
 
 
