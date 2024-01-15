@@ -46,6 +46,12 @@ class Api::V1::EventsController < ApplicationController
         render json: @event.errors, status: :unprocessable_entity
         end
     end
+
+    # GET available_events
+    def available_events
+        @events = Event.where("date > ?", DateTime.now)
+        render json: @events
+    end
     
     # DELETE /events/1
     def destroy
