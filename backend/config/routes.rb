@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get "/users/:id/owned_events", to: "users#owned_events"
 
       # Events routes
+      get "/events/available_events", to: "events#available_events"
       resources :events
       post "/events/:id/edit", to: "events#update"
       post "/events/:id/join", to: "events#join"
