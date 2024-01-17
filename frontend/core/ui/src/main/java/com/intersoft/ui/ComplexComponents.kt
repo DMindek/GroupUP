@@ -1,6 +1,7 @@
 package com.intersoft.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -129,39 +130,35 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
         mutableStateOf(placeholderStartTime)
     }
     var durationHours by remember {
-        mutableStateOf(-1)
+        if(placeholderHours != "")
+            mutableIntStateOf(placeholderHours.toInt())
+        else
+            mutableIntStateOf(-1)
     }
     var durationMinutes by remember {
-        mutableStateOf(-1)
+        if(placeholderMinutes != "")
+            mutableIntStateOf(placeholderMinutes.toInt())
+        else
+            mutableIntStateOf(-1)
     }
-    var selectedEndTimeText by remember {
-        mutableStateOf("")
-    }
-
-    val selectedStartTimeList = mutableListOf<Int>()
 
     var selectedStartTime by remember{
-        mutableStateOf(selectedStartTimeList)
+        if(placeholderStartTime != ""){
+            val tempStartTime = placeholderStartTime.split(":")
+            mutableStateOf(mutableListOf(tempStartTime[0].toInt(), tempStartTime[1].toInt()))
+        }
+        else{
+            mutableStateOf(mutableListOf<Int>())
+        }
     }
 
     var startTimeInMillis : Long
 
     var durationInMillis : Long
-
-    var tempEndTime by remember {
-        mutableStateOf("")
-    }
+    
     val warningMessage = "Note: Set duration passes midnight and the end date is different from the start date"
 
-    if(placeholderHours != "" && placeholderMinutes != ""){
-        durationHours = placeholderHours.toInt()
-        durationMinutes = placeholderMinutes.toInt()
-        if(placeholderStartTime != ""){
-            val tempStartTime = placeholderStartTime.split(":")
-            selectedStartTime = mutableListOf(tempStartTime[0].toInt(), tempStartTime[1].toInt())
-            tempEndTime = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
-        }
-    }
+    Log.d("NEKAJ","delam2")
 
 
 
@@ -189,8 +186,6 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
                             if(selectedStartTime.isNotEmpty() && durationMinutes != -1){
-                                selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
-                                tempEndTime = ""
                                 startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
                                 durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
 
@@ -222,8 +217,6 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
                             if(selectedStartTime.isNotEmpty() && durationHours != -1){
-                                selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
-                                tempEndTime = ""
                                 startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
                                 durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
 
@@ -266,10 +259,8 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                 }
                 Column(horizontalAlignment = Alignment.End) {
 
-                    if(selectedEndTimeText == "")
-                        DisabledTextField(tempEndTime)
-                    else
-                        DisabledTextField(textvalue = selectedEndTimeText)
+
+                    DisabledTextField(textvalue =  DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime))
                 }
             }
         }
@@ -280,8 +271,6 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                     selectedStartTimeText = DateTimeManager.formatStartTime(selectedStartTime)
 
                     if(DateTimeManager.durationIsSet(durationHours,durationMinutes)){
-                        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
-                        tempEndTime = ""
                         durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
                         onDurationInput(durationInMillis)
                     }
