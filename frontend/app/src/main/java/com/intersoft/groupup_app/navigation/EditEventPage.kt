@@ -18,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.intersoft.auth.AuthContext
+import com.intersoft.event.EventCreationManager
 import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DurationSelectionElement
 import com.intersoft.ui.ErrorText
@@ -30,7 +32,7 @@ import com.intersoft.ui.WarningText
 import com.intersoft.utils.DateTimeManager
 
 @Composable
-fun EditEventPage(eventName: String,description: String,selectedDateInMillis: Long,startTimeInMillis: Long,durationInMillis: Long,maxNumberOfParticipants: Int,location: String,onEditEvent: () -> Unit, onCancelEditEvent: () -> Unit){
+fun EditEventPage(eventId: Int,eventName: String,description: String,selectedDateInMillis: Long,startTimeInMillis: Long,durationInMillis: Long,maxNumberOfParticipants: Int,location: String,hostId: Int,onEditEvent: () -> Unit, onCancelEditEvent: () -> Unit){
     var editedEventName by remember {
         mutableStateOf(eventName)
     }
@@ -102,18 +104,21 @@ fun EditEventPage(eventName: String,description: String,selectedDateInMillis: Lo
                 .padding(start = 20.dp)
         ) {
             PrimaryButton(buttonText = "Apply changes") {
-                // TODO EventCreationManager EditEvent
-                /*EventCreationManager.createEvent(
+                EventCreationManager.editEvent(
+                    eventId = eventId,
                     eventName = eventName,
                     description = description,
                     selectedDateInMillis = selectedDateInMillis,
                     durationInMillis = durationInMillis,
                     startTimeInMillis = startTimeInMillis,
                     maxNumberOfParticipants = maxNumberOfParticipants,
-                    location = location,AuthContext.id!!,{onEditEvent()}
+                    location = location,
+                    hostId,
+                    AuthContext.token!!,
+                    {onEditEvent()}
                 ){error ->
                     errorText = error
-                }*/
+                }
             }
             Spacer(modifier = Modifier.width(100.dp))
             PrimaryButton(buttonText = "Cancel") {
