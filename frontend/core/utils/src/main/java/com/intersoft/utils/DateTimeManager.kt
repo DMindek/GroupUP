@@ -35,6 +35,13 @@ object DateTimeManager {
         durationMinutes: Int,
         selectedStartTime: MutableList<Int>
     ): String {
+
+        if(!durationIsSet(durationHours,durationMinutes))
+            return ""
+
+        if(selectedStartTime.isEmpty())
+            return ""
+
         var currentHoursSum = selectedStartTime[0] + durationHours
         var currentMinutesSum = selectedStartTime[1] + durationMinutes
         var endTimeHours : String
