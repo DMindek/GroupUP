@@ -89,6 +89,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("editEvent"){
                             EditEventPage(
+                                eventId = 1,
                                 eventName = "Event TestName",
                                 description = "Test description ovo je text koji tu pise u descriptionu",
                                 selectedDateInMillis = 1704827329310,
@@ -96,6 +97,7 @@ class MainActivity : ComponentActivity() {
                                 durationInMillis = 5400000,
                                 maxNumberOfParticipants = 5,
                                 location = "AAAAAAA",
+                                 1,
                                 onEditEvent = { /*TODO*/ }) {
                                 
                             }
