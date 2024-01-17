@@ -148,18 +148,22 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
 
     var durationInMillis : Long
 
+    var tempEndTime by remember {
+        mutableStateOf("")
+    }
     val warningMessage = "Note: Set duration passes midnight and the end date is different from the start date"
 
-    if(placeholderHours != "" && placeholderMinutes != "" ){
+    if(placeholderHours != "" && placeholderMinutes != ""){
         durationHours = placeholderHours.toInt()
         durationMinutes = placeholderMinutes.toInt()
+        if(placeholderStartTime != ""){
+            val tempStartTime = placeholderStartTime.split(":")
+            selectedStartTime = mutableListOf(tempStartTime[0].toInt(), tempStartTime[1].toInt())
+            tempEndTime = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+        }
     }
 
-    if(placeholderStartTime != "" && placeholderHours != "" && placeholderMinutes != ""){
-        val tempStartTime = placeholderStartTime.split(":")
-        val tempStartTimeList: MutableList<Int> = mutableListOf(tempStartTime[0].toInt(), tempStartTime[1].toInt())
-        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,tempStartTimeList)
-    }
+
 
 
     Column(modifier = Modifier
@@ -184,8 +188,9 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                     NumericTextInputField("", paddingAmount = 0, placeholder = placeholderHours){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
-                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1){
+                            if(selectedStartTime.isNotEmpty() && durationMinutes != -1){
                                 selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                                tempEndTime = ""
                                 startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
                                 durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
 
@@ -216,8 +221,9 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                     NumericTextInputField("", paddingAmount = 0, placeholder = placeholderMinutes){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
-                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1){
+                            if(selectedStartTime.isNotEmpty() && durationHours != -1){
                                 selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                                tempEndTime = ""
                                 startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
                                 durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
 
@@ -260,8 +266,10 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                 }
                 Column(horizontalAlignment = Alignment.End) {
 
-
-                    DisabledTextField(selectedEndTimeText)
+                    if(selectedEndTimeText == "")
+                        DisabledTextField(tempEndTime)
+                    else
+                        DisabledTextField(textvalue = selectedEndTimeText)
                 }
             }
         }
@@ -269,10 +277,11 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
             GeneralTimePicker(
                 onConfirm = { selectedTime ->
                     selectedStartTime = selectedTime
-                    selectedStartTimeText = DateTimeManager.formatStartTime(selectedTime)
+                    selectedStartTimeText = DateTimeManager.formatStartTime(selectedStartTime)
 
                     if(DateTimeManager.durationIsSet(durationHours,durationMinutes)){
-                        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedTime)
+                        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
+                        tempEndTime = ""
                         durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
                         onDurationInput(durationInMillis)
                     }
