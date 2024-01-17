@@ -7,6 +7,7 @@ import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
+import com.intersoft.network.models.responses.StoredEventData
 import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -63,6 +64,11 @@ object NetworkManager {
     fun createEvent(eventData: EventBody, onCreateEventSuccess: (EventSuccessResponse) ->Unit, onCreateEventFail: (String?) -> Unit){
         val res =serverService.createEvent(eventData)
         res.enqueue(ResponseHandler<EventSuccessResponse>(successCode = 201, errorCode = 422, onCreateEventSuccess, onCreateEventFail))
+    }
+
+    fun editEvent(eventId:Int,eventData: EventBody,authToken: String, onEditEventSuccess: (StoredEventData) ->Unit, onEditEventFail: (String?) -> Unit){
+        val res =serverService.editEvent(eventId,eventData,authToken)
+        res.enqueue(ResponseHandler<StoredEventData>(successCode = 201, errorCode = 422, onEditEventSuccess, onEditEventFail))
     }
 
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,

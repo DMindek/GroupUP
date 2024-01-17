@@ -6,6 +6,7 @@ import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
+import com.intersoft.network.models.responses.StoredEventData
 import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -34,4 +35,11 @@ interface ServerService {
     @Headers("Content-Type: application/json")
     @POST("/api/v1/events")
     fun createEvent(@Body event: EventBody): Call<EventSuccessResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("/api/v1/events/[event_id]/edit")
+    fun editEvent(
+        @Path("event_id") id: Int,
+        @Body event: EventBody,
+        @Header("Authorization") authToken: String ) : Call<StoredEventData>
 }
