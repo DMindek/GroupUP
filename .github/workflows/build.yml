@@ -36,4 +36,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: 
           gradle wrapper
-          ./gradlew build sonar --info
+          ./frontend/gradlew build sonar --info
