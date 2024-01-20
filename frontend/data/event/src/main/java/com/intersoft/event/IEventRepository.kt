@@ -23,6 +23,6 @@ interface IEventRepository {
     )
 
 
-    fun editEvent(eventId: Int,newEvent: EventModel,authToken: String ,onCreateEventError: (String) -> Unit, onCreateEventSuccess: (String) -> Unit){
+    fun editEvent(eventId: Int,newEvent: EventModel,authToken: String ,onEditEventError: (String) -> Unit, onEditEventSuccess: (String) -> Unit){
     }
 }
