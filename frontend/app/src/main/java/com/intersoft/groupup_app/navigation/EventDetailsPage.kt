@@ -185,7 +185,18 @@ fun EventDetailsPage(
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     EventDetailsButton(buttonName = "Edit Event") {
-                        /*TODO Add edit event functionality*/
+                        onEditEventButtonPressed(
+                            eventId,
+                            eventName,
+                            description,
+                            selectedDateInMillis,
+                            startTimeInMillis,
+                            durationInMillis,
+                            maxNumberOfParticipants,
+                            location,
+                            hostId
+                        )
+
                     }
                 }
             }
