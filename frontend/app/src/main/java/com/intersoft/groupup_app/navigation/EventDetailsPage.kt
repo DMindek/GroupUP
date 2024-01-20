@@ -90,11 +90,25 @@ fun EventDetailsPage(
         mutableStateOf(false)
     }
 
+    var selectedDateInMillis : Long by remember{
+        mutableLongStateOf(0)
+    }
+    var startTimeInMillis : Long by remember{
+        mutableLongStateOf(0)
+    }
+    var durationInMillis : Long by remember{
+        mutableLongStateOf(0)
+    }
+
      EventManager.getEvent(eventId ,{onGetEventFail()}){
 
+         val totalMillis = it.date.toInstant().toEpochMilli() - 3600000 // subtract 1 hour because the epoch functions ads 1 hour to account for time offset, which does not make sense here
          eventName = it.name
          description = it.description
-         eventDate = DateTimeManager.formatMillisToDateTime(it.date.toInstant().toEpochMilli())
+         eventDate = DateTimeManager.formatMillisToDateTime(totalMillis)
+         selectedDateInMillis = totalMillis
+         durationInMillis = DateTimeManager.calculateMillisFromMinutes(eventDuration)
+         startTimeInMillis = DateTimeManager.calculateStartTimeFromString(DateTimeManager.formatMillisToDateTime(totalMillis))
          eventDuration = it.duration
          maxNumberOfParticipants = it.max_participants
          hostId = it.owner_id
