@@ -61,13 +61,13 @@ fun EditEventPage(
     }
 
     var editedDurationInMillis by remember {
-        mutableLongStateOf(0)
+        mutableLongStateOf(durationInMillis)
     }
     var editedMaxNumberOfParticipants by remember {
         mutableIntStateOf(maxNumberOfParticipants)
     }
     var editedLocation by remember {
-        mutableStateOf("")
+        mutableStateOf(location)
     }
 
     var errorText by remember {
@@ -77,7 +77,7 @@ fun EditEventPage(
         mutableStateOf("")
     }
 
-    val currentSelectedDate = DateTimeManager.formatMilisDatetoString(selectedDateInMillis)
+    val currentSelectedDate = DateTimeManager.formatMillisDateToString(selectedDateInMillis)
     val currentDurationHours = DateTimeManager.calculateHoursFromMillis(durationInMillis)
     val currentDurationMinutes = DateTimeManager.calculateMinutesFromMillis(durationInMillis) - currentDurationHours * 60 // We deduct the amount of hours from the total time to get the minute duration
     val currentStartTimeHours = DateTimeManager.calculateHoursFromMillis(startTimeInMillis)
@@ -105,7 +105,7 @@ fun EditEventPage(
         )
         WarningText(text = warningText)
         CounterElement(label = "Max Participants", placeholder = maxNumberOfParticipants) {editedMaxNumberOfParticipants = it}
-        TextInputField(label = "location") { editedLocation = it }
+        TextInputField(label = "location", placeholder = location) { editedLocation = it }
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -116,15 +116,15 @@ fun EditEventPage(
                 .padding(start = 20.dp)
         ) {
             PrimaryButton(buttonText = "Apply changes") {
-                EventCreationManager.editEvent(
+                EventManager.editEvent(
                     eventId = eventId,
-                    eventName = eventName,
-                    description = description,
-                    selectedDateInMillis = selectedDateInMillis,
-                    durationInMillis = durationInMillis,
-                    startTimeInMillis = startTimeInMillis,
-                    maxNumberOfParticipants = maxNumberOfParticipants,
-                    location = location,
+                    eventName = editedEventName,
+                    description = editedDescription,
+                    selectedDateInMillis = editedSelectedDateInMillis,
+                    durationInMillis = editedDurationInMillis,
+                    startTimeInMillis = editedStartTimeInMillis,
+                    maxNumberOfParticipants = editedMaxNumberOfParticipants,
+                    location = editedLocation,
                     hostId,
                     AuthContext.token!!,
                     {onEditEvent()}
