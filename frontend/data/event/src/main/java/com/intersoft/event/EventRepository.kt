@@ -6,7 +6,6 @@ import com.intersoft.network.NetworkManager
 import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.NewEventData
 import java.sql.Timestamp
-import com.intersoft.user.UserModel
 
 class EventRepository: IEventRepository {
 
@@ -68,7 +67,15 @@ class EventRepository: IEventRepository {
                     max_participants = it.max_participants,
                     location = it.location,
                     owner_id = it.owner_id,
-                    participants = it.participants
+                   participants = it.participants?.map { participant ->
+                       UserModel(
+                           username = participant.username,
+                           email = participant.email,
+                           password = participant.password!!,
+                           location = participant.location,
+                           id = participant.id,
+                       )
+                   }
                 )
 
                 Log.d("EventRepository", "Recieved event: $response")
@@ -235,10 +242,6 @@ class EventRepository: IEventRepository {
         )
 
     }
-}
-
-
-
 
     override fun editEvent(
         eventId: Int,
@@ -254,14 +257,16 @@ class EventRepository: IEventRepository {
         val durationInMinutes = (newEvent.durationInMillis / 60000).toInt()
         Log.d("EventRepository", durationInMinutes.toString())
 
-        val event = EventData(
-            name= newEvent.name,
+        val event = NewEventData(
+            id = eventId,
+            name = newEvent.name,
             description = newEvent.description,
             date = dateTimestamp,
             duration =durationInMinutes,
             max_participants = newEvent.maxParticipants,
             location = newEvent.location,
-            owner_id =  newEvent.ownerId
+            owner_id =  newEvent.ownerId,
+            participants = null
         )
 
         NetworkManager.editEvent(
@@ -292,6 +297,12 @@ class EventRepository: IEventRepository {
 }
 
 
+
+
+
+
+
+
 data class CreateEventFailResponse(
     val name: String?,
     val description : String?,
@@ -311,7 +322,13 @@ data class GetEventResponse(
     val max_participants : Int,
     val location : String,
     val owner_id : Int,
-    val participants : List<String>?
+    val participants : List<UserModel>?
 )
 
-
+data class UserModel(
+    val id: Int?,
+    val email: String,
+    val password: String,
+    val username: String,
+    val location: String
+)
