@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
-import com.intersoft.event.EventCreationManager
+import com.intersoft.event.EventManager
 import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DurationSelectionElement
 import com.intersoft.ui.ErrorText
@@ -32,7 +32,19 @@ import com.intersoft.ui.WarningText
 import com.intersoft.utils.DateTimeManager
 
 @Composable
-fun EditEventPage(eventId: Int,eventName: String,description: String,selectedDateInMillis: Long,startTimeInMillis: Long,durationInMillis: Long,maxNumberOfParticipants: Int,location: String,hostId: Int,onEditEvent: () -> Unit, onCancelEditEvent: () -> Unit){
+fun EditEventPage(
+    eventId: Int,
+    eventName: String,
+    description: String,
+    selectedDateInMillis: Long,
+    startTimeInMillis: Long,
+    durationInMillis: Long,
+    maxNumberOfParticipants: Int,
+    location: String,
+    hostId: Int,
+    onEditEvent: () -> Unit,
+    onCancelEditEvent: () -> Unit
+){
     var editedEventName by remember {
         mutableStateOf(eventName)
     }
