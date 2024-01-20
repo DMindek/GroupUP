@@ -36,7 +36,20 @@ object EventManager {
 
     }
 
-    fun editEvent(eventId: Int, eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,startTimeInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,authToken: String,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
+    fun editEvent(
+        eventId: Int,
+        eventName: String,
+        description: String,
+        selectedDateInMillis: Long,
+        durationInMillis:Long,
+        startTimeInMillis:Long,
+        maxNumberOfParticipants: Int,
+        location: String,
+        ownerId: Int,
+        authToken: String,
+        onEditEventSuccess: () -> Unit,
+        onEditEventFailure: (String) -> Unit
+    ){
         val newEvent = EventModel(
             name = eventName,
             description = description,
@@ -47,16 +60,15 @@ object EventManager {
             location = location,
             ownerId = ownerId
         )
-
         val errorText = validateInput(newEvent)
 
         if(errorText == ""){
-            eventRepository.editEvent(eventId,newEvent,authToken,{error -> onCreateEventFailure(error)}){
-                onCreateEventSuccess()
+            eventRepository.editEvent(eventId,newEvent,authToken,{error -> onEditEventFailure(error)}){
+                onEditEventSuccess()
             }
         }
         else{
-            onCreateEventFailure(errorText)
+            onEditEventFailure(errorText)
         }
     }
     private fun validateInput(event: EventModel): String {
