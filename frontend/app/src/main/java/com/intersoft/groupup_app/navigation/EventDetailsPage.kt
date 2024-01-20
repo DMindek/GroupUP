@@ -32,7 +32,20 @@ import com.intersoft.ui.TitleText
 import com.intersoft.utils.DateTimeManager
 
 @Composable
-fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
+fun EventDetailsPage(
+    onGetEventFail: () -> Unit,
+    eventId: Int,
+    onEditEventButtonPressed: (
+        eventId: Int,
+        eventName: String,
+        description: String,
+        selectedDateInMillis: Long,
+        startTimeInMillis: Long,
+        durationInMillis: Long,
+        maxNumberOfParticipants: Int,
+        location: String,
+        hostId: Int,) -> Unit
+){
     var eventName by remember {
         mutableStateOf("")
     }
@@ -48,7 +61,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
         mutableIntStateOf(0)
     }
     var maxNumberOfParticipants by remember {
-        mutableStateOf(10)
+        mutableIntStateOf(0)
     }
 
     var isParticipant by remember {
