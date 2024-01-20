@@ -2,7 +2,9 @@ package com.intersoft.network
 
 import android.util.Log
 import com.intersoft.network.models.responses.EditBody
+import com.intersoft.network.models.responses.EditEventBody
 import com.intersoft.network.models.responses.EventBody
+import com.intersoft.network.models.responses.EventDetails
 import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
@@ -125,9 +127,9 @@ object NetworkManager {
 
     }
 
-    fun editEvent(eventId:Int,eventData: EventBody,authToken: String, onEditEventSuccess: (StoredEventData) ->Unit, onEditEventFail: (String?) -> Unit){
+    fun editEvent(eventId:Int, eventData: EditEventBody, authToken: String, onEditEventSuccess: (EventDetails) ->Unit, onEditEventFail: (String?) -> Unit){
         val res =serverService.editEvent(eventId,eventData,authToken)
-        res.enqueue(ResponseHandler<StoredEventData>(successCode = 201, errorCode = 422, onEditEventSuccess, onEditEventFail))
+        res.enqueue(ResponseHandler<EventDetails>(successCode = 200, errorCode = 422, onEditEventSuccess, onEditEventFail))
     }
 
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,
