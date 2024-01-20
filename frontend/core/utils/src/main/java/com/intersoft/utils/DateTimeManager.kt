@@ -29,7 +29,14 @@ object DateTimeManager {
         return TimeUnit.MILLISECONDS.toMinutes(timeInMillis)
     }
 
+    fun calculateMillisFromMinutes(timeInMinutes: Int): Long{
+        return TimeUnit.MINUTES.toMillis(timeInMinutes.toLong())
+    }
 
+    fun calculateStartTimeFromString(startTime: String): Long{
+        val listOfTimes = startTime.split(" ")[1].split(":")
+       return calculateMillisFromHoursAndMinutes(listOfTimes[0].toInt(),listOfTimes[1].toInt())
+    }
 
     fun datePassesMidnight( selectedStartTimeHours: Int,durationHours: Int): Boolean{
         if(selectedStartTimeHours + durationHours >=24)
