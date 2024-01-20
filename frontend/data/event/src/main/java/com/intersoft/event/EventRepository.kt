@@ -3,7 +3,9 @@ package com.intersoft.event
 import android.util.Log
 import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
+import com.intersoft.network.models.responses.EditEventBody
 import com.intersoft.network.models.responses.EventBody
+import com.intersoft.network.models.responses.EventDetails
 import com.intersoft.network.models.responses.NewEventData
 import java.sql.Timestamp
 
@@ -247,8 +249,8 @@ class EventRepository: IEventRepository {
         eventId: Int,
         newEvent: EventModel,
         authToken: String,
-        onCreateEventError: (String) -> Unit,
-        onCreateEventSuccess: (String) -> Unit
+        onEditEventError: (String) -> Unit,
+        onEditEventSuccess: (String) -> Unit
     ) {
         Log.d("EventRepository", newEvent.toString())
         // Timestamp automatically adjusts to local time which is +1 offset for us, so we have to decrease the time by one hour in millis "3600000 ms" because it does not make sense to adjust starting time by 1 hour offset
@@ -257,8 +259,7 @@ class EventRepository: IEventRepository {
         val durationInMinutes = (newEvent.durationInMillis / 60000).toInt()
         Log.d("EventRepository", durationInMinutes.toString())
 
-        val event = NewEventData(
-            id = eventId,
+        val event = EventDetails(
             name = newEvent.name,
             description = newEvent.description,
             date = dateTimestamp,
@@ -271,15 +272,15 @@ class EventRepository: IEventRepository {
 
         NetworkManager.editEvent(
             eventId = eventId,
-            eventData = EventBody(event),
+            eventData = EditEventBody(event),
             authToken = authToken,
             onEditEventSuccess= {eventSuccessResponse ->
-                onCreateEventSuccess(eventSuccessResponse.toString())
+                onEditEventSuccess(eventSuccessResponse.toString())
             },
             onEditEventFail = {
                 Log.d("EventRepository", "Error occurred: $it")
                 if(!it.isNullOrEmpty())if(it[0] != '{') {
-                    onCreateEventError(it)
+                    onEditEventError(it)
                 }
                 else{
                     val error: CreateEventFailResponse
@@ -287,7 +288,7 @@ class EventRepository: IEventRepository {
                         error = Gson().fromJson(it, CreateEventFailResponse::class.java)
                         Log.d("EventRepository", "Error occurred $error")
                     }catch (e: Exception){
-                        onCreateEventError("Server returned unknown error")
+                        onEditEventError("Server returned unknown error")
                         return@editEvent
                     }
                 }
