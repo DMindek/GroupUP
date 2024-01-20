@@ -1,7 +1,6 @@
 package com.intersoft.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -157,11 +156,6 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
     var durationInMillis : Long
     
     val warningMessage = "Note: Set duration passes midnight and the end date is different from the start date"
-
-    Log.d("NEKAJ","delam2")
-
-
-
 
     Column(modifier = Modifier
         .fillMaxSize()
