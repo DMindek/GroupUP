@@ -32,6 +32,16 @@ import com.intersoft.groupup_app.ui.theme.GroupUP_appTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        var tempEventId = 0
+        var tempEventName = ""
+        var tempDescription = ""
+        var tempSelectedDateInMillis : Long = 0
+        var tempStartTimeInMillis : Long = 0
+        var tempDurationInMillis : Long = 0
+        var tempMaxNumberOfParticipants = 0
+        var tempLocation = ""
+        var tempHostId = 0
+
         super.onCreate(savedInstanceState)
         setContent {
             GroupUP_appTheme {
@@ -103,17 +113,18 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("editEvent"){
                             EditEventPage(
-                                eventId = 1,
-                                eventName = "Event TestName",
-                                description = "Test description ovo je text koji tu pise u descriptionu",
-                                selectedDateInMillis = 1704827329310,
-                                startTimeInMillis = 55800000,
-                                durationInMillis = 5400000,
-                                maxNumberOfParticipants = 5,
-                                location = "AAAAAAA",
-                                 1,
-                                onEditEvent = { /*TODO*/ }
-                            ) {}
+                                eventId = tempEventId,
+                                eventName = tempEventName,
+                                description = tempDescription,
+                                selectedDateInMillis = tempSelectedDateInMillis,
+                                startTimeInMillis = tempStartTimeInMillis,
+                                durationInMillis = tempDurationInMillis,
+                                maxNumberOfParticipants = tempMaxNumberOfParticipants,
+                                location = tempLocation,
+                                 tempHostId,
+                                onEditEvent = { navController.navigate("eventDetail/$tempEventId") },
+                                onCancelEditEvent = {navController.navigate("eventDetail/$tempEventId")}
+                            )
                         }
                         composable(
                             "eventDetail/{eventId}",
@@ -126,7 +137,29 @@ class MainActivity : ComponentActivity() {
                                     Toast.makeText(applicationContext, "Event not found", Toast.LENGTH_SHORT).show()
                                     navController.navigate("home")
                                 },
-                                eventId = backStackEntry.arguments?.getInt("eventId") ?: 0
+                                eventId = backStackEntry.arguments?.getInt("eventId") ?: 0,
+                                onEditEventButtonPressed = {eventId,
+                                    eventName,
+                                    description,
+                                    selectedDateInMillis,
+                                    startTimeInMillis,
+                                    durationInMillis,
+                                    maxNumberOfParticipants,
+                                    location,
+                                    hostId ->
+
+                                    tempEventId = eventId
+                                    tempEventName = eventName
+                                    tempDescription = description
+                                    tempSelectedDateInMillis = selectedDateInMillis
+                                    tempStartTimeInMillis = startTimeInMillis
+                                    tempDurationInMillis = durationInMillis
+                                    tempMaxNumberOfParticipants = maxNumberOfParticipants
+                                    tempLocation = location
+                                    tempHostId = hostId
+
+                                    navController.navigate("editEvent",)
+                                }
                             )
 
                         }
