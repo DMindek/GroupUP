@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -124,7 +124,7 @@ fun EventDetailsPage(
              onGetHostnameSuccess = {hostname -> host = hostname }
          )
 
-         isParticipant = it.participants!!.any{user -> user == AuthContext.username} &&
+         isParticipant = it.participants!!.any{user -> user.username == AuthContext.username} &&
                  it.owner_id != AuthContext.id
 
          eventDataWasRecieved = true
