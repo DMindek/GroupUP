@@ -7,6 +7,7 @@ import com.intersoft.network.models.responses.EventSuccessResponse
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
+import com.intersoft.network.models.responses.NewEventData
 import com.intersoft.network.models.responses.StoredEventData
 import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
@@ -30,7 +31,7 @@ object NetworkManager {
         Log.d("NetworkManager", "Request ${res.request().body()}")
 
         res.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>?, response: Response<ResponseBody>?) {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 Log.d("NetworkManager", "Response: ${response?.body()}")
                 if(response?.code() != 201){
                     if(response?.code() == 422)
@@ -61,9 +62,67 @@ object NetworkManager {
         )
     }
 
-    fun createEvent(eventData: EventBody, onCreateEventSuccess: (EventSuccessResponse) ->Unit, onCreateEventFail: (String?) -> Unit){
-        val res =serverService.createEvent(eventData)
+    fun createEvent(eventData: EventBody, onCreateEventSuccess: (EventSuccessResponse) -> Unit, onCreateEventFail: (String?) -> Unit){
+        val res = serverService.createEvent(eventData)
         res.enqueue(ResponseHandler<EventSuccessResponse>(successCode = 201, errorCode = 422, onCreateEventSuccess, onCreateEventFail))
+    }
+
+    fun getUserEvents(
+        userId: Int,
+        authtoken: String,
+        onGetUserEventsSuccess: (List<NewEventData>) ->Unit,
+        onGetUserEventsFail: (String?)-> Unit)
+    {
+        serverService.getUserEvents(userId, authtoken)
+            .enqueue(
+                ResponseHandler<List<NewEventData>>(
+                    200,
+                    422,
+                    onGetUserEventsSuccess,
+                    onGetUserEventsFail
+                )
+            )
+    }
+
+    fun getEvent(eventId: Int, onGetEventSuccess: (StoredEventData) -> Unit, onGetEventFail: (String?) -> Unit){
+        val res = serverService.getEvent(eventId)
+        res.enqueue(ResponseHandler<StoredEventData>(successCode = 200, errorCode = 404, onGetEventSuccess, onGetEventFail))
+    }
+
+    fun getUser(userId: Int, authToken: String, onGetUserSuccess: (UserData) -> Unit, onGetUserError: (String?) -> Unit) {
+        val res = serverService.getUser(userId, authToken)
+        res.enqueue(ResponseHandler<UserData>(successCode = 200, errorCode = 401, onGetUserSuccess,onGetUserError))
+    }
+
+    fun getAvailableEvents(
+        authToken: String,
+        onGetUserEventsSuccess: (List<NewEventData>) ->Unit,
+        onGetUserEventsFail: (String?)-> Unit) {
+
+        serverService.getAvailableEvents(authToken)
+            .enqueue(
+                ResponseHandler<List<NewEventData>>(
+                    200,
+                    422,
+                    onGetUserEventsSuccess,
+                    onGetUserEventsFail
+                )
+            )
+
+
+    }
+
+    fun getJoinedEvents(userId: Int, authToken: String, onGetUserEventsSuccess: (List<NewEventData>) -> Unit, onGetUserEventsFail: (String?)-> Unit) {
+        serverService.getJoinedEvents(userId, authToken)
+            .enqueue(
+                ResponseHandler<List<NewEventData>>(
+                    200,
+                    422,
+                    onGetUserEventsSuccess,
+                    onGetUserEventsFail
+                )
+            )
+
     }
 
     fun editEvent(eventId:Int,eventData: EventBody,authToken: String, onEditEventSuccess: (StoredEventData) ->Unit, onEditEventFail: (String?) -> Unit){
@@ -75,7 +134,7 @@ object NetworkManager {
                                   val onSuccess : (T) -> Unit,
                                   val onFail: (String?) -> Unit): Callback<T>{
 
-        override fun onResponse(call: Call<T>?, response: Response<T>?) {
+        override fun onResponse(call: Call<T>, response: Response<T>) {
             Log.d("NetworkManager", "Response: ${response?.message()}")
             if (response != null) {
                 if (response.code() != successCode) {

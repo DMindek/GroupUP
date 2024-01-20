@@ -8,11 +8,14 @@ Rails.application.routes.draw do
       post "/register", to: "users#create"
       post "/users/:id/edit", to: "users#update"
       get "/users/:id/owned_events", to: "users#owned_events"
+      get "/users/:id/joined_events", to: "users#joined_events"
 
       # Events routes
+      get "/events/available_events", to: "events#available_events"
       resources :events
       post "/events/:id/edit", to: "events#update"
       post "/events/:id/join", to: "events#join"
+      post "/events/:id/leave", to: "events#leave"
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

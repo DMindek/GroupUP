@@ -17,6 +17,8 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/core/utils/location" />
+            <option value="$PROJECT_DIR$/core/utils/location/GoogleMapsService" />
+            <option value="$PROJECT_DIR$/core/utils/location/OSMservice" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/event" />
             <option value="$PROJECT_DIR$/data/user" />
@@ -26,6 +28,7 @@
             <option value="$PROJECT_DIR$/network" />
           </set>
         </option>
+        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

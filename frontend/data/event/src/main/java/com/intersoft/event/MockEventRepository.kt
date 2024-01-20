@@ -17,4 +17,30 @@ class MockEventRepository : IEventRepository {
             onCreateEventError("Event already exists")
         }
     }
+
+    override fun getUserEvents(
+        userId: Int,
+        authtoken: String,
+        onGetUserEventsError: (String) -> Unit,
+        onGetUserEventsSuccess: (List<EventModel>) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAvailableEvents(
+        authtoken: String,
+        onGetUserEventsError: (String) -> Unit,
+        onGetUserEventsSuccess: (List<EventModel>) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getJoinedEvents(
+        userId: Int,
+        authToken: String,
+        onGetJoinedEventsError: (String) -> Unit,
+        onGetJoinedEventsSuccess: (List<EventModel>) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
 }

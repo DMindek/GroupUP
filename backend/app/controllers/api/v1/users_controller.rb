@@ -19,6 +19,11 @@ class Api::V1::UsersController < ApplicationController
     render json: @user.owned_events
   end
 
+  # GET /users/1/joined_events
+  def joined_events
+    render json: @user.events.where("date > ?", DateTime.now)
+  end
+
   # POST /users
   def create
     @user = User.new(user_params)

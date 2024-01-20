@@ -7,11 +7,17 @@ import java.util.concurrent.TimeUnit
 
 
 object DateTimeManager {
-    fun formatMilisDatetoString(dateInMilis: Long): String {
+    fun formatMillisDateToString(dateInMilis: Long): String {
         val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return sdf.format(Date(dateInMilis))
     }
 
+    fun formatMillisToDateTime(dateInMilis: Long): String{
+        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+
+        //we subtract 1 hour in millis "3600000" because it formats the time based on our locale which is +1 offset, and that does not make sense in this context
+        return  simpleDateFormat.format(dateInMilis - 3600000)
+    }
     fun calculateMillisFromHoursAndMinutes(hours: Int, minutes: Int): Long {
         return  (hours * 3600000).toLong() + (minutes * 60000).toLong()
     }

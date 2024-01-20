@@ -14,7 +14,13 @@ import androidx.compose.ui.unit.dp
 import com.intersoft.ui.PrimaryButton
 
 @Composable
-fun HomePage(onUserInformationPressed: () -> Unit,onCreateEventButtonPress: () -> Unit, onEditEventButtonPressed: () -> Unit ) {
+fun HomePage(
+    onUserInformationPressed: () -> Unit,
+    onCreateEventButtonPress: () -> Unit,
+    onEventDetailsPressed: () -> Unit,
+    onAvailableEventsButtonPressed: () -> Unit,
+    onEditEventButtonPressed: () -> Unit) {
+
     Column (modifier = Modifier
         .fillMaxSize()
         .padding(30.dp)
@@ -31,6 +37,14 @@ fun HomePage(onUserInformationPressed: () -> Unit,onCreateEventButtonPress: () -
             Modifier.align(Alignment.CenterHorizontally)){
             onUserInformationPressed()
         }
+        PrimaryButton("Event Details test page",
+            Modifier.align(Alignment.CenterHorizontally)){
+            onEventDetailsPressed()
+        }
+        PrimaryButton("Available Events test page",
+            Modifier.align(Alignment.CenterHorizontally)){
+            onAvailableEventsButtonPressed()
+        }
         PrimaryButton("EditEvent",
             Modifier.align(Alignment.CenterHorizontally)){
             onEditEventButtonPressed()
@@ -41,5 +55,10 @@ fun HomePage(onUserInformationPressed: () -> Unit,onCreateEventButtonPress: () -
 @Preview
 @Composable
 fun HomePagePreview() {
-    HomePage(onUserInformationPressed = {}, onCreateEventButtonPress = {}, onEditEventButtonPressed = {})
+    HomePage(
+        onUserInformationPressed = {},
+        onCreateEventButtonPress = {},
+        onEventDetailsPressed = {},
+        onAvailableEventsButtonPressed = {},
+        onEditEventButtonPressed = {})
 }

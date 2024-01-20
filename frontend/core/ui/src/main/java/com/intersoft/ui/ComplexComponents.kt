@@ -69,7 +69,7 @@ fun GeneralDatePicker(label: String,placeholder: String = "" ,action: (Long) -> 
                 },
                 onConfirm = {selectedDateInMillis ->
                     showDatePicker.value = false
-                    selectedDateText = DateTimeManager.formatMilisDatetoString(selectedDateInMillis)
+                    selectedDateText = DateTimeManager.formatMillisDateToString(selectedDateInMillis)
                     action(selectedDateInMillis)
                 }
             )
