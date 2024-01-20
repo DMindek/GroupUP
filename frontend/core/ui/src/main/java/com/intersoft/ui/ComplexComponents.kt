@@ -185,21 +185,22 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                     NumericTextInputField("", paddingAmount = 0, placeholder = placeholderHours){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
-                            if(selectedStartTime.isNotEmpty() && durationMinutes != -1){
-                                startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
-                                durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
-
-                                if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
-                                    onDurationPastMidnight(warningMessage)
-                                else
-                                    onDurationPastMidnight("")
-
-                                onStartTimeInput(startTimeInMillis)
-                                onDurationInput(durationInMillis)
-                            }
                         } else{
-                            durationHours = -1
+                            durationHours = 0
                         }
+                        if(selectedStartTime.isNotEmpty() && durationMinutes >= 0){
+                            startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                            durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
+
+                            if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
+                                onDurationPastMidnight(warningMessage)
+                            else
+                                   onDurationPastMidnight("")
+
+                            onStartTimeInput(startTimeInMillis)
+                            onDurationInput(durationInMillis)
+                        }
+
                     }
                 }
             }
@@ -216,22 +217,23 @@ fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours
                     NumericTextInputField("", paddingAmount = 0, placeholder = placeholderMinutes){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
-                            if(selectedStartTime.isNotEmpty() && durationHours != -1){
-                                startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
-                                durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
-
-                                if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
-                                    onDurationPastMidnight(warningMessage)
-                                else
-                                    onDurationPastMidnight("")
-
-                                onStartTimeInput(startTimeInMillis)
-                                onDurationInput(durationInMillis)
-
-                            }
                         } else{
-                            durationMinutes = -1
+                            durationMinutes = 0
                         }
+                        if(selectedStartTime.isNotEmpty() && durationHours >= 0){
+                            startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                            durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
+
+                            if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
+                                onDurationPastMidnight(warningMessage)
+                            else
+                                onDurationPastMidnight("")
+
+                            onStartTimeInput(startTimeInMillis)
+                            onDurationInput(durationInMillis)
+
+                        }
+
                     }
                 }
             }
