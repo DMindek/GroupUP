@@ -13,7 +13,7 @@ object EventManager {
 
     fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,startTimeInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
         val newEvent = EventModel(
-            name= eventName,
+            name = eventName,
             description = description,
             dateInMillis =  selectedDateInMillis,
             durationInMillis = durationInMillis ,
@@ -38,7 +38,7 @@ object EventManager {
 
     fun editEvent(eventId: Int, eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,startTimeInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,authToken: String,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
         val newEvent = EventModel(
-            name= eventName,
+            name = eventName,
             description = description,
             dateInMillis =  selectedDateInMillis,
             durationInMillis = durationInMillis ,
@@ -82,7 +82,15 @@ object EventManager {
                     max_participants = it.max_participants,
                     location = it.location,
                     owner_id = it.owner_id,
-                    participants = it.participants
+                    participants = it.participants?.map {user ->
+                        ReceivedUserData(
+                            username = user.username,
+                            email = user.email,
+                            password = user.password,
+                            location = user.location,
+                            id = user.id
+                        )
+                    }
                 )
 
                 onGetEventSuccess(eventData)
@@ -113,7 +121,13 @@ object EventManager {
         val max_participants : Int,
         val location : String,
         val owner_id : Int,
-        val participants : List<String>?
+        val participants : List<ReceivedUserData>?
     )
-
+    data class ReceivedUserData (
+        val id: Int?,
+        val email: String,
+        val password: String,
+        val username: String,
+        val location: String
+    )
 }
