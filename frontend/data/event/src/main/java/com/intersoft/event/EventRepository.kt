@@ -3,10 +3,11 @@ package com.intersoft.event
 import android.util.Log
 import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
+import com.intersoft.network.models.responses.EditEventBody
 import com.intersoft.network.models.responses.EventBody
+import com.intersoft.network.models.responses.EventDetails
 import com.intersoft.network.models.responses.NewEventData
 import java.sql.Timestamp
-import com.intersoft.user.UserModel
 
 class EventRepository: IEventRepository {
 
@@ -68,7 +69,15 @@ class EventRepository: IEventRepository {
                     max_participants = it.max_participants,
                     location = it.location,
                     owner_id = it.owner_id,
-                    participants = it.participants
+                   participants = it.participants?.map { participant ->
+                       UserModel(
+                           username = participant.username,
+                           email = participant.email,
+                           password = participant.password!!,
+                           location = participant.location,
+                           id = participant.id,
+                       )
+                   }
                 )
 
                 Log.d("EventRepository", "Recieved event: $response")
@@ -235,7 +244,62 @@ class EventRepository: IEventRepository {
         )
 
     }
+
+    override fun editEvent(
+        eventId: Int,
+        newEvent: EventModel,
+        authToken: String,
+        onEditEventError: (String) -> Unit,
+        onEditEventSuccess: (String) -> Unit
+    ) {
+        Log.d("EventRepository", newEvent.toString())
+        // Timestamp automatically adjusts to local time which is +1 offset for us, so we have to decrease the time by one hour in millis "3600000 ms" because it does not make sense to adjust starting time by 1 hour offset
+        val dateTimestamp = java.sql.Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
+        Log.d("EventRepository", dateTimestamp.toString())
+        val durationInMinutes = (newEvent.durationInMillis / 60000).toInt()
+        Log.d("EventRepository", durationInMinutes.toString())
+
+        val event = EventDetails(
+            name = newEvent.name,
+            description = newEvent.description,
+            date = dateTimestamp,
+            duration =durationInMinutes,
+            max_participants = newEvent.maxParticipants,
+            location = newEvent.location,
+            owner_id =  newEvent.ownerId,
+            participants = null
+        )
+
+        NetworkManager.editEvent(
+            eventId = eventId,
+            eventData = EditEventBody(event),
+            authToken = authToken,
+            onEditEventSuccess= {eventSuccessResponse ->
+                onEditEventSuccess(eventSuccessResponse.toString())
+            },
+            onEditEventFail = {
+                Log.d("EventRepository", "Error occurred: $it")
+                if(!it.isNullOrEmpty())if(it[0] != '{') {
+                    onEditEventError(it)
+                }
+                else{
+                    val error: CreateEventFailResponse
+                    try {
+                        error = Gson().fromJson(it, CreateEventFailResponse::class.java)
+                        Log.d("EventRepository", "Error occurred $error")
+                    }catch (e: Exception){
+                        onEditEventError("Server returned unknown error")
+                        return@editEvent
+                    }
+                }
+            }
+        )
+    }
 }
+
+
+
+
 
 
 
@@ -259,7 +323,13 @@ data class GetEventResponse(
     val max_participants : Int,
     val location : String,
     val owner_id : Int,
-    val participants : List<String>?
+    val participants : List<UserModel>?
 )
 
-
+data class UserModel(
+    val id: Int?,
+    val email: String,
+    val password: String,
+    val username: String,
+    val location: String
+)

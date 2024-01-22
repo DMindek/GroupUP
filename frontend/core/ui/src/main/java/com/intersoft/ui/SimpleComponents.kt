@@ -79,9 +79,9 @@ fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: (
 }
 
 @Composable
-fun MultiLineTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, action: (String) -> Unit = {}){
+fun MultiLineTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, placeholder: String = "", action: (String) -> Unit = {}){
     var textValue by remember{
-        mutableStateOf("")
+        mutableStateOf(placeholder)
     }
     Column(modifier = Modifier.padding(20.dp)){
         Text(text = label,
@@ -133,9 +133,9 @@ fun TextInputField(label: String, visualTransformation: VisualTransformation = V
 }
 
 @Composable
-fun NumericTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, paddingAmount: Int, action: (String) -> Unit = {}){
+fun NumericTextInputField(label: String, visualTransformation: VisualTransformation = VisualTransformation.None, placeholder: String = "",paddingAmount: Int, action: (String) -> Unit = {}){
     var textValue by remember{
-        mutableStateOf("")
+        mutableStateOf(placeholder)
     }
     val pattern = remember {Regex("^[0-9]{0,2}\$")}
     Column(modifier = Modifier
