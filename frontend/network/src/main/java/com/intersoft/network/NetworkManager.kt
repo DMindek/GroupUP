@@ -91,6 +91,10 @@ object NetworkManager {
         res.enqueue(ResponseHandler<StoredEventData>(successCode = 200, errorCode = 404, onGetEventSuccess, onGetEventFail))
     }
 
+    fun deleteEvent(eventId: Int, onDeleteEventSuccess: (String) -> Unit, onDeleteEventFail: (String) -> Unit){
+
+    }
+
     fun getUser(userId: Int, authToken: String, onGetUserSuccess: (UserData) -> Unit, onGetUserError: (String?) -> Unit) {
         val res = serverService.getUser(userId, authToken)
         res.enqueue(ResponseHandler<UserData>(successCode = 200, errorCode = 401, onGetUserSuccess,onGetUserError))
