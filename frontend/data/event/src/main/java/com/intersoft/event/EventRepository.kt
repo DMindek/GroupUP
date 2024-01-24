@@ -307,7 +307,7 @@ class EventRepository: IEventRepository {
                 if(it != null){
                     onDeleteEventError(it)
                 }
-                else onDeleteEventError("Unknown server error")}
+                else onDeleteEventError("Unknown error occurred")}
         )
     }
 }
