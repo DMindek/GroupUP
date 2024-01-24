@@ -34,8 +34,8 @@ object NetworkManager {
         res.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 Log.d("NetworkManager", "Response: ${response.body()}")
-                if(response?.code() != 201){
-                    if(response?.code() == 422)
+                if(response.code() != 201){
+                    if(response.code() == 422)
                         requestListener.onError(response.errorBody()?.string())
                     else requestListener.onError("Unknown error occurred")
                 } else requestListener.onSuccess(response.body()!!)

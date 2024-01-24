@@ -74,7 +74,5 @@ interface ServerService {
 
     @DELETE("/api/v1/events/{event_id}")
     fun deleteEvent(
-        @Path("event_id") id: Int,
-    //    @Header("Authorization") authToken: String
-    ) : Call<Unit>
+        @Path("event_id") id: Int) : Call<Unit>
 }
