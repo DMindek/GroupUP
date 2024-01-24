@@ -124,6 +124,10 @@ object EventManager {
         )
     }
 
+    fun deleteEvent(eventId: Int, onDeleteSuccess: (String) -> Unit, onDeleteFail: (String) -> Unit){
+        eventRepository.deleteEvent(eventId, onDeleteEventSuccess = onDeleteSuccess, onDeleteEventError = onDeleteFail)
+    }
+
     data class RecievedEventData (
         val id : Int,
         val name: String,

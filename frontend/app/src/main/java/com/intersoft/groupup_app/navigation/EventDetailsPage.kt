@@ -1,5 +1,6 @@
 package com.intersoft.groupup_app.navigation
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -181,7 +182,7 @@ fun EventDetailsPage(
 
                 hostId == AuthContext.id -> {
                     EventDetailsButton(buttonName = "Delete Event") {
-                        /*TODO Add delete event functionality*/
+                        EventManager.deleteEvent(eventId, {eventName = "SUCCESS"}, {eventName = "FAIL"})
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     EventDetailsButton(buttonName = "Edit Event") {

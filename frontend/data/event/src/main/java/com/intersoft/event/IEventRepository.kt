@@ -25,4 +25,6 @@ interface IEventRepository {
 
     fun editEvent(eventId: Int,newEvent: EventModel,authToken: String ,onEditEventError: (String) -> Unit, onEditEventSuccess: (String) -> Unit){
     }
+
+    fun deleteEvent(eventId: Int, onDeleteEventError: (String) -> Unit, onDeleteEventSuccess: (String) -> Unit){}
 }
