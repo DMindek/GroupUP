@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -19,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
@@ -28,6 +31,7 @@ import com.intersoft.ui.LabelText
 import com.intersoft.ui.LoadingScreen
 import com.intersoft.ui.ParticipantNumberDisplayField
 import com.intersoft.ui.PrimaryButton
+import com.intersoft.ui.R
 import com.intersoft.ui.TitleText
 import com.intersoft.utils.DateTimeManager
 
@@ -87,6 +91,10 @@ fun EventDetailsPage(
     }
 
     var isShowingLeaveConfirmationDialog by remember{
+        mutableStateOf(false)
+    }
+
+    var isShowingDeleteDialog by remember{
         mutableStateOf(false)
     }
 
@@ -181,7 +189,7 @@ fun EventDetailsPage(
 
                 hostId == AuthContext.id -> {
                     EventDetailsButton(buttonName = "Delete Event") {
-                        EventManager.deleteEvent(eventId, {eventName = "SUCCESS"}, {eventName = "FAIL"})
+                        isShowingDeleteDialog = true
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     EventDetailsButton(buttonName = "Edit Event") {
@@ -217,6 +225,26 @@ fun EventDetailsPage(
                 isShowingLeaveConfirmationDialog = false
             }
 
+        )
+    }
+
+    if(isShowingDeleteDialog){
+        ConfirmationDialog(
+            title = "Deleting event",
+            dialogText = "Are you sure you want to delete the event \"${eventName}\"?",
+            onConfirmButton = {
+                EventManager.deleteEvent(eventId, {eventName = "SUCCESS"}, {eventName = it})
+                isShowingDeleteDialog = false
+            },
+            onDismissButton = {
+                isShowingDeleteDialog = false
+            },
+            ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.inputField),
+                contentColor = colorResource(R.color.errorColor),
+                disabledContainerColor = colorResource(R.color.secondary),
+                disabledContentColor = colorResource(R.color.secondaryText)
+            )
         )
     }
 

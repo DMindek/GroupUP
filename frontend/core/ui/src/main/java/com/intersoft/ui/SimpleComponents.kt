@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Card
@@ -348,6 +349,7 @@ fun ConfirmationDialog(
     dialogText: String,
     onConfirmButton: () -> Unit,
     onDismissButton: () -> Unit,
+    confirmColors: ButtonColors = ButtonDefaults.buttonColors()
 ){
     AlertDialog(onDismissRequest = onDismissButton,
         title = {
@@ -357,7 +359,7 @@ fun ConfirmationDialog(
             Text(text = dialogText)
         },
         confirmButton = {
-            Button(onClick = onConfirmButton) {
+            Button(onClick = onConfirmButton, colors = confirmColors) {
                 Text(text = "Confirm")
             }
         },
