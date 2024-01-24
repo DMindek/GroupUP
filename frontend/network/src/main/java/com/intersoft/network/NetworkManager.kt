@@ -30,11 +30,10 @@ object NetworkManager {
     fun registerUser(user: RegisterBody, requestListener: RequestListener){
 
         val res = serverService.createUser(user)
-        Log.d("NetworkManager", "Request ${res.request().body()}")
 
         res.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                Log.d("NetworkManager", "Response: ${response?.body()}")
+                Log.d("NetworkManager", "Response: ${response.body()}")
                 if(response?.code() != 201){
                     if(response?.code() == 422)
                         requestListener.onError(response.errorBody()?.string())
@@ -42,8 +41,8 @@ object NetworkManager {
                 } else requestListener.onSuccess(response.body()!!)
             }
 
-            override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
-                Log.d("NetworkManager", "Error: ${t?.message}")
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("NetworkManager", "Error: ${t.message}")
                 requestListener.onError("Broken connection")
             }
         })
@@ -142,28 +141,23 @@ object NetworkManager {
                                   val onFail: (String?) -> Unit): Callback<T>{
 
         override fun onResponse(call: Call<T>, response: Response<T>) {
-            Log.d("NetworkManager", "Response: ${response?.message()}")
-            if (response != null) {
-                if (response.code() != successCode) {
-
-                    if (response.code() == errorCode) {
-                        val errorMessage = response.errorBody()?.string()
-                        Log.d("NetworkManager", "Error: $errorMessage")
-                        onFail(errorMessage)
-                    }
-                    else onFail("Unknown error occurred")
-                } else {
-                    Log.d("NetworkManager", "Success: ${response.body()}")
-                    if(response.body() == null) onFail("no response from server")
-                    else onSuccess(response.body()!!)
+            Log.d("NetworkManager", "Response: ${response.message()}")
+            if (response.code() != successCode) {
+                if (response.code() == errorCode) {
+                    val errorMessage = response.errorBody()?.string()
+                    Log.d("NetworkManager", "Error: $errorMessage")
+                    onFail(errorMessage)
                 }
-
-
+                else onFail("Unknown error occurred")
+            } else {
+                Log.d("NetworkManager", "Success: ${response.body()}")
+                if (response.body() == null) onFail("no response from server")
+                else onSuccess(response.body()!!)
             }
         }
 
-        override fun onFailure(call: Call<T>?, t: Throwable?) {
-            Log.d("NetworkManager", "Error: ${t?.message}")
+        override fun onFailure(call: Call<T>, t: Throwable) {
+            Log.d("NetworkManager", "Error: ${t.message}")
             onFail("Could not reach server")
         }
 
