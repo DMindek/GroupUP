@@ -159,7 +159,8 @@ class MainActivity : ComponentActivity() {
                                     tempHostId = hostId
 
                                     navController.navigate("editEvent",)
-                                }
+                                },
+                                onEventDeleted = {navController.navigate("goBack")}
                             )
 
                         }
