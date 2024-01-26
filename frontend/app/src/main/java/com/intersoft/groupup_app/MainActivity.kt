@@ -1,6 +1,7 @@
 package com.intersoft.groupup_app
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -134,8 +135,8 @@ class MainActivity : ComponentActivity() {
                         ) { backStackEntry ->
                             EventDetailsPage(
                                 onGetEventFail = {
-                                    Toast.makeText(applicationContext, "Event not found", Toast.LENGTH_SHORT).show()
-                                    navController.navigate("home")
+                                    //Toast.makeText(applicationContext, "Event not found", Toast.LENGTH_SHORT).show()
+                                    //navController.navigate("home")
                                 },
                                 eventId = backStackEntry.arguments?.getInt("eventId") ?: 0,
                                 onEditEventButtonPressed = {eventId,
@@ -158,9 +159,15 @@ class MainActivity : ComponentActivity() {
                                     tempLocation = location
                                     tempHostId = hostId
 
-                                    navController.navigate("editEvent",)
+                                    navController.navigate("editEvent")
                                 },
-                                onEventDeleted = {navController.navigate("goBack")}
+                                onEventDeleted = {
+                                    val destination = navController.previousBackStackEntry!!.destination.route!!
+                                    Log.d("Navigation control", "destination is $destination")
+                                    navController.navigate("goBack")
+                                    navController.navigate("goBack")
+                                    navController.navigate(destination)
+                                }
                             )
 
                         }

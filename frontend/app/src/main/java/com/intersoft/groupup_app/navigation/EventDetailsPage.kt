@@ -1,5 +1,6 @@
 package com.intersoft.groupup_app.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,7 @@ import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
 import com.intersoft.ui.ConfirmationDialog
 import com.intersoft.ui.DisabledTextField
+import com.intersoft.ui.ErrorText
 import com.intersoft.ui.LabelText
 import com.intersoft.ui.LoadingScreen
 import com.intersoft.ui.ParticipantNumberDisplayField
@@ -107,6 +109,9 @@ fun EventDetailsPage(
     var durationInMillis : Long by remember{
         mutableLongStateOf(0)
     }
+    var errorText by remember{
+        mutableStateOf("")
+    }
 
      EventManager.getEvent(eventId ,{onGetEventFail()}){
 
@@ -174,6 +179,8 @@ fun EventDetailsPage(
             DisabledTextField(textvalue = host)
             Spacer(modifier = Modifier.height(20.dp))
 
+            ErrorText(text = errorText)
+            Spacer(modifier = Modifier.height(20.dp))
 
             when{
                 hostId != AuthContext.id &&
@@ -233,9 +240,8 @@ fun EventDetailsPage(
             title = "Deleting event",
             dialogText = "Are you sure you want to delete the event \"${eventName}\"?",
             onConfirmButton = {
-                EventManager.deleteEvent(eventId, {eventName = "SUCCESS"}, {eventName = it})
                 isShowingDeleteDialog = false
-                onEventDeleted()
+                EventManager.deleteEvent(eventId, {onEventDeleted()}, { errorText = it})
             },
             onDismissButton = {
                 isShowingDeleteDialog = false
