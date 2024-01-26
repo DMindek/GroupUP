@@ -245,7 +245,7 @@ fun ErrorText(text: String){
     Text(
         text = text,
         color = colorResource(R.color.errorColor),
-        fontSize = 12.sp,
+        fontSize = 14.sp,
         textAlign = TextAlign.Center,
         modifier = Modifier.fillMaxWidth()
     )
