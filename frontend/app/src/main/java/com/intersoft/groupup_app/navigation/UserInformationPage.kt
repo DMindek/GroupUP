@@ -11,17 +11,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -50,6 +47,7 @@ data class UserData(
     var userName: String,
     var userEmail: String,
     var userLocation: String,
+    var userLocationName: String,
     var userImage: Int
 )
 // Depreciated code ----------------------------------
@@ -60,7 +58,8 @@ fun UserInformationPage(){
     val userData = UserData(
         userName = "John Doe",
         userEmail = "johnDoe@gmail.com",
-        userLocation = "New York",
+        userLocation = "10.0,10.0",
+        userLocationName = "New York",
         userImage = R.drawable.icon
     )
 
@@ -69,13 +68,14 @@ fun UserInformationPage(){
         userData.userName = AuthContext.username!!
         userData.userEmail = AuthContext.email!!
         userData.userLocation = AuthContext.location!!
-
+        userData.userLocationName = AuthContext.location_name!!
     }
 
     var isEditDialogVisible by remember { mutableStateOf(false) }
     var editedUserName by remember { mutableStateOf(userData.userName) }
     var editedUserEmail by remember { mutableStateOf(userData.userEmail) }
     var editedUserLocation by remember { mutableStateOf(userData.userLocation) }
+    var editedUserLocationName by remember { mutableStateOf(userData.userLocationName) }
     var error by remember { mutableStateOf("") }
 
 
@@ -96,6 +96,9 @@ fun UserInformationPage(){
         }
         item {
             UserLocationRow(editedUserLocation)
+        }
+        item {
+            UserLocationNameRow(editedUserLocationName)
         }
         item {
             Column(
@@ -119,28 +122,32 @@ fun UserInformationPage(){
             userName = editedUserName,
             userEmail = editedUserEmail,
             userLocation = editedUserLocation,
+            userLocationName = editedUserLocationName,
             error = error,
             showDialog = isEditDialogVisible,
             onDismiss = {
                 error = ""
                 isEditDialogVisible = false
             },
-            onSave = {name, email, location ->
+            onSave = {name, email, location, locationName ->
                 EditUserInfoManager.editUser(
                     UserModel(
                         name,
                         email,
                         "",
-                        location
+                        location,
+                        locationName
                     ),
                     onEditSuccess = {
                         Log.d("UserInformationPage", "User edited successfully")
                         AuthContext.username = name
                         AuthContext.email = email
                         AuthContext.location = location
+                        AuthContext.location_name = locationName
                         editedUserName = name
                         editedUserEmail = email
                         editedUserLocation = location
+                        editedUserLocationName = locationName
 
                         error = ""
 
@@ -193,20 +200,27 @@ fun UserLocationRow(userLocation: String){
     IconInformationText(icon = Icons.Default.LocationOn, text = userLocation )
 }
 
+@Composable
+fun UserLocationNameRow(userLocationName: String){
+    IconInformationText(icon = Icons.Default.LocationOn, text = userLocationName )
+}
+
 
 @Composable
 fun EditUserDialog(
     userName: String,
     userEmail: String,
     userLocation: String,
+    userLocationName: String,
     error: String,
     showDialog : Boolean ,
     onDismiss: () -> Unit,
-    onSave: (String, String, String) -> Unit
+    onSave: (String, String, String, String) -> Unit
 ) {
     val editedName = remember { mutableStateOf(userName) }
     val editedEmail = remember { mutableStateOf(userEmail) }
     val editedLocation = remember { mutableStateOf(userLocation) }
+    val editedLocationName = remember { mutableStateOf(userLocationName) }
 
     if(!showDialog) return
     Dialog(
@@ -242,6 +256,11 @@ fun EditUserDialog(
                     placeholder = editedLocation.value,
                     action = { editedLocation.value = it }
                 )
+                TextInputField(
+                    label = "Location name",
+                    placeholder = editedLocationName.value,
+                    action = { editedLocationName.value = it }
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 ErrorText(text = error)
 
@@ -262,7 +281,7 @@ fun EditUserDialog(
                     Button(
                         onClick = {
                             // Perform your save operation here
-                            onSave(editedName.value, editedEmail.value, editedLocation.value)
+                            onSave(editedName.value, editedEmail.value, editedLocation.value, editedLocationName.value)
                         }
                     ) {
                         Text(text = "Save")
@@ -286,10 +305,11 @@ fun EditUserDialogPreview() {
     EditUserDialog(
         userName = "John Doe",
         userEmail = "johnDoe@gmail.com",
-        userLocation = "New York",
+        userLocation = "10.0,10.0",
+        userLocationName = "New York",
         error = "",
         showDialog = true,
         onDismiss = {},
-        onSave = { _, _, _ -> }
+        onSave = { _, _, _, _ -> }
     )
 }

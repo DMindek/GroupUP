@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
 import com.intersoft.groupup_app.AppContext
-import com.intersoft.location.LocationUtils
 import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DurationSelectionElement
 import com.intersoft.ui.ErrorText
@@ -44,6 +43,7 @@ fun EditEventPage(
     durationInMillis: Long,
     maxNumberOfParticipants: Int,
     location: String,
+    locationName: String,
     hostId: Int,
     onEditEvent: () -> Unit,
     onCancelEditEvent: () -> Unit
@@ -71,6 +71,10 @@ fun EditEventPage(
     }
     var editedLocation by remember {
         mutableStateOf(location)
+    }
+
+    var editedLocationName by remember {
+        mutableStateOf(locationName)
     }
 
     var errorText by remember {
@@ -116,6 +120,7 @@ fun EditEventPage(
             longitude =  coordinates[1].toDouble(),
             isEdit = true
         )
+        TextInputField(label = "Location name", placeholder = locationName) { editedLocationName = it }
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -135,9 +140,10 @@ fun EditEventPage(
                     startTimeInMillis = editedStartTimeInMillis,
                     maxNumberOfParticipants = editedMaxNumberOfParticipants,
                     location = editedLocation,
-                    hostId,
-                    AuthContext.token!!,
-                    {onEditEvent()}
+                    locationName = editedLocationName,
+                    ownerId = hostId,
+                    authToken = AuthContext.token!!,
+                    onEditEventSuccess = {onEditEvent()}
                 ){error ->
                     errorText = error
                 }
