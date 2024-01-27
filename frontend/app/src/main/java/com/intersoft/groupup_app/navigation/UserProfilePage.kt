@@ -25,7 +25,7 @@ import com.intersoft.location.LocationUtils
 import com.intersoft.ui.PrimaryButton
 
 enum class UserProfileFields{
-    USERNAME, EMAIL, LOCATION
+    USERNAME, EMAIL, LOCATION, LOCATION_NAME
 }
 
 @Composable
@@ -35,6 +35,7 @@ fun UserProfilePage(onEditPress: () -> Unit){
     var email by remember { mutableStateOf("test123@gmail.com") }
     var latitude by remember { mutableStateOf<Double?>(null) }
     var longitude by remember { mutableStateOf<Double?>(null) }
+    var locationName by remember { mutableStateOf("J street 10") }
 
     if(AuthContext.token != null){
         username = AuthContext.username!!
@@ -44,6 +45,7 @@ fun UserProfilePage(onEditPress: () -> Unit){
             latitude = coordinates.first
             longitude = coordinates.second
         }
+        locationName = AuthContext.location_name!!
     }
 
     LazyColumn(
@@ -92,6 +94,9 @@ fun UserProfilePage(onEditPress: () -> Unit){
                 )
             }
         }
+        item {
+            UserTextInformation(field = UserProfileFields.LOCATION_NAME, value = locationName)
+        }
     }
 }
 
@@ -102,6 +107,7 @@ fun UserTextInformation(field : UserProfileFields , value: String) {
         UserProfileFields.USERNAME -> "Username"
         UserProfileFields.EMAIL -> "Email"
         UserProfileFields.LOCATION -> "Location"
+        UserProfileFields.LOCATION_NAME -> "Location name"
     }
 
     Column(modifier = Modifier

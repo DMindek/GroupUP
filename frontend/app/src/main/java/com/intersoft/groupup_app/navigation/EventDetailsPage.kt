@@ -45,6 +45,7 @@ fun EventDetailsPage(
         durationInMillis: Long,
         maxNumberOfParticipants: Int,
         location: String,
+        locationName: String,
         hostId: Int,) -> Unit
 ){
     var eventName by remember {
@@ -72,6 +73,10 @@ fun EventDetailsPage(
     var currentNumberOfParticipants = 0
 
     var location by remember {
+        mutableStateOf("")
+    }
+
+    var locationName by remember {
         mutableStateOf("")
     }
 
@@ -118,6 +123,7 @@ fun EventDetailsPage(
          if(participantsNumber != null)
             currentNumberOfParticipants = participantsNumber
          location = it.location
+         locationName = it.locationName
          EventManager.getHostname(
              it.owner_id,
              AuthContext.token!!,
@@ -146,6 +152,12 @@ fun EventDetailsPage(
             Spacer(modifier = Modifier.height(20.dp))
             AppContext.getLocationService().LocationDisplay(coordinates[0].toDouble(), coordinates[1].toDouble())
 
+            Spacer(modifier = Modifier.height(20.dp))
+            Row{
+                LabelText(text = "Location name:")
+                Spacer(modifier = Modifier.width(30.dp))
+                DisabledTextField(textvalue = locationName)
+            }
             Spacer(modifier = Modifier.height(20.dp))
             Row{
                 LabelText(text = "Event start:")
@@ -196,6 +208,7 @@ fun EventDetailsPage(
                             durationInMillis,
                             maxNumberOfParticipants,
                             location,
+                            locationName,
                             hostId
                         )
 

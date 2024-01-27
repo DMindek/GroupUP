@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
         var tempDurationInMillis : Long = 0
         var tempMaxNumberOfParticipants = 0
         var tempLocation = ""
+        var tempLocationName = ""
         var tempHostId = 0
 
         super.onCreate(savedInstanceState)
@@ -121,6 +122,7 @@ class MainActivity : ComponentActivity() {
                                 durationInMillis = tempDurationInMillis,
                                 maxNumberOfParticipants = tempMaxNumberOfParticipants,
                                 location = tempLocation,
+                                locationName = tempLocationName,
                                  tempHostId,
                                 onEditEvent = { navController.navigate("eventDetail/$tempEventId") },
                                 onCancelEditEvent = {navController.navigate("eventDetail/$tempEventId")}
@@ -146,6 +148,7 @@ class MainActivity : ComponentActivity() {
                                     durationInMillis,
                                     maxNumberOfParticipants,
                                     location,
+                                    locationName,
                                     hostId ->
 
                                     tempEventId = eventId
@@ -156,6 +159,7 @@ class MainActivity : ComponentActivity() {
                                     tempDurationInMillis = durationInMillis
                                     tempMaxNumberOfParticipants = maxNumberOfParticipants
                                     tempLocation = location
+                                    tempLocationName = locationName
                                     tempHostId = hostId
 
                                     navController.navigate("editEvent",)
