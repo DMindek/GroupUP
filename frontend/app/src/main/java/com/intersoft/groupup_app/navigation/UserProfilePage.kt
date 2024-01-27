@@ -1,7 +1,7 @@
 package com.intersoft.groupup_app.navigation
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,12 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.groupup_app.AppContext
 import com.intersoft.location.LocationUtils
-import com.intersoft.ui.LabelText
 import com.intersoft.ui.PrimaryButton
 
 enum class UserProfileFields{
@@ -38,9 +39,11 @@ fun UserProfilePage(onEditPress: () -> Unit){
 
     var username by remember { mutableStateOf("John Smith") }
     var email by remember { mutableStateOf("test123@gmail.com") }
-    var latitude by remember { mutableStateOf<Double?>(null) }
-    var longitude by remember { mutableStateOf<Double?>(null) }
+    var latitude by remember { mutableStateOf<Double?>(10.0) }
+    var longitude by remember { mutableStateOf<Double?>(10.0) }
     var locationName by remember { mutableStateOf("J street 10") }
+    var selectedModuleName by remember { mutableStateOf(AppContext.getLocationService().getName())}
+    var selectedModule by remember { mutableStateOf(AppContext.getLocationService())}
 
     if(AuthContext.token != null){
         username = AuthContext.username!!
@@ -93,7 +96,7 @@ fun UserProfilePage(onEditPress: () -> Unit){
                     modifier = Modifier
                         .padding(bottom = 4.dp)
                 )
-                AppContext.getLocationService().LocationDisplay(
+                selectedModule.LocationDisplay(
                     latitude = latitude,
                     longitude = longitude
                 )
@@ -103,14 +106,33 @@ fun UserProfilePage(onEditPress: () -> Unit){
             UserTextInformation(field = UserProfileFields.LOCATION_NAME, value = locationName)
         }
         item{
-            LabelText(text = "Location provider")
-            Column {
+            Text(
+                text = "Location",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(bottom = 4.dp, start = 32.dp, end = 32.dp)
+            )
+            Column(Modifier.padding(top = 20.dp)) {
                 AppContext.getLocationServicesNames().forEach{module->
-                    Surface(onClick = {AppContext.setLocationService(module)}, border = BorderStroke(4.dp, Color.Blue)) {
+                    Surface(
+                        onClick = {
+                            AppContext.setLocationService(module)
+                            selectedModuleName = module
+                            selectedModule = AppContext.getLocationService()
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                            .padding(start = 32.dp, end = 32.dp)
+                            .border(width = 2.dp, color = Color.Blue, shape = RoundedCornerShape(6.dp))
+                            .background(
+                                if(module == selectedModuleName) Color.LightGray
+                                else Color.Transparent
+                            )
+                        )
+                    {
                         Text(
                             text = module,
+                            textAlign = TextAlign.Center,
                             modifier = Modifier.background(
-                                if(module == AppContext.getLocationService().getName()) Color.LightGray
+                                if(module == selectedModuleName) Color.LightGray
                                 else Color.Transparent
                             )
                         )
