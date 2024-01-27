@@ -11,7 +11,7 @@ object EventManager {
         eventRepository = repo
     }
 
-    fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,startTimeInMillis:Long,maxNumberOfParticipants: Int,location: String,ownerId: Int,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
+    fun createEvent(eventName: String,description: String,selectedDateInMillis: Long,durationInMillis:Long,startTimeInMillis:Long,maxNumberOfParticipants: Int,location: String,locationName: String,ownerId: Int,onCreateEventSuccess: () -> Unit, onCreateEventFailure: (String) -> Unit ){
         val newEvent = EventModel(
             name = eventName,
             description = description,
@@ -20,6 +20,7 @@ object EventManager {
             startTimeInMillis = startTimeInMillis,
             maxParticipants = maxNumberOfParticipants,
             location = location,
+            locationName = locationName,
             ownerId = ownerId
         )
 
@@ -45,6 +46,7 @@ object EventManager {
         startTimeInMillis:Long,
         maxNumberOfParticipants: Int,
         location: String,
+        locationName : String,
         ownerId: Int,
         authToken: String,
         onEditEventSuccess: () -> Unit,
@@ -58,6 +60,7 @@ object EventManager {
             startTimeInMillis = startTimeInMillis,
             maxParticipants = maxNumberOfParticipants,
             location = location,
+            locationName = locationName,
             ownerId = ownerId
         )
         val errorText = validateInput(newEvent)
@@ -78,6 +81,7 @@ object EventManager {
         if(event.description.length >= 256) return "Event description must contain less than 256 characters"
         if(event.dateInMillis <= 0) return "Please enter event date"
         if(event.location.isBlank()) return "Please enter event location"
+        if(event.locationName.isBlank()) return "Please enter event location name"
 
         return ""
     }
@@ -93,6 +97,7 @@ object EventManager {
                     duration = it.duration,
                     max_participants = it.max_participants,
                     location = it.location,
+                    locationName = it.locationName,
                     owner_id = it.owner_id,
                     participants = it.participants?.map {user ->
                         ReceivedUserData(
@@ -100,6 +105,7 @@ object EventManager {
                             email = user.email,
                             password = user.password,
                             location = user.location,
+                            locationName = user.locationName,
                             id = user.id
                         )
                     }
@@ -132,6 +138,7 @@ object EventManager {
         val duration : Int,
         val max_participants : Int,
         val location : String,
+        val locationName : String,
         val owner_id : Int,
         val participants : List<ReceivedUserData>?
     )
@@ -140,6 +147,7 @@ object EventManager {
         val email: String,
         val password: String,
         val username: String,
-        val location: String
+        val location: String,
+        val locationName : String,
     )
 }
