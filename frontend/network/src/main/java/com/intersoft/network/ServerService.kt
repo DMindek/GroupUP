@@ -48,6 +48,10 @@ interface ServerService {
     fun getUser(@Path("user_id") userId: Int, @Header("Authorization") authToken: String): Call<UserData>
 
     @Headers("Content-Type: application/json")
+    @GET("/api/v1/users/search/{username}")
+    fun getUsersByUsername(@Path("username") username: String, @Header("Authorization") authToken: String): Call<UserData>
+
+    @Headers("Content-Type: application/json")
     @GET("/api/v1/users/{user_id}/owned_events")
     fun getUserEvents(
         @Path("user_id") userId: Int,
