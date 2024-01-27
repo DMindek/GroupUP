@@ -135,8 +135,8 @@ class MainActivity : ComponentActivity() {
                         ) { backStackEntry ->
                             EventDetailsPage(
                                 onGetEventFail = {
-                                    //Toast.makeText(applicationContext, "Event not found", Toast.LENGTH_SHORT).show()
-                                    //navController.navigate("home")
+                                    Toast.makeText(applicationContext, "Event not found", Toast.LENGTH_SHORT).show()
+                                    navController.navigate("home")
                                 },
                                 eventId = backStackEntry.arguments?.getInt("eventId") ?: 0,
                                 onEditEventButtonPressed = {eventId,
