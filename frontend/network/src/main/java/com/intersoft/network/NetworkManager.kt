@@ -96,9 +96,9 @@ object NetworkManager {
         res.enqueue(ResponseHandler<UserData>(successCode = 200, errorCode = 401, onGetUserSuccess,onGetUserError))
     }
 
-    fun getUserByUsername(username: String, authToken: String,onGetUsersByUsernameSuccess: (UserData) -> Unit, onGetUsersByUsernameError: (String?) -> Unit ){
+    fun getUserByUsername(username: String, authToken: String,onGetUsersByUsernameSuccess: (List<UserData>) -> Unit, onGetUsersByUsernameError: (String?) -> Unit ){
         val res = serverService.getUsersByUsername(username, authToken)
-        res.enqueue(ResponseHandler<UserData>(successCode = 200, errorCode = 401, onGetUsersByUsernameSuccess, onGetUsersByUsernameError))
+        res.enqueue(ResponseHandler<List<UserData>>(successCode = 200, errorCode = 401, onGetUsersByUsernameSuccess, onGetUsersByUsernameError))
     }
 
     fun getAvailableEvents(
