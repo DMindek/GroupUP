@@ -1,6 +1,5 @@
 package com.intersoft.groupup_app.navigation
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -112,35 +111,44 @@ fun EventDetailsPage(
     var errorText by remember{
         mutableStateOf("")
     }
+    var isDeleted by remember{
+        mutableStateOf(false)
+    }
 
-     EventManager.getEvent(eventId ,{onGetEventFail()}){
+    if(!isDeleted) {
+        EventManager.getEvent(eventId, { onGetEventFail() }) {
 
-         val totalMillis = it.date.toInstant().toEpochMilli() - 3600000 // subtract 1 hour because the epoch functions ads 1 hour to account for time offset, which does not make sense here
-         eventName = it.name
-         description = it.description
-         eventDate = DateTimeManager.formatMillisToDateTime(totalMillis)
-         selectedDateInMillis = totalMillis
-         durationInMillis = DateTimeManager.calculateMillisFromMinutes(eventDuration)
-         startTimeInMillis = DateTimeManager.calculateStartTimeFromString(DateTimeManager.formatMillisToDateTime(totalMillis))
-         eventDuration = it.duration
-         maxNumberOfParticipants = it.max_participants
-         hostId = it.owner_id
+            val totalMillis = it.date.toInstant()
+                .toEpochMilli() - 3600000 // subtract 1 hour because the epoch functions ads 1 hour to account for time offset, which does not make sense here
+            eventName = it.name
+            description = it.description
+            eventDate = DateTimeManager.formatMillisToDateTime(totalMillis)
+            selectedDateInMillis = totalMillis
+            durationInMillis = DateTimeManager.calculateMillisFromMinutes(eventDuration)
+            startTimeInMillis = DateTimeManager.calculateStartTimeFromString(
+                DateTimeManager.formatMillisToDateTime(totalMillis)
+            )
+            eventDuration = it.duration
+            maxNumberOfParticipants = it.max_participants
+            hostId = it.owner_id
 
-         val participantsNumber = it.participants?.count()
-         if(participantsNumber != null)
-            currentNumberOfParticipants = participantsNumber
-         location = it.location
-         EventManager.getHostname(
-             it.owner_id,
-             AuthContext.token!!,
-             onGetHostnameError = {},
-             onGetHostnameSuccess = {hostname -> host = hostname }
-         )
+            val participantsNumber = it.participants?.count()
+            if (participantsNumber != null)
+                currentNumberOfParticipants = participantsNumber
+            location = it.location
+            EventManager.getHostname(
+                it.owner_id,
+                AuthContext.token!!,
+                onGetHostnameError = {},
+                onGetHostnameSuccess = { hostname -> host = hostname }
+            )
 
-         isParticipant = it.participants!!.any{user -> user.username == AuthContext.username} &&
-                 it.owner_id != AuthContext.id
+            isParticipant =
+                it.participants!!.any { user -> user.username == AuthContext.username } &&
+                        it.owner_id != AuthContext.id
 
-         eventDataWasRecieved = true
+            eventDataWasRecieved = true
+        }
     }
 
     if(eventDataWasRecieved){
@@ -241,7 +249,13 @@ fun EventDetailsPage(
             dialogText = "Are you sure you want to delete the event \"${eventName}\"?",
             onConfirmButton = {
                 isShowingDeleteDialog = false
-                EventManager.deleteEvent(eventId, {onEventDeleted()}, { errorText = it})
+                EventManager.deleteEvent(
+                    eventId,
+                    {
+                        isDeleted = true
+                        onEventDeleted()
+                    },
+                    { errorText = it})
             },
             onDismissButton = {
                 isShowingDeleteDialog = false
@@ -254,7 +268,6 @@ fun EventDetailsPage(
             )
         )
     }
-
 }
 
 
