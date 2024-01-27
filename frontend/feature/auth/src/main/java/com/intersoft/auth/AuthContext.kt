@@ -6,4 +6,5 @@ object AuthContext {
     var id: Int? = null
     var username: String? = null
     var location: String? = null
+    var location_name : String? = null
 }
