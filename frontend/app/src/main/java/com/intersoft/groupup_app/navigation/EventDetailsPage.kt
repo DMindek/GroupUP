@@ -24,6 +24,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
+import com.intersoft.groupup_app.AppContext
 import com.intersoft.ui.ConfirmationDialog
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.ErrorText
@@ -161,9 +162,10 @@ fun EventDetailsPage(
             TitleText(text = eventName)
             Spacer(modifier = Modifier.height(20.dp))
             Row {
+                val coordinates = location.split(',')
                 LabelText(text = "Location:")
                 Spacer(modifier = Modifier.width(45.dp))
-                DisabledTextField(textvalue = location)
+                AppContext.getLocationService().LocationDisplay(coordinates[0].toDouble(), coordinates[1].toDouble())
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row{
