@@ -139,13 +139,13 @@ fun EventDetailsPage(
                 .verticalScroll(rememberScrollState())
         ) {
             TitleText(text = eventName)
+            Spacer(modifier = Modifier.height(25.dp))
+
+            val coordinates = location.split(',')
+            LabelText(text = "Location:")
             Spacer(modifier = Modifier.height(20.dp))
-            Row {
-                val coordinates = location.split(',')
-                LabelText(text = "Location:")
-                Spacer(modifier = Modifier.width(45.dp))
-                AppContext.getLocationService().LocationDisplay(coordinates[0].toDouble(), coordinates[1].toDouble())
-            }
+            AppContext.getLocationService().LocationDisplay(coordinates[0].toDouble(), coordinates[1].toDouble())
+
             Spacer(modifier = Modifier.height(20.dp))
             Row{
                 LabelText(text = "Event start:")
