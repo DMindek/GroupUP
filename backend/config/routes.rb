@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       post "/users/:id/edit", to: "users#update"
       get "/users/:id/owned_events", to: "users#owned_events"
       get "/users/:id/joined_events", to: "users#joined_events"
+      get "/users/search/:username", to: "users#search"
 
       # Events routes
       get "/events/available_events", to: "events#available_events"

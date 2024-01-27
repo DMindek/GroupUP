@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_user, except: [:create, :login, :index]
+  before_action :authenticate_user, except: [:create, :login, :index, :search]
   before_action :set_user, only: %i[ show update destroy ]
 
   # GET /users
@@ -66,6 +66,13 @@ class Api::V1::UsersController < ApplicationController
       render json: { error: 'Incorrect email or password' }, status: :unprocessable_entity
     end
   end
+
+  # GET /users/search/:username
+  def search
+    @users = User.where("username LIKE ?", "%#{params[:username]}%")
+    render json: @users
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
