@@ -1,5 +1,6 @@
 package com.intersoft.groupup_app
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -44,6 +45,8 @@ class MainActivity : ComponentActivity() {
         var tempLocation = ""
         var tempLocationName = ""
         var tempHostId = 0
+
+        initLocationModule(applicationContext.getSharedPreferences("GroupUpAppPreferences", MODE_PRIVATE))
 
         super.onCreate(savedInstanceState)
         setContent {
@@ -188,6 +191,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+fun initLocationModule(sharedPrefs: SharedPreferences){
+    val locationModule = sharedPrefs.getString("locationModule", "none")
+    if(locationModule == null || locationModule == "none"){
+        val edit = sharedPrefs.edit()
+        edit.putString("locationModule", AppContext.getLocationService().getName())
+        edit.apply()
+    }
+    else{
+        AppContext.setLocationService(locationModule)
     }
 }
 
