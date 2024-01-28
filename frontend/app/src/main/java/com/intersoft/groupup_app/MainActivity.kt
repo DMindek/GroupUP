@@ -43,8 +43,9 @@ class MainActivity : ComponentActivity() {
         var tempLocation = ""
         var tempLocationName = ""
         var tempHostId = 0
+        val sharedPrefs = applicationContext.getSharedPreferences("GroupUpAppPreferences", MODE_PRIVATE)
 
-        initLocationModule(applicationContext.getSharedPreferences("GroupUpAppPreferences", MODE_PRIVATE))
+        initLocationModule(sharedPrefs, getString(R.string.location_module_sharedpref))
 
         super.onCreate(savedInstanceState)
         setContent {
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "login"){
+                    NavHost(navController = navController, startDestination = "user_information"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -108,9 +109,14 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("user_information") {
-                            UserProfilePage {
-                                navController.navigate("edit_profile")
-                            }
+                            UserProfilePage (
+                                onEditPress = { navController.navigate("edit_profile") },
+                                onLocationModuleChanged = {
+                                    val editor = sharedPrefs.edit()
+                                    editor.putString(getString(R.string.location_module_sharedpref), AppContext.getLocationService().getName())
+                                    editor.apply()
+                                }
+                            )
                         }
                         composable("edit_profile") {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
@@ -181,11 +187,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-fun initLocationModule(sharedPrefs: SharedPreferences){
-    val locationModule = sharedPrefs.getString("locationModule", "none")
+fun initLocationModule(sharedPrefs: SharedPreferences, saveLocation: String){
+    val locationModule = sharedPrefs.getString(saveLocation, "none")
     if(locationModule == null || locationModule == "none"){
         val edit = sharedPrefs.edit()
-        edit.putString("locationModule", AppContext.getLocationService().getName())
+        edit.putString(saveLocation, AppContext.getLocationService().getName())
         edit.apply()
     }
     else{

@@ -35,7 +35,7 @@ enum class UserProfileFields{
 }
 
 @Composable
-fun UserProfilePage(onEditPress: () -> Unit){
+fun UserProfilePage(onEditPress: () -> Unit, onLocationModuleChanged: () -> Unit){
 
     var username by remember { mutableStateOf("John Smith") }
     var email by remember { mutableStateOf("test123@gmail.com") }
@@ -118,6 +118,7 @@ fun UserProfilePage(onEditPress: () -> Unit){
                             AppContext.setLocationService(module)
                             selectedModuleName = module
                             selectedModule = AppContext.getLocationService()
+                            onLocationModuleChanged()
                         },
                         modifier = Modifier.fillMaxWidth()
                             .padding(start = 32.dp, end = 32.dp)
@@ -177,6 +178,6 @@ fun UserTextInformation(field : UserProfileFields , value: String) {
 @Preview
 @Composable
 fun UserProfilePagePreview(){
-    UserProfilePage({})
+    UserProfilePage({},{})
 }
 
