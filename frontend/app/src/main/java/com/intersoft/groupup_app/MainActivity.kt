@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "user_information"){
+                    NavHost(navController = navController, startDestination = "login"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
