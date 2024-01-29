@@ -18,7 +18,9 @@ fun HomePage(
     onUserInformationPressed: () -> Unit,
     onCreateEventButtonPress: () -> Unit,
     onEventDetailsPressed: () -> Unit,
-    onAvailableEventsButtonPressed: () -> Unit) {
+    onAvailableEventsButtonPressed: () -> Unit,
+    onEditEventButtonPressed: () -> Unit) {
+
     Column (modifier = Modifier
         .fillMaxSize()
         .padding(30.dp)
@@ -43,6 +45,10 @@ fun HomePage(
             Modifier.align(Alignment.CenterHorizontally)){
             onAvailableEventsButtonPressed()
         }
+        PrimaryButton("EditEvent",
+            Modifier.align(Alignment.CenterHorizontally)){
+            onEditEventButtonPressed()
+        }
     }
 }
 
@@ -53,5 +59,6 @@ fun HomePagePreview() {
         onUserInformationPressed = {},
         onCreateEventButtonPress = {},
         onEventDetailsPressed = {},
-        onAvailableEventsButtonPressed = {})
+        onAvailableEventsButtonPressed = {},
+        onEditEventButtonPressed = {})
 }

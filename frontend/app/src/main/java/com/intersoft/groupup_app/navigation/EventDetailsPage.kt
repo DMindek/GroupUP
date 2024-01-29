@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,7 +32,20 @@ import com.intersoft.ui.TitleText
 import com.intersoft.utils.DateTimeManager
 
 @Composable
-fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
+fun EventDetailsPage(
+    onGetEventFail: () -> Unit,
+    eventId: Int,
+    onEditEventButtonPressed: (
+        eventId: Int,
+        eventName: String,
+        description: String,
+        selectedDateInMillis: Long,
+        startTimeInMillis: Long,
+        durationInMillis: Long,
+        maxNumberOfParticipants: Int,
+        location: String,
+        hostId: Int,) -> Unit
+){
     var eventName by remember {
         mutableStateOf("")
     }
@@ -48,7 +61,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
         mutableIntStateOf(0)
     }
     var maxNumberOfParticipants by remember {
-        mutableStateOf(10)
+        mutableIntStateOf(0)
     }
 
     var isParticipant by remember {
@@ -77,11 +90,25 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
         mutableStateOf(false)
     }
 
+    var selectedDateInMillis : Long by remember{
+        mutableLongStateOf(0)
+    }
+    var startTimeInMillis : Long by remember{
+        mutableLongStateOf(0)
+    }
+    var durationInMillis : Long by remember{
+        mutableLongStateOf(0)
+    }
+
      EventManager.getEvent(eventId ,{onGetEventFail()}){
 
+         val totalMillis = it.date.toInstant().toEpochMilli() - 3600000 // subtract 1 hour because the epoch functions ads 1 hour to account for time offset, which does not make sense here
          eventName = it.name
          description = it.description
-         eventDate = DateTimeManager.formatMillisToDateTime(it.date.toInstant().toEpochMilli())
+         eventDate = DateTimeManager.formatMillisToDateTime(totalMillis)
+         selectedDateInMillis = totalMillis
+         durationInMillis = DateTimeManager.calculateMillisFromMinutes(eventDuration)
+         startTimeInMillis = DateTimeManager.calculateStartTimeFromString(DateTimeManager.formatMillisToDateTime(totalMillis))
          eventDuration = it.duration
          maxNumberOfParticipants = it.max_participants
          hostId = it.owner_id
@@ -97,7 +124,7 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
              onGetHostnameSuccess = {hostname -> host = hostname }
          )
 
-         isParticipant = it.participants!!.any{user -> user == AuthContext.username} &&
+         isParticipant = it.participants!!.any{user -> user.username == AuthContext.username} &&
                  it.owner_id != AuthContext.id
 
          eventDataWasRecieved = true
@@ -158,7 +185,18 @@ fun EventDetailsPage(onGetEventFail: () -> Unit, eventId: Int){
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     EventDetailsButton(buttonName = "Edit Event") {
-                        /*TODO Add edit event functionality*/
+                        onEditEventButtonPressed(
+                            eventId,
+                            eventName,
+                            description,
+                            selectedDateInMillis,
+                            startTimeInMillis,
+                            durationInMillis,
+                            maxNumberOfParticipants,
+                            location,
+                            hostId
+                        )
+
                     }
                 }
             }

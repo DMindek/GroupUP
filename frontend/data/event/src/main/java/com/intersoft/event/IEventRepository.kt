@@ -22,4 +22,7 @@ interface IEventRepository {
         onGetJoinedEventsSuccess: (List<EventModel>) -> Unit
     )
 
+
+    fun editEvent(eventId: Int,newEvent: EventModel,authToken: String ,onEditEventError: (String) -> Unit, onEditEventSuccess: (String) -> Unit){
+    }
 }
