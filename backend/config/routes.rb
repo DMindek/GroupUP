@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get "/users/:id/joined_events", to: "users#joined_events"
       get "/users/search/:username", to: "users#search"
       post "/users/:id/add_friend", to: "users#add_friend"
+      get "/users/:id/friend_requests", to: "users#friend_requests"
 
       # Events routes
       get "/events/available_events", to: "events#available_events"
