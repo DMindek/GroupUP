@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authenticate_user, except: [:create, :login, :index, :search]
-  before_action :set_user, only: %i[ show update destroy ]
+  before_action :set_user, only: %i[ show update destroy owned_events joined_events add_friend]
 
   # GET /users
   def index
@@ -71,6 +71,18 @@ class Api::V1::UsersController < ApplicationController
   def search
     @users = User.where("username LIKE ?", "%#{params[:username]}%")
     render json: @users
+  end
+
+  # POST /users/:id/add_friend
+  def add_friend
+    @friend = User.find(params[:friend_id])
+    @friendship = Friendship.new(user: @user, friend: @friend, status: 'pending')
+
+    if @friendship.save
+      render json: {message: "Successfully sent a friend request."}, status: :created
+    else
+      render json: @friendship.errors, status: :unprocessable_entity
+    end
   end
 
 

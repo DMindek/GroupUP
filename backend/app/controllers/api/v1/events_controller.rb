@@ -68,6 +68,7 @@ class Api::V1::EventsController < ApplicationController
     # DELETE /events/1
     def destroy
         @event.destroy
+        return render json: {message: "Successfully deleted the Event."}, status: :ok
     end
     
     private
