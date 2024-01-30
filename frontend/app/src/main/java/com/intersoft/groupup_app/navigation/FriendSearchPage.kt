@@ -1,9 +1,8 @@
 package com.intersoft.groupup_app.navigation
 
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,18 +13,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.intersoft.auth.AuthContext
 import com.intersoft.social.UsersViewModel
-import com.intersoft.ui.DisabledTextField
+import com.intersoft.ui.ErrorText
 import com.intersoft.ui.LoadingScreen
-import com.intersoft.ui.TextInputField
+import com.intersoft.ui.TextSearchField
 import com.intersoft.ui.TitleText
 import com.intersoft.ui.UserListItem
-import com.intersoft.user.UserModel
 
 
 @Composable
@@ -33,15 +34,17 @@ fun FriendSearchPage(
     onFriendElementClick: () -> Unit
 ){
     val viewModel = viewModel<UsersViewModel>()
-    val searchText by viewModel.searchText.collectAsState()
-    //val users by viewModel.users.collectAsState()
     val users by viewModel._users.collectAsState()
     val error by viewModel.error.observeAsState()
     val isSearching by viewModel.isSearching.collectAsState()
     val pageTitle = "Add new friend"
-
-    //viewModel.getUsersByUsername("admin",AuthContext.token!!)
-
+    var searchAttempted by remember {
+        mutableStateOf(false)
+    }
+    var clearPage by remember {
+        mutableStateOf(true)
+    }
+    val noUsersFoundErrorText = "No users found with such a username"
     Column (
         modifier = Modifier
             .padding(16.dp)
@@ -50,28 +53,49 @@ fun FriendSearchPage(
             .fillMaxHeight(),
     ) {
         TitleText(text = pageTitle)
-        TextInputField(label = "Search") { username ->
-            viewModel.onSearchTextChange(username, AuthContext.token!!)
+        TextSearchField(
+            onTextChanged ={ searchText ->
+                viewModel.onSearchTextChange(searchText)
+            } ,
+            onIconClicked = {
+                viewModel.searchForUser(AuthContext.token!!)
+                clearPage = viewModel.searchTextIsBlank()
+                searchAttempted = true
+            }
+        )
+
+        @Suppress("ControlFlowWithEmptyBody")
+        if(clearPage){
+
         }
-
-        if (isSearching) {
-            LoadingScreen()
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(16.dp)
-            ) {
-                items(
-                    count = users.size,
-                    key = { index -> users[index].id!! },
-                    itemContent = { index ->
-                        val user = users[index]
-                        UserListItem(user.username)
+        else {
+            if (isSearching) {
+                LoadingScreen()
+            } else {
+                Log.d("DELAM I TU","Stanje: searchAttempted = $searchAttempted error = $error users = ${users.isNotEmpty()}")
+                if(error == "" && users.isNotEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(16.dp)
+                    ) {
+                        items(
+                            count = users.size,
+                            key = { index -> users[index].id!! },
+                            itemContent = { index ->
+                                val user = users[index]
+                                UserListItem(user.username)
+                            }
+                        )
                     }
-                )
-
+                } else if (users.isEmpty() && searchAttempted && error == ""){
+                    ErrorText(text = noUsersFoundErrorText)
+                } else{
+                    if(searchAttempted ) {
+                        ErrorText(text = error.toString())
+                    }
+                }
             }
         }
     }
