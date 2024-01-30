@@ -15,8 +15,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.intersoft.auth.AuthContext
@@ -28,6 +30,7 @@ import com.intersoft.ui.TitleText
 import com.intersoft.ui.UserListItem
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun FriendSearchPage(
     onFriendElementClick: () -> Unit
@@ -44,6 +47,8 @@ fun FriendSearchPage(
         mutableStateOf(true)
     }
     val noUsersFoundErrorText = "No users found with such a username"
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column (
         modifier = Modifier
             .padding(16.dp)
@@ -60,6 +65,8 @@ fun FriendSearchPage(
                 viewModel.searchForUser(AuthContext.token!!)
                 clearPage = viewModel.searchTextIsBlank()
                 searchAttempted = true
+                keyboardController?.hide()
+
             }
         )
 

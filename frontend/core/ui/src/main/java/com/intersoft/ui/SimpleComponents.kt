@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -377,6 +378,9 @@ fun TextSearchField(visualTransformation: VisualTransformation = VisualTransform
             visualTransformation = visualTransformation,
             textStyle = TextStyle(fontSize = 25.sp),
             modifier = Modifier.background(color = colorResource(R.color.inputField)),
+            keyboardActions = KeyboardActions(
+                onDone = { onIconClicked() }
+            ),
             decorationBox = { innerTextField ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -391,7 +395,7 @@ fun TextSearchField(visualTransformation: VisualTransformation = VisualTransform
                         modifier = Modifier
                             .padding(10.dp)
                             .size(30.dp)
-                            .clickable { onIconClicked()}
+                            .clickable { onIconClicked() }
                     )
                 }
 
