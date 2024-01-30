@@ -1,6 +1,5 @@
 package com.intersoft.groupup_app.navigation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -72,7 +71,6 @@ fun FriendSearchPage(
             if (isSearching) {
                 LoadingScreen()
             } else {
-                Log.d("DELAM I TU","Stanje: searchAttempted = $searchAttempted error = $error users = ${users.isNotEmpty()}")
                 if(error == "" && users.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier

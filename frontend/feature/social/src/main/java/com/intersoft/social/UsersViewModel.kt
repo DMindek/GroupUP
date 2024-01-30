@@ -1,6 +1,5 @@
 package com.intersoft.social
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -71,14 +70,11 @@ class UsersViewModel () : ViewModel() {
                     }
                     _error.value = ""
                     _users.value = listOfUsers
-                    Log.d("DELAM", "Trenutno stanje users: ${_users.value}")
                 }
-                Log.d("DELAM", "A ovo je bilo poslano od servera: $users")
                 searchForUsersComplete()
             },
             onGetUsersByUsernameError = {
                 _error.value = it
-                Log.d("DELAM2", "tu sam $it")
                 searchForUsersComplete()
             }
         )
