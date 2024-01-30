@@ -25,6 +25,7 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/auth" />
             <option value="$PROJECT_DIR$/feature/event" />
+            <option value="$PROJECT_DIR$/feature/social" />
             <option value="$PROJECT_DIR$/network" />
           </set>
         </option>

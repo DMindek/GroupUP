@@ -19,7 +19,8 @@ fun HomePage(
     onCreateEventButtonPress: () -> Unit,
     onEventDetailsPressed: () -> Unit,
     onAvailableEventsButtonPressed: () -> Unit,
-    onEditEventButtonPressed: () -> Unit) {
+    onEditEventButtonPressed: () -> Unit,
+    onSearchButtonPressed: () -> Unit) {
 
     Column (modifier = Modifier
         .fillMaxSize()
@@ -49,6 +50,10 @@ fun HomePage(
             Modifier.align(Alignment.CenterHorizontally)){
             onEditEventButtonPressed()
         }
+        PrimaryButton("Add new friend",
+            Modifier.align(Alignment.CenterHorizontally)){
+            onSearchButtonPressed()
+        }
     }
 }
 
@@ -60,5 +65,7 @@ fun HomePagePreview() {
         onCreateEventButtonPress = {},
         onEventDetailsPressed = {},
         onAvailableEventsButtonPressed = {},
-        onEditEventButtonPressed = {})
+        onEditEventButtonPressed = {},
+        onSearchButtonPressed = {}
+    )
 }

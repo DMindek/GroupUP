@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authenticate_user, except: [:create, :login, :index, :search]
-  before_action :set_user, only: %i[ show update destroy owned_events joined_events add_friend friend_requests]
+  before_action :set_user, only: %i[ show update destroy owned_events joined_events add_friend friend_requests friends]
 
   # GET /users
   def index
@@ -87,8 +87,14 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /users/:id/friend_requests
   def friend_requests
-    @friendships = Friendship.where(user: @user, status: 'pending')
-    render json: @friendships
+    @friendships = Friendship.where(user: @user, status: 'pending').or(Friendship.where(friend: @user, status: 'accepted'))
+    render json: @friendships, except: [:created_at, :updated_at]
+  end
+
+  # GET /users/:id/friends
+  def friends
+    @friendships = Friendship.where(user: @user, status: 'accepted' )
+    render json: @friendships, except: [:created_at, :updated_at]
   end
 
 

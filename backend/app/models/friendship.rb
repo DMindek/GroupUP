@@ -16,6 +16,6 @@ class Friendship < ApplicationRecord
 
   validates :user_id, presence: true
   validates :friend_id, presence: true
-  validates :status, inclusion: { in: ['pending', 'accepted', 'rejected'] }
+  validates :status, inclusion: { in: ['pending', 'accepted'] }
 
 end

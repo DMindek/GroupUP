@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get "/users/search/:username", to: "users#search"
       post "/users/:id/add_friend", to: "users#add_friend"
       get "/users/:id/friend_requests", to: "users#friend_requests"
+      get "/users/:id/friends", to: "users#friends"
 
       # Events routes
       get "/events/available_events", to: "events#available_events"
@@ -22,6 +23,8 @@ Rails.application.routes.draw do
 
       # Friendships routes
       resources :friendships
+      post "/friendships/:id/accept", to: "friendships#accept"
+      post "/friendships/:id/decline", to: "friendships#decline"
       post "/friendships/:id/cancel", to: "friendships#cancel"
     end
   end
