@@ -16,7 +16,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 
 class UsersViewModel () : ViewModel() {
 
@@ -30,48 +32,45 @@ class UsersViewModel () : ViewModel() {
 
     val isSearching = _isSearching.asStateFlow()
 
-    private val _authToken = MutableStateFlow("")
+    //private val _authToken = MutableStateFlow("")
 
-    val authToken = _authToken.asStateFlow()
+    //val authToken = _authToken.asStateFlow()
 
-    val _userList = getUsersByUsername(searchText.toString(), authToken.toString())
-    private var _users = MutableStateFlow(_userList)
+    //val _userList = getUsersByUsername(_searchText.value, _authToken.value)
+    //private var userList = listOf<UserModel>()
+    var _users = MutableStateFlow(listOf<UserModel>())
 
     private val _error : MutableLiveData<String> = MutableLiveData("")
 
     val error: LiveData<String> = _error
 
-
+    /*
     @OptIn(FlowPreview::class)
-    val users = searchText
+    val users = _users
         .debounce(1000L)
         .onEach { _isSearching.update { true } }
-        .combine(_users){text, users ->
-            if(text.isBlank()) {
-                ""
-            }
-            else {
-                users
-            }
-        }
         .onEach { _isSearching.update { false } }
         .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            _users
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = _users
         )
+*/
 
-    fun onSearchTextChange(text: String) {
+    fun onSearchTextChange(text: String, authToken: String) {
         _searchText.value = text
+        getUsersByUsername(text, authToken)
     }
 
-    fun setAuthToken(text : String){
+
+
+   /* fun setAuthToken(text : String){
+        Log.d("DOSTAVA", text)
         _authToken.value = text
     }
+    */
 
-    private fun getUsersByUsername(username: String, authToken: String) : List<UserModel>{
-        var tempUsers = listOf<UserModel>()
-        Log.d("CEKAM", "evo sad bu")
+     private fun getUsersByUsername(username: String, authToken: String){
         userRepository.getUsersByUsername(
             username,
             authToken,
@@ -90,15 +89,17 @@ class UsersViewModel () : ViewModel() {
                            token = null
                        )
                     }
-                    tempUsers = listOfUsers
+                    _users.value = listOfUsers
+                    //Log.d("DELAM", "Trenutno stanje userlist: $userList")
+                    Log.d("DELAM", "Trenutno stanje users: $_users")
                 }
-                Log.d("DELAM", users.toString())
+                Log.d("DELAM", "A ovo je bilo poslano od servera: $users")
             },
             onGetUsersByUsernameError = {
                 _error.value = it
                 Log.d("DELAM2", it)
             }
         )
-        return tempUsers
+
     }
 }
