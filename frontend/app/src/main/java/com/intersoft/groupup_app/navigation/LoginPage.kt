@@ -28,10 +28,10 @@ import com.intersoft.ui.TitleText
 @Composable
 fun LoginPage(context: Context, onLogin: () -> Unit, onRegisterClick: () -> Unit){
     var email by remember {
-        mutableStateOf("")
+        mutableStateOf("admin@admin.com")
     }
     var password by remember {
-        mutableStateOf("")
+        mutableStateOf("adminadmin10!")
     }
     var errorText by remember {
         mutableStateOf("")

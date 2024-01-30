@@ -34,13 +34,15 @@ fun AvailableEventsPage(
 
     val PAGE_TITLE = "All Events"
 
+    if (events == null) {
+        viewModel.fetchAvailableEvents(AuthContext.token!!)
+    }
+
     LaunchedEffect(
         key1 = events,
         block = {
-            if (events == null) {
-                viewModel.fetchAvailableEvents(AuthContext.token!!)
-            }
-}
+
+        }
     )
 
 

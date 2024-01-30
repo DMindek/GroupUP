@@ -45,12 +45,14 @@ fun UserCreatedEventsPage(
     val events by viewModel.events.observeAsState()
     val error by viewModel.error.observeAsState()
 
+    if (events == null) {
+        viewModel.fetchUserCurrentEvents(AuthContext.id!!, AuthContext.token!!)
+    }
+
     LaunchedEffect(
         key1 = events,
         block = {
-            if (events == null) {
-                viewModel.fetchUserCurrentEvents(AuthContext.id!!, AuthContext.token!!)
-            }
+
         }
     )
 

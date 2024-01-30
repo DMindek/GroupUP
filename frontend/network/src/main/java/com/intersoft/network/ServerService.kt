@@ -55,7 +55,7 @@ interface ServerService {
         @Header("Authorization") authToken: String): Call<List<NewEventData>>
 
     @Headers("Content-Type: application/json")
-    @GET("/api/v1/events")
+    @GET("/api/v1/events/available_events")
     fun getAvailableEvents(
         @Header("Authorization") authToken: String): Call<List<NewEventData>>
 
