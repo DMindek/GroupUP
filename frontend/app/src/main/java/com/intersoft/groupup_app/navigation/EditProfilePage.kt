@@ -40,7 +40,8 @@ fun EditProfilePage(
 
     var username by remember { mutableStateOf("John Smith") }
     var email by remember { mutableStateOf("test123@gmail.com") }
-    var location by remember { mutableStateOf("Maia, 23th") }
+    var location by remember { mutableStateOf("10.0,10.0") }
+    var locationName by remember { mutableStateOf("Maia, 23th") }
     var error by remember { mutableStateOf("") }
     var coordinates: Pair<Double?,Double?>? = Pair(null, null)
 
@@ -48,6 +49,7 @@ fun EditProfilePage(
         username = AuthContext.username!!
         email = AuthContext.email!!
         location = AuthContext.location!!
+        locationName = AuthContext.location_name!!
         coordinates = LocationUtils.coordinatesFromString(AuthContext.location!!)
     }
 
@@ -117,8 +119,11 @@ fun EditProfilePage(
                         modifier = Modifier.padding(start = 8.dp, end= 4.dp)
                     )
                 }
-
-
+            }
+        }
+        item{
+            EditProfileField(field = UserProfileFields.LOCATION_NAME, value = locationName) {
+                locationName = it
             }
         }
 
@@ -138,13 +143,15 @@ fun EditProfilePage(
                             username,
                             email,
                             "",
-                            location
+                            location,
+                            locationName
                         ),
                         onEditSuccess = {
                             Log.d("UserInformationPage", "User edited successfully")
                             AuthContext.username = username
                             AuthContext.email = email
                             AuthContext.location = location
+                            AuthContext.location_name = locationName
 
                             error = ""
 
@@ -187,6 +194,7 @@ fun EditProfileField(
         UserProfileFields.USERNAME -> "Username"
         UserProfileFields.EMAIL -> "Email"
         UserProfileFields.LOCATION -> "Location"
+        UserProfileFields.LOCATION_NAME -> "Location name"
     }
 
     Column(modifier = Modifier

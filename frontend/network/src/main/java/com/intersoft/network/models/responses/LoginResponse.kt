@@ -5,6 +5,6 @@ data class LoginResponse(
     val email: String,
     val id: Int,
     val username: String,
-    val location: String
-
+    val location: String,
+    val location_name : String,
 )

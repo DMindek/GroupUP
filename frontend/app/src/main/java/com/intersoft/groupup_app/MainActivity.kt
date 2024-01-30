@@ -1,5 +1,6 @@
 package com.intersoft.groupup_app
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -42,7 +43,11 @@ class MainActivity : ComponentActivity() {
         var tempDurationInMillis : Long = 0
         var tempMaxNumberOfParticipants = 0
         var tempLocation = ""
+        var tempLocationName = ""
         var tempHostId = 0
+        val sharedPrefs = applicationContext.getSharedPreferences("GroupUpAppPreferences", MODE_PRIVATE)
+
+        initLocationModule(sharedPrefs, getString(R.string.location_module_sharedpref))
 
         super.onCreate(savedInstanceState)
         setContent {
@@ -54,7 +59,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    NavHost(navController = navController, startDestination = "login"){
+                    NavHost(navController = navController, startDestination = "user_information"){
                         composable("registration"){
                             RegistrationPage(
                                 onRegister = {
@@ -107,9 +112,14 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("user_information") {
-                            UserProfilePage {
-                                navController.navigate("edit_profile")
-                            }
+                            UserProfilePage (
+                                onEditPress = { navController.navigate("edit_profile") },
+                                onLocationModuleChanged = {
+                                    val editor = sharedPrefs.edit()
+                                    editor.putString(getString(R.string.location_module_sharedpref), AppContext.getLocationService().getName())
+                                    editor.apply()
+                                }
+                            )
                         }
                         composable("edit_profile") {
                             EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
@@ -124,6 +134,7 @@ class MainActivity : ComponentActivity() {
                                 durationInMillis = tempDurationInMillis,
                                 maxNumberOfParticipants = tempMaxNumberOfParticipants,
                                 location = tempLocation,
+                                locationName = tempLocationName,
                                  tempHostId,
                                 onEditEvent = { navController.navigate("eventDetail/$tempEventId") },
                                 onCancelEditEvent = {navController.navigate("eventDetail/$tempEventId")}
@@ -149,6 +160,7 @@ class MainActivity : ComponentActivity() {
                                     durationInMillis,
                                     maxNumberOfParticipants,
                                     location,
+                                    locationName,
                                     hostId ->
 
                                     tempEventId = eventId
@@ -159,6 +171,7 @@ class MainActivity : ComponentActivity() {
                                     tempDurationInMillis = durationInMillis
                                     tempMaxNumberOfParticipants = maxNumberOfParticipants
                                     tempLocation = location
+                                    tempLocationName = locationName
                                     tempHostId = hostId
 
                                     navController.navigate("editEvent")
@@ -184,6 +197,18 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+}
+
+fun initLocationModule(sharedPrefs: SharedPreferences, saveLocation: String){
+    val locationModule = sharedPrefs.getString(saveLocation, "none")
+    if(locationModule == null || locationModule == "none"){
+        val edit = sharedPrefs.edit()
+        edit.putString(saveLocation, AppContext.getLocationService().getName())
+        edit.apply()
+    }
+    else{
+        AppContext.setLocationService(locationModule)
     }
 }
 

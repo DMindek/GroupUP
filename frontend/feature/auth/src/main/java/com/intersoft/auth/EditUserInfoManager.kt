@@ -27,5 +27,6 @@ object EditUserInfoManager {
         AuthContext.username = user.username
         AuthContext.email = user.email
         AuthContext.location = user.location
+        AuthContext.location_name = user.locationName
     }
 }
