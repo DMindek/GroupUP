@@ -1,6 +1,6 @@
 class Api::V1::FriendshipsController < ApplicationController
     #before_action :authenticate_user, except: [:index, :show]
-    before_action :set_friendship, only: %i[ show update destroy cancel ]
+    before_action :set_friendship, only: %i[ show update destroy cancel accept decline]
     
     # GET /friendships
     def index
@@ -41,6 +41,21 @@ class Api::V1::FriendshipsController < ApplicationController
 
     # POST /friendships/1/cancel
     def cancel
+      destroy
+    end
+
+    # POST /friendships/1/accept
+    def accept
+      @friendship.status = "accepted"
+      if @friendship.save
+        render json: @friendship, except: [:created_at, :updated_at]
+      else
+        render json: @friendship.errors, status: :unprocessable_entity
+      end
+    end
+
+    # POST /friendships/1/decline
+    def decline
       destroy
     end
     
