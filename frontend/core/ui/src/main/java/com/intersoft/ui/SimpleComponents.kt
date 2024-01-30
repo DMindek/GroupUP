@@ -304,7 +304,7 @@ fun ObjectCard(data : IIterableObject, interaction: () -> Unit){
 }
 
 @Composable
-fun UserListItem(username: String){
+fun UserListItem(username: String, onClick: () -> Unit){
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -312,7 +312,7 @@ fun UserListItem(username: String){
             .padding(top = 16.dp)
     ){
         UserCard(username = username) {
-
+            onClick()
         }
     }
 
@@ -320,9 +320,9 @@ fun UserListItem(username: String){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserCard(username: String, interaction: () -> Unit) {
+fun UserCard(username: String, onClick: () -> Unit) {
     Card(
-        onClick = interaction,
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp)
