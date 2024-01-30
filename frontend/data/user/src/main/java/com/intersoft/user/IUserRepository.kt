@@ -6,4 +6,6 @@ interface IUserRepository {
     fun editUser(user: UserModel, onEditSuccess: (UserModel) -> Unit, onEditError: (String) -> Unit)
     fun getHostname(hostId: Int, authToken: String,onGetHostnameError: (String?) -> Unit ,onGetHostNameSuccess: (String) -> Unit){}
 
+    fun getUsersByUsername(username: String, authToken: String, onGetUsersByUsernameSuccess: (List<UserModel>) -> Unit, onGetUsersByUsernameError: (String) -> Unit){}
+
 }

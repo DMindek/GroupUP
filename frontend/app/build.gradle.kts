@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.intersoft.groupup_app"
-        minSdk = 27
+        minSdk = 33
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -69,8 +69,11 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.5.2")
     implementation(project(mapOf("path" to ":feature:event")))
     implementation(project(":core:utils:location"))
+
     implementation(project(":OSMservice"))
     implementation(project(":GoogleMapsService"))
+
+    implementation(project(mapOf("path" to ":feature:social")))
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

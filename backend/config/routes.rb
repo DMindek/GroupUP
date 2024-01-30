@@ -10,6 +10,9 @@ Rails.application.routes.draw do
       get "/users/:id/owned_events", to: "users#owned_events"
       get "/users/:id/joined_events", to: "users#joined_events"
       get "/users/search/:username", to: "users#search"
+      post "/users/:id/add_friend", to: "users#add_friend"
+      get "/users/:id/friend_requests", to: "users#friend_requests"
+      get "/users/:id/friends", to: "users#friends"
 
       # Events routes
       get "/events/available_events", to: "events#available_events"
@@ -17,6 +20,12 @@ Rails.application.routes.draw do
       post "/events/:id/edit", to: "events#update"
       post "/events/:id/join", to: "events#join"
       post "/events/:id/leave", to: "events#leave"
+
+      # Friendships routes
+      resources :friendships
+      post "/friendships/:id/accept", to: "friendships#accept"
+      post "/friendships/:id/decline", to: "friendships#decline"
+      post "/friendships/:id/cancel", to: "friendships#cancel"
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

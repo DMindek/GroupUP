@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -19,16 +20,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
 import com.intersoft.groupup_app.AppContext
 import com.intersoft.ui.ConfirmationDialog
 import com.intersoft.ui.DisabledTextField
+import com.intersoft.ui.ErrorText
 import com.intersoft.ui.LabelText
 import com.intersoft.ui.LoadingScreen
 import com.intersoft.ui.ParticipantNumberDisplayField
 import com.intersoft.ui.PrimaryButton
+import com.intersoft.ui.R
 import com.intersoft.ui.TitleText
 import com.intersoft.utils.DateTimeManager
 
@@ -46,7 +50,9 @@ fun EventDetailsPage(
         maxNumberOfParticipants: Int,
         location: String,
         locationName: String,
-        hostId: Int,) -> Unit
+        hostId: Int
+    ) -> Unit,
+    onEventDeleted: () -> Unit,
 ){
     var eventName by remember {
         mutableStateOf("")
@@ -96,6 +102,10 @@ fun EventDetailsPage(
         mutableStateOf(false)
     }
 
+    var isShowingDeleteDialog by remember{
+        mutableStateOf(false)
+    }
+
     var selectedDateInMillis : Long by remember{
         mutableLongStateOf(0)
     }
@@ -105,36 +115,48 @@ fun EventDetailsPage(
     var durationInMillis : Long by remember{
         mutableLongStateOf(0)
     }
+    var errorText by remember{
+        mutableStateOf("")
+    }
+    var isDeleted by remember{
+        mutableStateOf(false)
+    }
 
-     EventManager.getEvent(eventId ,{onGetEventFail()}){
+    if(!isDeleted) {
+        EventManager.getEvent(eventId, { onGetEventFail() }) {
 
-         val totalMillis = it.date.toInstant().toEpochMilli() - 3600000 // subtract 1 hour because the epoch functions ads 1 hour to account for time offset, which does not make sense here
-         eventName = it.name
-         description = it.description
-         eventDate = DateTimeManager.formatMillisToDateTime(totalMillis)
-         selectedDateInMillis = totalMillis
-         durationInMillis = DateTimeManager.calculateMillisFromMinutes(eventDuration)
-         startTimeInMillis = DateTimeManager.calculateStartTimeFromString(DateTimeManager.formatMillisToDateTime(totalMillis))
-         eventDuration = it.duration
-         maxNumberOfParticipants = it.max_participants
-         hostId = it.owner_id
+            val totalMillis = it.date.toInstant()
+                .toEpochMilli() - 3600000 // subtract 1 hour because the epoch functions ads 1 hour to account for time offset, which does not make sense here
+            eventName = it.name
+            description = it.description
+            eventDate = DateTimeManager.formatMillisToDateTime(totalMillis)
+            selectedDateInMillis = totalMillis
+            durationInMillis = DateTimeManager.calculateMillisFromMinutes(eventDuration)
+            startTimeInMillis = DateTimeManager.calculateStartTimeFromString(
+                DateTimeManager.formatMillisToDateTime(totalMillis)
+            )
+            eventDuration = it.duration
+            maxNumberOfParticipants = it.max_participants
+            hostId = it.owner_id
 
-         val participantsNumber = it.participants?.count()
-         if(participantsNumber != null)
-            currentNumberOfParticipants = participantsNumber
-         location = it.location
-         locationName = it.locationName
-         EventManager.getHostname(
-             it.owner_id,
-             AuthContext.token!!,
-             onGetHostnameError = {},
-             onGetHostnameSuccess = {hostname -> host = hostname }
-         )
+            val participantsNumber = it.participants?.count()
+            if (participantsNumber != null)
+                currentNumberOfParticipants = participantsNumber
+            location = it.location
+            locationName = it.locationName
+            EventManager.getHostname(
+                it.owner_id,
+                AuthContext.token!!,
+                onGetHostnameError = {},
+                onGetHostnameSuccess = { hostname -> host = hostname }
+            )
 
-         isParticipant = it.participants!!.any{user -> user.username == AuthContext.username} &&
-                 it.owner_id != AuthContext.id
+            isParticipant =
+                it.participants!!.any { user -> user.username == AuthContext.username } &&
+                        it.owner_id != AuthContext.id
 
-         eventDataWasRecieved = true
+            eventDataWasRecieved = true
+        }
     }
 
     if(eventDataWasRecieved){
@@ -180,6 +202,8 @@ fun EventDetailsPage(
             DisabledTextField(textvalue = host)
             Spacer(modifier = Modifier.height(20.dp))
 
+            ErrorText(text = errorText)
+            Spacer(modifier = Modifier.height(20.dp))
 
             when{
                 hostId != AuthContext.id &&
@@ -195,7 +219,7 @@ fun EventDetailsPage(
 
                 hostId == AuthContext.id -> {
                     EventDetailsButton(buttonName = "Delete Event") {
-                        /*TODO Add delete event functionality*/
+                        isShowingDeleteDialog = true
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     EventDetailsButton(buttonName = "Edit Event") {
@@ -211,7 +235,6 @@ fun EventDetailsPage(
                             locationName,
                             hostId
                         )
-
                     }
                 }
             }
@@ -235,6 +258,31 @@ fun EventDetailsPage(
         )
     }
 
+    if(isShowingDeleteDialog){
+        ConfirmationDialog(
+            title = "Deleting event",
+            dialogText = "Are you sure you want to delete the event \"${eventName}\"?",
+            onConfirmButton = {
+                isShowingDeleteDialog = false
+                EventManager.deleteEvent(
+                    eventId,
+                    {
+                        isDeleted = true
+                        onEventDeleted()
+                    },
+                    { errorText = it})
+            },
+            onDismissButton = {
+                isShowingDeleteDialog = false
+            },
+            ButtonDefaults.buttonColors(
+                containerColor = colorResource(R.color.inputField),
+                contentColor = colorResource(R.color.errorColor),
+                disabledContainerColor = colorResource(R.color.secondary),
+                disabledContentColor = colorResource(R.color.secondaryText)
+            )
+        )
+    }
 }
 
 

@@ -43,4 +43,12 @@ class MockEventRepository : IEventRepository {
     ) {
         TODO("Not yet implemented")
     }
+
+    override fun deleteEvent(
+        eventId: Int,
+        onDeleteEventError: (String) -> Unit,
+        onDeleteEventSuccess: (String) -> Unit
+    ) {
+        eventList.removeIf { it.id == eventId }
+    }
 }

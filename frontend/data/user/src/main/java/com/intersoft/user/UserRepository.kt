@@ -141,6 +141,48 @@ class UserRepository: IUserRepository {
         )
     }
 
+    override fun getUsersByUsername(
+        username: String,
+        authToken: String,
+        onGetUsersByUsernameSuccess: (List<UserModel>) -> Unit,
+        onGetUsersByUsernameError: (String) -> Unit
+    ) {
+        NetworkManager.getUserByUsername(
+            username,
+            authToken,
+            onGetUsersByUsernameSuccess = { userData ->
+                val receivedUserData = userData.map{ user ->
+                    UserModel(
+                        username = user.username,
+                        email = user.email,
+                        password = "",
+                        location = user.location,
+                        id = user.id,
+                        token = null,
+                        locationName = user.location_name
+                    )
+                }
+                Log.d("EventRepository", "Received user data: $receivedUserData")
+                onGetUsersByUsernameSuccess(receivedUserData)
+            },
+            onGetUsersByUsernameError = {
+                Log.d("EventRepository", "Error occurred: $it")
+                if(!it.isNullOrEmpty())if(it[0] != '{') {
+                    onGetUsersByUsernameError(it)
+                }
+                else {
+                    val error: SingleError
+                    try {
+                        error = Gson().fromJson(it, SingleError::class.java)
+                        Log.d("EventRepository", "Error occurred $error")
+                    } catch (e: Exception) {
+                        onGetUsersByUsernameError("Server returned unknown error")
+                        return@getUserByUsername
+                    }
+                }
+            }
+        )
+    }
 
 }
 
