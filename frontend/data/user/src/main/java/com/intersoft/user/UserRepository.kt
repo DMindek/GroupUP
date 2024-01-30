@@ -158,7 +158,8 @@ class UserRepository: IUserRepository {
                         password = "",
                         location = user.location,
                         id = user.id,
-                        token = null
+                        token = null,
+                        locationName = user.location_name
                     )
                 }
                 Log.d("EventRepository", "Received user data: $receivedUserData")
