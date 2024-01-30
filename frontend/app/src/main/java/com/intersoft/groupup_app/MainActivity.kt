@@ -22,6 +22,7 @@ import com.intersoft.groupup_app.navigation.CreateEventPage
 import com.intersoft.groupup_app.navigation.EditEventPage
 import com.intersoft.groupup_app.navigation.EditProfilePage
 import com.intersoft.groupup_app.navigation.EventDetailsPage
+import com.intersoft.groupup_app.navigation.FriendSearchPage
 import com.intersoft.groupup_app.navigation.HomePage
 import com.intersoft.groupup_app.navigation.JoinedEventsPage
 import com.intersoft.groupup_app.navigation.LoginPage
@@ -74,7 +75,8 @@ class MainActivity : ComponentActivity() {
                                 onUserInformationPressed = {navController.navigate("user_information")},
                                 onEventDetailsPressed = {navController.navigate("eventDetail/1")},
                                 onAvailableEventsButtonPressed = {navController.navigate("availableEvents")},
-                                onEditEventButtonPressed = {navController.navigate("editEvent")}
+                                onEditEventButtonPressed = {navController.navigate("editEvent")},
+                                onSearchButtonPressed = {navController.navigate("searchForFriend")}
                             )
                         }
                         composable("createEvent"){
@@ -165,6 +167,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("goBack"){
                             navController.popBackStack()
+                        }
+                        composable("searchForFriend"){
+                            FriendSearchPage()
                         }
 
                     }
