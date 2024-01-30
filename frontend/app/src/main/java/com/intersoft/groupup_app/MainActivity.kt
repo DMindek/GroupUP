@@ -1,6 +1,7 @@
 package com.intersoft.groupup_app
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -158,7 +159,14 @@ class MainActivity : ComponentActivity() {
                                     tempLocation = location
                                     tempHostId = hostId
 
-                                    navController.navigate("editEvent",)
+                                    navController.navigate("editEvent")
+                                },
+                                onEventDeleted = {
+                                    val destination = navController.previousBackStackEntry!!.destination.route!!
+                                    Log.d("Navigation control", "destination is $destination")
+                                    navController.navigate("goBack")
+                                    navController.navigate("goBack")
+                                    navController.navigate(destination)
                                 }
                             )
 

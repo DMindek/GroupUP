@@ -295,6 +295,21 @@ class EventRepository: IEventRepository {
             }
         )
     }
+
+    override fun deleteEvent(
+        eventId: Int,
+        onDeleteEventError: (String) -> Unit,
+        onDeleteEventSuccess: (String) -> Unit
+    ) {
+        NetworkManager.deleteEvent(eventId,
+            onDeleteEventSuccess = {onDeleteEventSuccess("Event has been deleted")},
+            onDeleteEventFail = {
+                if(it != null){
+                    onDeleteEventError(it)
+                }
+                else onDeleteEventError("Unknown error occurred")}
+        )
+    }
 }
 
 

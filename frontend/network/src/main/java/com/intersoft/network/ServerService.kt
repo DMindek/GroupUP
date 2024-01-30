@@ -14,6 +14,7 @@ import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -70,4 +71,8 @@ interface ServerService {
         @Path("event_id") id: Int,
         @Body event: EditEventBody,
         @Header("Authorization") authToken: String ) : Call<EventDetails>
+
+    @DELETE("/api/v1/events/{event_id}")
+    fun deleteEvent(
+        @Path("event_id") id: Int) : Call<Unit>
 }
