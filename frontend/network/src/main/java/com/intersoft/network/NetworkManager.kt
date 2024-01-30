@@ -90,29 +90,9 @@ object NetworkManager {
         res.enqueue(ResponseHandler<StoredEventData>(successCode = 200, errorCode = 404, onGetEventSuccess, onGetEventFail))
     }
 
-    fun deleteEvent(eventId: Int, onDeleteEventSuccess: () -> Unit, onDeleteEventFail: (String?) -> Unit){
+    fun deleteEvent(eventId: Int, onDeleteEventSuccess: (Unit) -> Unit, onDeleteEventFail: (String?) -> Unit){
         val res = serverService.deleteEvent(eventId)
-        res.enqueue(object: Callback<Unit>{
-            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                Log.d("NetworkManager", "Response: ${response.message()}")
-                if (response.code() != 204) {
-                    if (response.code() == 404) {
-                        val errorMessage = response.errorBody()?.string()
-                        Log.d("NetworkManager", "Error: $errorMessage")
-                        onDeleteEventFail(errorMessage)
-                    }
-                    else onDeleteEventFail("Unknown error occurred")
-                } else {
-                    Log.d("NetworkManager", "Success: ${response.body()}")
-                    onDeleteEventSuccess()
-                }
-            }
-
-            override fun onFailure(call: Call<Unit>, t: Throwable) {
-                Log.d("NetworkManager", "Error: ${t.message}")
-                onDeleteEventFail("Could not reach server")
-            }
-        })
+        res.enqueue(ResponseHandler<Unit>(successCode = 204, errorCode = 404, onDeleteEventSuccess, onDeleteEventFail))
     }
 
     fun getUser(userId: Int, authToken: String, onGetUserSuccess: (UserData) -> Unit, onGetUserError: (String?) -> Unit) {
