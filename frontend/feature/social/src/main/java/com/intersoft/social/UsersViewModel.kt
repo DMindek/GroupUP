@@ -27,17 +27,28 @@ class UsersViewModel () : ViewModel() {
     val error: LiveData<String> = _error
 
 
-    fun onSearchTextChange(text: String, authToken: String) {
+
+    fun onSearchTextChange(text: String) {
         _searchText.value = text
     }
 
-
-
-   /* fun setAuthToken(text : String){
-        Log.d("DOSTAVA", text)
-        _authToken.value = text
+    fun searchForUser(authToken: String) {
+        if(_searchText.value != ""){
+            isSearchingForUsers()
+            getUsersByUsername(_searchText.value,authToken)
+        }
     }
-    */
+
+    fun searchTextIsBlank() : Boolean {
+        return _searchText.value == ""
+    }
+    private fun isSearchingForUsers() {
+        _isSearching.value = true
+    }
+
+    private fun searchForUsersComplete() {
+        _isSearching.value = false
+    }
 
      private fun getUsersByUsername(username: String, authToken: String){
         userRepository.getUsersByUsername(
@@ -58,15 +69,17 @@ class UsersViewModel () : ViewModel() {
                            token = null
                        )
                     }
+                    _error.value = ""
                     _users.value = listOfUsers
-                    //Log.d("DELAM", "Trenutno stanje userlist: $userList")
-                    Log.d("DELAM", "Trenutno stanje users: $_users")
+                    Log.d("DELAM", "Trenutno stanje users: ${_users.value}")
                 }
                 Log.d("DELAM", "A ovo je bilo poslano od servera: $users")
+                searchForUsersComplete()
             },
             onGetUsersByUsernameError = {
                 _error.value = it
-                Log.d("DELAM2", it)
+                Log.d("DELAM2", "tu sam $it")
+                searchForUsersComplete()
             }
         )
 
