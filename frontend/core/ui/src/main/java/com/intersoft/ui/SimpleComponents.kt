@@ -1,6 +1,7 @@
 package com.intersoft.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,11 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -40,7 +39,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -286,6 +284,63 @@ fun ObjectCard(data : IIterableObject, interaction: () -> Unit){
                     .fillMaxWidth()
                     .padding(10.dp)
             ){
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    tint = colorResource(R.color.primaryText),
+                    contentDescription = "Click to view details",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                        .wrapContentWidth(Alignment.End)
+
+                )
+            }
+        }
+
+    }
+}
+
+@Composable
+fun UserListItem(username: String){
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+    ){
+        UserCard(username = username) {
+
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserCard(username: String, interaction: () -> Unit) {
+    Card(
+        onClick = interaction,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = colorResource(R.color.primary)),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.padding(start = 16.dp))
+            Text(
+                text = username,
+                fontSize = 30.sp,
+                color = colorResource(R.color.primaryText)
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            ) {
                 Icon(
                     imageVector = Icons.Default.Info,
                     tint = colorResource(R.color.primaryText),

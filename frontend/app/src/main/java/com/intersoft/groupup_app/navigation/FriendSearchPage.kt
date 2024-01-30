@@ -24,6 +24,7 @@ import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.LoadingScreen
 import com.intersoft.ui.TextInputField
 import com.intersoft.ui.TitleText
+import com.intersoft.ui.UserListItem
 import com.intersoft.user.UserModel
 
 
@@ -67,7 +68,7 @@ fun FriendSearchPage(
                     key = { index -> users[index].id!! },
                     itemContent = { index ->
                         val user = users[index]
-                        UserListItem(user = user)
+                        UserListItem(user.username)
                     }
                 )
 
@@ -77,37 +78,4 @@ fun FriendSearchPage(
 }
 
 
-@Composable
-fun UserListItem(user: UserModel){
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
-    ){
-        DisabledTextField(textvalue = user.username)
-    }
 
-}
-
-/*
-@Composable
-fun UserDataScreen(data: List<IIterableObject>, onEventClick: () -> Unit) {
-    Column(content = {
-
-        for(user in data) {
-            UserCard(
-                user = user,
-                onEventClick = onEventClick
-            )
-        }
-    })
-}
-
-@Composable
-fun UserCard(user: IIterableObject, onEventClick: () -> Unit) {
-    ObjectCard(data = user, interaction = {
-        onEventClick()
-    })
-}
-*/
