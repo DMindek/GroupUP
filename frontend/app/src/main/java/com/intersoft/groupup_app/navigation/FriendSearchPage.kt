@@ -1,9 +1,12 @@
 package com.intersoft.groupup_app.navigation
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -19,6 +22,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.intersoft.auth.AuthContext
@@ -58,7 +62,7 @@ fun FriendSearchPage(){
     val noUsersFoundErrorText = "No users found with such a username"
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column (
+   /* Column (
         modifier = Modifier
             .padding(16.dp)
             .background(color = Color.White)
@@ -67,9 +71,9 @@ fun FriendSearchPage(){
     ) {
         TitleText(text = pageTitle)
         TextSearchField(
-            onTextChanged ={ searchText ->
+            onTextChanged = { searchText ->
                 viewModel.onSearchTextChange(searchText)
-            } ,
+            },
             onIconClicked = {
                 viewModel.searchForUser(AuthContext.token!!)
                 clearPage = viewModel.searchTextIsBlank()
@@ -79,15 +83,53 @@ fun FriendSearchPage(){
             }
         )
 
-        @Suppress("ControlFlowWithEmptyBody")
-        if(clearPage){
+    */
 
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            item(){
+                TextSearchField(
+                    pageTitle = pageTitle,
+                    onTextChanged = { searchText ->
+                        viewModel.onSearchTextChange(searchText)
+                    },
+                    onIconClicked = {
+                        viewModel.searchForUser(AuthContext.token!!)
+                        clearPage = viewModel.searchTextIsBlank()
+                        searchAttempted = true
+                        keyboardController?.hide()
+
+                    }
+                )
+            }
+            items(
+                count = 1,
+                key = { 1 },
+                itemContent = {
+                    UserListItem("") {
+                        dialogUsername = "user.username"
+                        dialogEmail = "user.email"
+                        showUserCard = true
+                    }
+                }
+            )
         }
-        else {
+
+
+        
+
+     /*   @Suppress("ControlFlowWithEmptyBody")
+        if (clearPage) {
+
+        } else {
             if (isSearching) {
                 LoadingScreen()
             } else {
-                if(error == "" && users.isNotEmpty()) {
+                if (error == "" && users.isNotEmpty()) {
+                    Log.d("DELAM", "TU sam v lazycolumnu ispred, data: ${users[0].username}")
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -99,7 +141,7 @@ fun FriendSearchPage(){
                             key = { index -> users[index].id!! },
                             itemContent = { index ->
                                 val user = users[index]
-                                UserListItem(user.username){
+                                UserListItem(user.username) {
                                     dialogUsername = user.username
                                     dialogEmail = user.email
                                     showUserCard = true
@@ -107,25 +149,26 @@ fun FriendSearchPage(){
                             }
                         )
                     }
-                } else if (users.isEmpty() && searchAttempted && error == ""){
+                } else if (users.isEmpty() && searchAttempted && error == "") {
                     ErrorText(text = noUsersFoundErrorText)
-                } else{
-                    if(searchAttempted ) {
+                } else {
+                    if (searchAttempted) {
                         ErrorText(text = error.toString())
                     }
                 }
             }
         }
 
-        if(showUserCard)
-        ConfirmationDialog(
-            title = "Add friend?",
-            dialogText = "Username: $dialogUsername \nEmail: $dialogEmail",
-            onDismissButton = {showUserCard = false},
-            onConfirmButton = {showUserCard = false}
-        )
-
+        if (showUserCard)
+            ConfirmationDialog(
+                title = "Add friend?",
+                dialogText = "Username: $dialogUsername \nEmail: $dialogEmail",
+                onDismissButton = { showUserCard = false },
+                onConfirmButton = { showUserCard = false }
+            )
     }
+
+      */
 }
 
 
