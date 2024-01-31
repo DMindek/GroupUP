@@ -23,7 +23,6 @@ import com.intersoft.ui.ErrorText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.SecondaryButton
 import com.intersoft.ui.TextInputField
-import com.intersoft.ui.TitleText
 
 @Composable
 fun LoginPage(context: Context, onLogin: () -> Unit, onRegisterClick: () -> Unit){
@@ -43,7 +42,6 @@ fun LoginPage(context: Context, onLogin: () -> Unit, onRegisterClick: () -> Unit
             .fillMaxSize()
             .padding(horizontal = 50.dp)
     ) {
-        TitleText(text = "Welcome to GroupUP")
         Image(
             painter = painterResource(id = R.drawable.groupup_icon),
             contentDescription = "app logo",

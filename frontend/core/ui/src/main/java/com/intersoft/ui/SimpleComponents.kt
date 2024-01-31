@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,6 +24,9 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -45,6 +49,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 
 
 @Composable
@@ -220,14 +225,49 @@ fun ParticipantNumberDisplayField(label: String, currentNumber: Int, maxNumber: 
 
 
 @Composable
-fun TitleText(text: String){
+fun DisabledTextField(textvalue:String, isMultiline: Boolean, visualTransformation: VisualTransformation = VisualTransformation.None){
+    BasicTextField(textvalue, {},
+        singleLine = isMultiline,
+        visualTransformation = visualTransformation,
+        textStyle = TextStyle(fontSize = 25.sp),
+        modifier = Modifier.background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark)),
+        decorationBox = {innerTextField ->
+            Row(modifier = Modifier.fillMaxWidth()){}
+            innerTextField()
+        },
+        enabled = false
+    )
+}
+
+
+@Composable
+fun ParticipantNumberDisplayField(label: String, currentNumber: Int, maxNumber: Int){
+    LabelText(text = label)
+    BasicTextField("$currentNumber / $maxNumber", {},
+        singleLine = true,
+        visualTransformation = VisualTransformation.None,
+        textStyle = TextStyle(fontSize = 25.sp),
+        modifier = Modifier
+            .background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark))
+            .width(110.dp),
+        decorationBox = {innerTextField ->
+            Row(modifier = Modifier.width(30.dp)){}
+            innerTextField()
+        },
+        enabled = false
+    )
+}
+
+
+
+@Composable
+fun TitleText(text: String, modifier: Modifier = Modifier){
     Text(
         text = text,
         fontSize = 40.sp,
         textAlign = TextAlign.Center,
         lineHeight = 50.sp,
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
     )
 }
 
@@ -248,9 +288,35 @@ fun ErrorText(text: String){
         color = colorResource(R.color.errorColor),
         fontSize = 14.sp,
         textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        maxLines = 1
     )
 }
+
+@Composable
+fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
+    var currentRoute by remember {
+        mutableStateOf(navBarItems[0].route)
+    }
+
+    NavigationBar(Modifier.height(50.dp)){
+        for (item in navBarItems){
+            NavigationBarItem(
+                selected = currentRoute == item.route,
+                icon = { Icon(item.icon, item.route) },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = colorResource(id = R.color.primary),
+                    unselectedIconColor = colorResource(id = R.color.secondary),
+                ),
+                onClick = {
+                    currentRoute = item.route
+                    navController.navigate(item.route)
+            })
+        }
+    }
+}
+
+data class NavBarItem(val route: String, val icon: ImageVector)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -419,7 +485,6 @@ fun IconInformationText(icon: ImageVector, text: String){
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = text, style = MaterialTheme.typography.bodyLarge )
     }
-
 }
 
 @Composable
