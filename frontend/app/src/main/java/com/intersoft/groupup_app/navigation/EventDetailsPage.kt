@@ -275,10 +275,10 @@ fun EventDetailsPage(
                 isShowingDeleteDialog = false
             },
             ButtonDefaults.buttonColors(
-                containerColor = colorResource(R.color.inputField),
-                contentColor = colorResource(R.color.errorColor),
-                disabledContainerColor = colorResource(R.color.secondary),
-                disabledContentColor = colorResource(R.color.secondaryText)
+                containerColor = colorResource(com.intersoft.ui.R.color.inputField),
+                contentColor = colorResource(com.intersoft.ui.R.color.errorColor),
+                disabledContainerColor = colorResource(com.intersoft.ui.R.color.secondary),
+                disabledContentColor = colorResource(com.intersoft.ui.R.color.secondaryText)
             )
         )
     }
