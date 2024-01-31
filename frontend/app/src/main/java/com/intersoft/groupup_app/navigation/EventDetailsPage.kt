@@ -284,14 +284,17 @@ fun EventDetailsPage(
             title = "Deleting event",
             dialogText = "Are you sure you want to delete the event \"${eventName}\"?",
             onConfirmButton = {
+                isDeleted = true
                 isShowingDeleteDialog = false
                 EventManager.deleteEvent(
                     eventId,
                     {
-                        isDeleted = true
                         onEventDeleted()
                     },
-                    { errorText = it})
+                    {
+                        errorText = it
+                        isDeleted = false
+                    })
             },
             onDismissButton = {
                 isShowingDeleteDialog = false
