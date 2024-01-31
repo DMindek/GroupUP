@@ -48,7 +48,7 @@ fun UserProfilePage(onEditPress: () -> Unit){
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(16.dp),
 
     ){

@@ -47,8 +47,8 @@ fun LoginPage(context: Context, onLogin: () -> Unit, onRegisterClick: () -> Unit
             contentDescription = "app logo",
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
-        TextInputField(label = "e-mail", placeholder = "admin@admin.com" ) { email = it }
-        TextInputField(label = "password", visualTransformation = PasswordVisualTransformation(), placeholder = "adminadmin10!") { password = it }
+        TextInputField(label = "e-mail", placeholder = "" ) { email = it }
+        TextInputField(label = "password", visualTransformation = PasswordVisualTransformation(), placeholder = "") { password = it }
         ErrorText(text = errorText)
 
         PrimaryButton(buttonText = "Sign in",

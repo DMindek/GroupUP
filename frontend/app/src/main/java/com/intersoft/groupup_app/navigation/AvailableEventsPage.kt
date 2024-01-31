@@ -3,6 +3,7 @@ package com.intersoft.groupup_app.navigation
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -32,7 +33,7 @@ fun AvailableEventsPage(
     val events by viewModel.events.observeAsState()
     val error by viewModel.error.observeAsState()
 
-    val PAGE_TITLE = "All Events"
+    val PAGE_TITLE = "Home"
 
     if (events == null) {
         viewModel.fetchAvailableEvents(AuthContext.token!!)
@@ -49,6 +50,7 @@ fun AvailableEventsPage(
             content = {
 
                 TitleText(text = PAGE_TITLE)
+
 
                 // Check if data is loaded before displaying DataScreen
 

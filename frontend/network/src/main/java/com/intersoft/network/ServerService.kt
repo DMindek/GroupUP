@@ -66,9 +66,9 @@ interface ServerService {
         @Header("Authorization") authToken: String): Call<List<NewEventData>>
 
     @Headers("Content-Type: application/json")
-    @GET("/api/v1/users/{user_id}/joined_events") /*TODO TO BE DEFINED*/
+    @GET("/api/v1/users/{user_id}/joined_events")
     fun getJoinedEvents(
-        @Path("userId") userId: Int,
+        @Path("user_id") userId: Int,
         @Header("Authorization") authToken: String): Call<List<NewEventData>>
 
     @Headers("Content-Type: application/json")

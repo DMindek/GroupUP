@@ -1,5 +1,6 @@
 package com.intersoft.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -188,39 +189,7 @@ fun DisabledTextField(textvalue:String, visualTransformation: VisualTransformati
         )
 }
 
-@Composable
-fun DisabledTextField(textvalue:String, isMultiline: Boolean, visualTransformation: VisualTransformation = VisualTransformation.None){
-    BasicTextField(textvalue, {},
-        singleLine = isMultiline,
-        visualTransformation = visualTransformation,
-        textStyle = TextStyle(fontSize = 25.sp),
-        modifier = Modifier.background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark)),
-        decorationBox = {innerTextField ->
-            Row(modifier = Modifier.fillMaxWidth()){}
-            innerTextField()
-        },
-        enabled = false
-    )
-}
 
-
-@Composable
-fun ParticipantNumberDisplayField(label: String, currentNumber: Int, maxNumber: Int){
-    LabelText(text = label)
-    BasicTextField("$currentNumber / $maxNumber", {},
-        singleLine = true,
-        visualTransformation = VisualTransformation.None,
-        textStyle = TextStyle(fontSize = 25.sp),
-        modifier = Modifier
-            .background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark))
-            .width(110.dp),
-        decorationBox = {innerTextField ->
-            Row(modifier = Modifier.width(30.dp)){}
-            innerTextField()
-        },
-        enabled = false
-    )
-}
 
 
 
@@ -388,6 +357,7 @@ fun UserListItem(username: String, onClick: () -> Unit){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserCard(username: String, onClick: () -> Unit) {
+    Log.d("UserCard", "UserCard")
     Card(
         onClick = onClick,
         modifier = Modifier
