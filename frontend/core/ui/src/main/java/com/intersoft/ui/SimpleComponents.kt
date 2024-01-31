@@ -399,46 +399,50 @@ fun UserCard(username: String, onClick: () -> Unit) {
 
 
 @Composable
-fun TextSearchField(visualTransformation: VisualTransformation = VisualTransformation.None,placeholder: String = "", onTextChanged: (String) -> Unit, onIconClicked: () -> Unit){
+fun TextSearchField(pageTitle: String, errorText: String, visualTransformation: VisualTransformation = VisualTransformation.None,placeholder: String = "", onTextChanged: (String) -> Unit, onIconClicked: () -> Unit){
 
     var textValue by remember{
         mutableStateOf(placeholder)
     }
-    Row {
-        BasicTextField(
-            textValue,
-            {
-                textValue = it
-                onTextChanged(it)
-            },
-            singleLine = true,
-            visualTransformation = visualTransformation,
-            textStyle = TextStyle(fontSize = 25.sp),
-            modifier = Modifier.background(color = colorResource(R.color.inputField)),
-            keyboardActions = KeyboardActions(
-                onDone = { onIconClicked() }
-            ),
-            decorationBox = { innerTextField ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    innerTextField()
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        tint = colorResource(R.color.foregroundText),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .size(30.dp)
-                            .clickable { onIconClicked() }
-                    )
+    Column {
+        TitleText(text = pageTitle)
+        Row {
+            BasicTextField(
+                textValue,
+                {
+                    textValue = it
+                    onTextChanged(it)
+                },
+                singleLine = true,
+                visualTransformation = visualTransformation,
+                textStyle = TextStyle(fontSize = 25.sp),
+                modifier = Modifier.background(color = colorResource(R.color.inputField)),
+                keyboardActions = KeyboardActions(
+                    onDone = { onIconClicked() }
+                ),
+                decorationBox = { innerTextField ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        innerTextField()
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            tint = colorResource(R.color.foregroundText),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(30.dp)
+                                .clickable { onIconClicked() }
+                        )
+                    }
+
                 }
+            )
 
-            }
-        )
-
+        }
+        ErrorText(text = errorText)
     }
 
 }
