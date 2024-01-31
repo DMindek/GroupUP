@@ -47,12 +47,12 @@ import java.time.Instant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GeneralDatePicker(label: String, action: (Long) -> Unit){
+fun GeneralDatePicker(label: String,placeholder: String = "" ,action: (Long) -> Unit){
     val showDatePicker = remember {
         mutableStateOf(false)
     }
     var selectedDateText by remember {
-        mutableStateOf("")
+        mutableStateOf(placeholder)
     }
 
 
@@ -119,35 +119,42 @@ private fun SetupDatePickerDialogue(onDismiss: () -> Unit, onConfirm: (Long) -> 
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDurationInput: (Long) -> Unit ,onStartTimeInput: (Long) -> Unit){
+fun DurationSelectionElement(placeholderStartTime: String = "", placeholderHours: String = "" , placeholderMinutes: String = "", onDurationPastMidnight: (String) -> Unit,onDurationInput: (Long) -> Unit ,onStartTimeInput: (Long) -> Unit){
 
     val showStartTimePicker = remember {
         mutableStateOf(false)
     }
 
     var selectedStartTimeText by remember {
-        mutableStateOf("")
+        mutableStateOf(placeholderStartTime)
     }
     var durationHours by remember {
-        mutableStateOf(-1)
+        if(placeholderHours != "")
+            mutableIntStateOf(placeholderHours.toInt())
+        else
+            mutableIntStateOf(-1)
     }
     var durationMinutes by remember {
-        mutableStateOf(-1)
+        if(placeholderMinutes != "")
+            mutableIntStateOf(placeholderMinutes.toInt())
+        else
+            mutableIntStateOf(-1)
     }
-    var selectedEndTimeText by remember {
-        mutableStateOf("")
-    }
-
-    val selectedStartTimeList = mutableListOf<Int>()
 
     var selectedStartTime by remember{
-        mutableStateOf(selectedStartTimeList)
+        if(placeholderStartTime != ""){
+            val tempStartTime = placeholderStartTime.split(":")
+            mutableStateOf(mutableListOf(tempStartTime[0].toInt(), tempStartTime[1].toInt()))
+        }
+        else{
+            mutableStateOf(mutableListOf<Int>())
+        }
     }
 
     var startTimeInMillis : Long
 
     var durationInMillis : Long
-
+    
     val warningMessage = "Note: Set duration passes midnight and the end date is different from the start date"
 
     Column(modifier = Modifier
@@ -169,25 +176,25 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
                     LabelText(text = "Hours")
                 }
                 Column(modifier = Modifier.width(80.dp)) {
-                    NumericTextInputField("", paddingAmount = 0){
+                    NumericTextInputField("", paddingAmount = 0, placeholder = placeholderHours){
                         if(it.isNotBlank()){
                             durationHours = it.toInt()
-                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationMinutes != -1){
-                                selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
-                                startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
-                                durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
-
-                                if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
-                                    onDurationPastMidnight(warningMessage)
-                                else
-                                    onDurationPastMidnight("")
-
-                                onStartTimeInput(startTimeInMillis)
-                                onDurationInput(durationInMillis)
-                            }
                         } else{
-                            durationHours = -1
+                            durationHours = 0
                         }
+                        if(selectedStartTime.isNotEmpty() && durationMinutes >= 0){
+                            startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                            durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
+
+                            if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
+                                onDurationPastMidnight(warningMessage)
+                            else
+                                   onDurationPastMidnight("")
+
+                            onStartTimeInput(startTimeInMillis)
+                            onDurationInput(durationInMillis)
+                        }
+
                     }
                 }
             }
@@ -201,26 +208,26 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
                     LabelText(text = "Minutes")
                 }
                 Column(modifier = Modifier.width(80.dp)) {
-                    NumericTextInputField("", paddingAmount = 0){
+                    NumericTextInputField("", paddingAmount = 0, placeholder = placeholderMinutes){
                         if(it.isNotBlank()){
                             durationMinutes = it.toInt()
-                            if(DateTimeManager.startTimeIsSet(selectedStartTimeText) && durationHours != -1){
-                                selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime)
-                                startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
-                                durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
-
-                                if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
-                                    onDurationPastMidnight(warningMessage)
-                                else
-                                    onDurationPastMidnight("")
-
-                                onStartTimeInput(startTimeInMillis)
-                                onDurationInput(durationInMillis)
-
-                            }
                         } else{
-                            durationMinutes = -1
+                            durationMinutes = 0
                         }
+                        if(selectedStartTime.isNotEmpty() && durationHours >= 0){
+                            startTimeInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(selectedStartTime[0],selectedStartTime[1])
+                            durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
+
+                            if(DateTimeManager.datePassesMidnight(selectedStartTime[0],durationHours))
+                                onDurationPastMidnight(warningMessage)
+                            else
+                                onDurationPastMidnight("")
+
+                            onStartTimeInput(startTimeInMillis)
+                            onDurationInput(durationInMillis)
+
+                        }
+
                     }
                 }
             }
@@ -249,7 +256,7 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
                 Column(horizontalAlignment = Alignment.End) {
 
 
-                    DisabledTextField(selectedEndTimeText)
+                    DisabledTextField(textvalue =  DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedStartTime))
                 }
             }
         }
@@ -257,10 +264,9 @@ fun DurationSelectionElement(onDurationPastMidnight: (String) -> Unit,onDuration
             GeneralTimePicker(
                 onConfirm = { selectedTime ->
                     selectedStartTime = selectedTime
-                    selectedStartTimeText = DateTimeManager.formatStartTime(selectedTime)
+                    selectedStartTimeText = DateTimeManager.formatStartTime(selectedStartTime)
 
                     if(DateTimeManager.durationIsSet(durationHours,durationMinutes)){
-                        selectedEndTimeText = DateTimeManager.calculateEndTime(durationHours,durationMinutes,selectedTime)
                         durationInMillis = DateTimeManager.calculateMillisFromHoursAndMinutes(durationHours,durationMinutes)
                         onDurationInput(durationInMillis)
                     }
@@ -365,9 +371,9 @@ private fun SetupTimePickerDialogue(
 
 
 @Composable
-fun CounterElement(label: String, onNumberOfParticipantsSet: (Int) -> Unit = {}){
+fun CounterElement(label: String,placeholder: Int = 0 ,onNumberOfParticipantsSet: (Int) -> Unit = {}){
     var count by remember {
-        mutableIntStateOf(0)
+        mutableIntStateOf(placeholder)
     }
 
     Column(modifier = Modifier

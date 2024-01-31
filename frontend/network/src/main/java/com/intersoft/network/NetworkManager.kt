@@ -2,13 +2,17 @@ package com.intersoft.network
 
 import android.util.Log
 import com.intersoft.network.models.responses.EditBody
+import com.intersoft.network.models.responses.EditEventBody
 import com.intersoft.network.models.responses.EventBody
+import com.intersoft.network.models.responses.EventDetails
 import com.intersoft.network.models.responses.EventSuccessResponse
+import com.intersoft.network.models.responses.JoinBodyRequest
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
 import com.intersoft.network.models.responses.NewEventData
 import com.intersoft.network.models.responses.StoredEventData
+import com.intersoft.network.models.responses.SuccessfulBodyResponse
 import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -28,20 +32,19 @@ object NetworkManager {
     fun registerUser(user: RegisterBody, requestListener: RequestListener){
 
         val res = serverService.createUser(user)
-        Log.d("NetworkManager", "Request ${res.request().body()}")
 
         res.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                Log.d("NetworkManager", "Response: ${response?.body()}")
-                if(response?.code() != 201){
-                    if(response?.code() == 422)
+                Log.d("NetworkManager", "Response: ${response.body()}")
+                if(response.code() != 201){
+                    if(response.code() == 422)
                         requestListener.onError(response.errorBody()?.string())
                     else requestListener.onError("Unknown error occurred")
                 } else requestListener.onSuccess(response.body()!!)
             }
 
-            override fun onFailure(call: Call<ResponseBody>?, t: Throwable?) {
-                Log.d("NetworkManager", "Error: ${t?.message}")
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.d("NetworkManager", "Error: ${t.message}")
                 requestListener.onError("Broken connection")
             }
         })
@@ -89,9 +92,19 @@ object NetworkManager {
         res.enqueue(ResponseHandler<StoredEventData>(successCode = 200, errorCode = 404, onGetEventSuccess, onGetEventFail))
     }
 
+    fun deleteEvent(eventId: Int, onDeleteEventSuccess: (Unit) -> Unit, onDeleteEventFail: (String?) -> Unit){
+        val res = serverService.deleteEvent(eventId)
+        res.enqueue(ResponseHandler<Unit>(successCode = 200, errorCode = 404, onDeleteEventSuccess, onDeleteEventFail))
+    }
+
     fun getUser(userId: Int, authToken: String, onGetUserSuccess: (UserData) -> Unit, onGetUserError: (String?) -> Unit) {
         val res = serverService.getUser(userId, authToken)
         res.enqueue(ResponseHandler<UserData>(successCode = 200, errorCode = 401, onGetUserSuccess,onGetUserError))
+    }
+
+    fun getUserByUsername(username: String, authToken: String,onGetUsersByUsernameSuccess: (List<UserData>) -> Unit, onGetUsersByUsernameError: (String?) -> Unit ){
+        val res = serverService.getUsersByUsername(username, authToken)
+        res.enqueue(ResponseHandler<List<UserData>>(successCode = 200, errorCode = 404, onGetUsersByUsernameSuccess, onGetUsersByUsernameError))
     }
 
     fun getAvailableEvents(
@@ -125,33 +138,46 @@ object NetworkManager {
 
     }
 
+    fun editEvent(eventId:Int, eventData: EditEventBody, authToken: String, onEditEventSuccess: (EventDetails) ->Unit, onEditEventFail: (String?) -> Unit){
+        val res =serverService.editEvent(eventId,eventData,authToken)
+        res.enqueue(ResponseHandler<EventDetails>(successCode = 200, errorCode = 422, onEditEventSuccess, onEditEventFail))
+    }
+
+    fun joinEvent(eventId: Int, userId: Int, authToken: String, onJoinEventSuccess: (String?)->Unit, onJoinEventFail: (String?)-> Unit) {
+        val joinBodyRequest = JoinBodyRequest(userId)
+        val res = serverService.joinEvent(eventId, joinBodyRequest, authToken)
+        res.enqueue(ResponseHandler<SuccessfulBodyResponse>(successCode = 201, errorCode = 422, {onJoinEventSuccess(it.message)}, onJoinEventFail))
+
+    }
+
+    fun leaveEvent(eventId: Int, userId: Int, authToken: String, onLeaveEventSuccess: (String?) -> Unit, onLeaveEventFail: (String?) -> Unit) {
+        val joinBodyRequest = JoinBodyRequest(userId)
+        val res = serverService.leaveEvent(eventId, joinBodyRequest, authToken)
+        res.enqueue(ResponseHandler<SuccessfulBodyResponse>(successCode = 201, errorCode = 422, {onLeaveEventSuccess(it.message)}, onLeaveEventFail))
+    }
+
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,
                                   val onSuccess : (T) -> Unit,
                                   val onFail: (String?) -> Unit): Callback<T>{
 
         override fun onResponse(call: Call<T>, response: Response<T>) {
-            Log.d("NetworkManager", "Response: ${response?.message()}")
-            if (response != null) {
-                if (response.code() != successCode) {
-
-                    if (response.code() == errorCode) {
-                        val errorMessage = response.errorBody()?.string()
-                        Log.d("NetworkManager", "Error: $errorMessage")
-                        onFail(errorMessage)
-                    }
-                    else onFail("Unknown error occurred")
-                } else {
-                    Log.d("NetworkManager", "Success: ${response.body()}")
-                    if(response.body() == null) onFail("no response from server")
-                    else onSuccess(response.body()!!)
+            Log.d("NetworkManager", "Response: ${response.message()}")
+            if (response.code() != successCode) {
+                if (response.code() == errorCode) {
+                    val errorMessage = response.errorBody()?.string()
+                    Log.d("NetworkManager", "Error: $errorMessage")
+                    onFail(errorMessage)
                 }
-
-
+                else onFail("Unknown error occurred")
+            } else {
+                Log.d("NetworkManager", "Success: ${response.body()}")
+                if (response.body() == null) onFail("no response from server")
+                else onSuccess(response.body()!!)
             }
         }
 
-        override fun onFailure(call: Call<T>?, t: Throwable?) {
-            Log.d("NetworkManager", "Error: ${t?.message}")
+        override fun onFailure(call: Call<T>, t: Throwable) {
+            Log.d("NetworkManager", "Error: ${t.message}")
             onFail("Could not reach server")
         }
 

@@ -3,17 +3,18 @@ package com.intersoft.event
 import android.util.Log
 import com.google.gson.Gson
 import com.intersoft.network.NetworkManager
+import com.intersoft.network.models.responses.EditEventBody
 import com.intersoft.network.models.responses.EventBody
+import com.intersoft.network.models.responses.EventDetails
 import com.intersoft.network.models.responses.NewEventData
 import java.sql.Timestamp
-import com.intersoft.user.UserModel
 
 class EventRepository: IEventRepository {
 
     override fun createEvent(newEvent: EventModel, onCreateEventError: (String) -> Unit, onCreateEventSuccess: (String) -> Unit) {
         Log.d("EventRepository", newEvent.toString())
         // Timestamp automatically adjusts to local time which is +1 offset for us, so we have to decrease the time by one hour in millis "3600000 ms" because it does not make sense to adjust starting time by 1 hour offset
-        val dateTimestamp = java.sql.Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
+        val dateTimestamp = Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
         Log.d("EventRepository", dateTimestamp.toString())
         val durationInMinutes = (newEvent.durationInMillis / 60000).toInt()
         Log.d("EventRepository", durationInMinutes.toString())
@@ -25,6 +26,7 @@ class EventRepository: IEventRepository {
             duration =durationInMinutes,
             max_participants = newEvent.maxParticipants,
             location = newEvent.location,
+            location_name = newEvent.locationName,
             owner_id =  newEvent.ownerId,
             id = newEvent.id,
             participants = emptyList()
@@ -67,8 +69,18 @@ class EventRepository: IEventRepository {
                     duration = it.duration,
                     max_participants = it.max_participants,
                     location = it.location,
+                    locationName = it.location_name,
                     owner_id = it.owner_id,
-                    participants = it.participants
+                   participants = it.participants?.map { participant ->
+                       UserModel(
+                           username = participant.username,
+                           email = participant.email,
+                           password = "nan",
+                           location = participant.location,
+                           locationName = participant.location_name,
+                           id = participant.id,
+                       )
+                   }
                 )
 
                 Log.d("EventRepository", "Recieved event: $response")
@@ -112,14 +124,16 @@ class EventRepository: IEventRepository {
                         startTimeInMillis = event.date.time - event.duration.toLong() * 60000,
                         maxParticipants = event.max_participants,
                         location = event.location,
+                        locationName = event.location_name,
                         ownerId = event.owner_id,
                         id = event.id!!,
                         participants = event.participants?.map { participant ->
                             UserModel(
                                 username = participant.username,
                                 email = participant.email,
-                                password = participant.password!!,
+                                password = "nan",
                                 location = participant.location,
+                                locationName = participant.location_name,
                                 id = participant.id,
                             )
                         }
@@ -160,14 +174,16 @@ class EventRepository: IEventRepository {
                         startTimeInMillis = event.date.time - event.duration.toLong() * 60000,
                         maxParticipants = event.max_participants,
                         location = event.location,
+                        locationName = event.location_name,
                         ownerId = event.owner_id,
                         id = event.id!!,
                         participants = event.participants?.map { participant ->
                             UserModel(
                                 username = participant.username,
                                 email = participant.email,
-                                password = participant.password!!,
+                                password = "nan",
                                 location = participant.location,
+                                locationName = participant.location_name,
                                 id = participant.id,
                             )
                         }
@@ -208,14 +224,16 @@ class EventRepository: IEventRepository {
                         startTimeInMillis = event.date.time - event.duration.toLong() * 60000,
                         maxParticipants = event.max_participants,
                         location = event.location,
+                        locationName = event.location_name,
                         ownerId = event.owner_id,
                         id = event.id!!,
                         participants = event.participants?.map { participant ->
                             UserModel(
                                 username = participant.username,
                                 email = participant.email,
-                                password = participant.password!!,
+                                password = "nan",
                                 location = participant.location,
+                                locationName = participant.location_name,
                                 id = participant.id,
                             )
                         }
@@ -235,7 +253,120 @@ class EventRepository: IEventRepository {
         )
 
     }
+
+    override fun editEvent(
+        eventId: Int,
+        newEvent: EventModel,
+        authToken: String,
+        onEditEventError: (String) -> Unit,
+        onEditEventSuccess: (String) -> Unit
+    ) {
+        Log.d("EventRepository", newEvent.toString())
+        // Timestamp automatically adjusts to local time which is +1 offset for us, so we have to decrease the time by one hour in millis "3600000 ms" because it does not make sense to adjust starting time by 1 hour offset
+        val dateTimestamp = Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
+        Log.d("EventRepository", dateTimestamp.toString())
+        val durationInMinutes = (newEvent.durationInMillis / 60000).toInt()
+        Log.d("EventRepository", durationInMinutes.toString())
+
+        val event = EventDetails(
+            name = newEvent.name,
+            description = newEvent.description,
+            date = dateTimestamp,
+            duration =durationInMinutes,
+            max_participants = newEvent.maxParticipants,
+            location = newEvent.location,
+            location_name = newEvent.locationName,
+            owner_id =  newEvent.ownerId,
+            participants = null
+        )
+
+        NetworkManager.editEvent(
+            eventId = eventId,
+            eventData = EditEventBody(event),
+            authToken = authToken,
+            onEditEventSuccess= {eventSuccessResponse ->
+                onEditEventSuccess(eventSuccessResponse.toString())
+            },
+            onEditEventFail = {
+                Log.d("EventRepository", "Error occurred: $it")
+                if(!it.isNullOrEmpty())if(it[0] != '{') {
+                    onEditEventError(it)
+                }
+                else{
+                    val error: CreateEventFailResponse
+                    try {
+                        error = Gson().fromJson(it, CreateEventFailResponse::class.java)
+                        Log.d("EventRepository", "Error occurred $error")
+                    }catch (e: Exception){
+                        onEditEventError("Server returned unknown error")
+                        return@editEvent
+                    }
+                }
+            }
+        )
+    }
+
+    override fun deleteEvent(
+        eventId: Int,
+        onDeleteEventError: (String) -> Unit,
+        onDeleteEventSuccess: (String) -> Unit
+    ) {
+        NetworkManager.deleteEvent(eventId,
+            onDeleteEventSuccess = {onDeleteEventSuccess("Event has been deleted")},
+            onDeleteEventFail = {
+                if(it != null){
+                    onDeleteEventError(it)
+                }
+                else onDeleteEventError("Unknown error occurred")}
+        )
+    }
+
+    override fun joinEvent(
+        eventId: Int,
+        userId: Int,
+        authToken: String,
+        onJoinEventError: (String) -> Unit,
+        onJoinEventSuccess: (String) -> Unit
+    ) {
+        NetworkManager.joinEvent(eventId,
+            userId,
+            authToken,
+            onJoinEventSuccess = {onJoinEventSuccess("Event has been Joined")},
+            onJoinEventFail = {
+                if(it != null){
+                    onJoinEventError(it)
+                }
+                else onJoinEventError("Unknown error occurred")}
+        )
+
+    }
+
+    override fun leaveEvent(
+        eventId: Int,
+        userId: Int,
+        authToken: String,
+        onLeaveEventError: (String) -> Unit,
+        onLeaveEventSuccess: (String) -> Unit
+    ) {
+        NetworkManager.leaveEvent(eventId,
+            userId,
+            authToken,
+            onLeaveEventSuccess = {onLeaveEventSuccess("Event has been left")},
+            onLeaveEventFail = {
+                if(it != null){
+                    onLeaveEventError(it)
+                }
+                else onLeaveEventError("Unknown error occurred")}
+        )
+
+    }
 }
+
+
+
+
+
+
 
 
 
@@ -247,6 +378,7 @@ data class CreateEventFailResponse(
     val duration : String?,
     val maxParticipants : String?,
     val location : String?,
+    val locationName : String?,
     val ownerId : String?
 )
 
@@ -258,8 +390,16 @@ data class GetEventResponse(
     val duration : Int,
     val max_participants : Int,
     val location : String,
+    val locationName : String?,
     val owner_id : Int,
-    val participants : List<String>?
+    val participants : List<UserModel>?
 )
 
-
+data class UserModel(
+    val id: Int?,
+    val email: String,
+    val password: String,
+    val username: String,
+    val location: String,
+    val locationName : String?,
+)

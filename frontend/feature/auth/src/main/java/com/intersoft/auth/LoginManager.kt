@@ -40,6 +40,7 @@ object LoginManager {
         AuthContext.token = res.token
         AuthContext.username = res.username
         AuthContext.location = res.location
+        AuthContext.location_name = res.locationName
         val sharedPref = context.getSharedPreferences(getString(context, R.string.shared_prefs_file), Context.MODE_PRIVATE)
         with(sharedPref.edit()){
             putString(getString(context, R.string.shared_prefs_user_token), AuthContext.token)
@@ -47,6 +48,7 @@ object LoginManager {
             putString(getString(context, R.string.shared_prefs_user_username), AuthContext.username)
             putString(getString(context, R.string.shared_prefs_user_email), AuthContext.email)
             putString(getString(context, R.string.shared_prefs_user_location), AuthContext.location)
+            putString(getString(context, R.string.shared_prefs_user_location_name), AuthContext.location_name)
             apply()
         }
     }

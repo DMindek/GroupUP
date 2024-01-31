@@ -8,6 +8,7 @@ data class UserData(
     val username: String,
     val email: String,
     val location: String,
+    val location_name : String?,
     val password: String? = null,
     val id: Int? = null,
 )

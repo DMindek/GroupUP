@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#FF6200EE</color>
-    <color name="primaryText">#E3CFFF</color>
-    <color name="secondary">#9A9A9A</color>
-    <color name="secondaryText">#000000</color>
-    <color name="errorColor">#B80000</color>
-    <color name="foregroundText">#000000</color>
-    <color name="inputField">#D5D5D5</color>
+    <color name="primary">#ff7e1c</color>
+    <color name="primaryText">#000000</color>
+    <color name="secondary">#0fb8fa</color>
+    <color name="secondaryText">#FFFFFF</color>
+    <color name="errorColor">#f71616</color>
+    <color name="foregroundText">#FFFFFF</color>
+    <color name="inputField">#FFFFFF</color>
 </resources>

@@ -19,7 +19,6 @@ import com.intersoft.groupup_app.AppContext
 import com.intersoft.ui.ErrorText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
-import com.intersoft.ui.TitleText
 import com.intersoft.user.UserModel
 
 
@@ -32,6 +31,9 @@ fun RegistrationPage(onRegister: () -> Unit){
         mutableStateOf("")
     }
     var location by remember {
+        mutableStateOf("")
+    }
+    var locationName by remember {
         mutableStateOf("")
     }
     var password by remember {
@@ -48,9 +50,8 @@ fun RegistrationPage(onRegister: () -> Unit){
         verticalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxSize()
-            .padding(50.dp)
+            .padding(start = 50.dp, end = 50.dp, top = 0.dp, bottom = 50.dp)
     ){
-        TitleText(text = "Register")
         TextInputField(label = "email") { email = it }
         TextInputField(label = "username") {username = it}
         Text(text = "Location")
@@ -60,13 +61,14 @@ fun RegistrationPage(onRegister: () -> Unit){
             longitude = null,
             false
         )
+        TextInputField(label = "location name") {locationName = it}
         TextInputField(label = "password", PasswordVisualTransformation()) {password = it}
         TextInputField(label = "confirm password", PasswordVisualTransformation()) {passwordRetype = it}
         ErrorText(text = errorText)
         PrimaryButton(buttonText = "Sign up",
             modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-            RegistrationManager.registerUser(UserModel(username, email, password, location), passwordRetype,
+            RegistrationManager.registerUser(UserModel(username, email, password, location, locationName), passwordRetype,
                 onRegisterSuccess = onRegister,
                 onRegisterFail = {
                     errorText = it

@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "com.intersoft.ui"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
-        minSdk = 27
+        minSdk = 33
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -48,6 +48,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation(project(mapOf("path" to ":core:utils")))
     implementation(project(mapOf("path" to ":core:utils")))

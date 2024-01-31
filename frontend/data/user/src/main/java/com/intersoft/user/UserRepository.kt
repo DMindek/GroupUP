@@ -13,15 +13,16 @@ class UserRepository: IUserRepository {
 
     override fun addUser(
         newUser: UserModel,
-        onRegisterSucceed: () -> Unit,
+        onRegistrationSucceed: () -> Unit,
         onRegistrationError: (String) -> Unit
     ) {
         Log.d("UserRepository", newUser.toString())
-        val user = UserData(newUser.username, newUser.email, newUser.location, newUser.password,)
+
+        val user = UserData(newUser.username, newUser.email, newUser.location, newUser.locationName, newUser.password,)
         val res = NetworkManager.registerUser(RegisterBody(user), object: RequestListener {
             override fun <T> onSuccess(data: T) {
                 Log.d("UserRepository", "User added successfully")
-                onRegisterSucceed()
+                onRegistrationSucceed()
             }
 
             override fun onError(error: String?) {
@@ -52,7 +53,7 @@ class UserRepository: IUserRepository {
 
     override fun logIn(email: String, password: String, onLoginSuccess: (LoginSuccessResponse) -> Unit, onLoginError: (String) -> Unit) {
         NetworkManager.logInUser(LoginBody(email, password), onLoginSuccess = {
-            val res =  LoginSuccessResponse(it.token, it.email, it.id, it.username, it.location)
+            val res =  LoginSuccessResponse(it.token, it.email, it.id, it.username, it.location, it.location_name)
 
             onLoginSuccess(res)
         }){
@@ -82,13 +83,13 @@ class UserRepository: IUserRepository {
         onEditError: (String) -> Unit
     )
     {
-        val userData = UserData(user.username, user.email, user.location)
+        val userData = UserData(user.username, user.email, user.location, user.locationName)
         val res = NetworkManager.editUser(EditBody(userData), user.id!!, user.token!!, onEditSuccess = {
             if(it == null){
                 onEditError("Server returned o body")
                 return@editUser
             }
-            val userModel = UserModel(it.username, it.email, "", it.location)
+            val userModel = UserModel(it.username, it.email, "", it.location, it.location_name)
             onEditSuccess(userModel)
         }, onEditError = {
             Log.d("UserRepository", "Error occurred: $it")
@@ -141,6 +142,48 @@ class UserRepository: IUserRepository {
         )
     }
 
+    override fun getUsersByUsername(
+        username: String,
+        authToken: String,
+        onGetUsersByUsernameSuccess: (List<UserModel>) -> Unit,
+        onGetUsersByUsernameError: (String) -> Unit
+    ) {
+        NetworkManager.getUserByUsername(
+            username,
+            authToken,
+            onGetUsersByUsernameSuccess = { userData ->
+                val receivedUserData = userData.map{ user ->
+                    UserModel(
+                        username = user.username,
+                        email = user.email,
+                        password = "",
+                        location = user.location,
+                        id = user.id,
+                        token = null,
+                        locationName = user.location_name
+                    )
+                }
+                Log.d("EventRepository", "Received user data: $receivedUserData")
+                onGetUsersByUsernameSuccess(receivedUserData)
+            },
+            onGetUsersByUsernameError = {
+                Log.d("EventRepository", "Error occurred: $it")
+                if(!it.isNullOrEmpty())if(it[0] != '{') {
+                    onGetUsersByUsernameError(it)
+                }
+                else {
+                    val error: SingleError
+                    try {
+                        error = Gson().fromJson(it, SingleError::class.java)
+                        Log.d("EventRepository", "Error occurred $error")
+                    } catch (e: Exception) {
+                        onGetUsersByUsernameError("Server returned unknown error")
+                        return@getUserByUsername
+                    }
+                }
+            }
+        )
+    }
 
 }
 
@@ -159,7 +202,8 @@ data class LoginSuccessResponse(
     val email: String? = null,
     val id: Int? = null,
     val username: String? = null,
-    val location: String? = null
+    val location: String? = null,
+    val locationName: String? = null,
 )
 
 data class GetHostnameFailResponse(
