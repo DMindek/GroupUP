@@ -58,7 +58,6 @@ fun JoinedEventsPage(
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .background(color = Color.White)
                 .verticalScroll(rememberScrollState())
                 .fillMaxHeight(),
             content = {
@@ -73,7 +72,7 @@ fun JoinedEventsPage(
                 )
 
                 when {
-                    events?.isEmpty() == true && error == "NO_EVENTS" -> Text(text = "There are no current joined events.")
+                    events?.isEmpty() == true && error == "NO_EVENTS" -> Text(text = "There are no current joined events.", color = Color.White)
                     events?.isEmpty() == true && error != "" -> ErrorText(text = error!!)
                 }
 

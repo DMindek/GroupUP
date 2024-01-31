@@ -57,7 +57,6 @@ fun UserCreatedEventsPage(
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .background(color = Color.White)
                 .verticalScroll(rememberScrollState())
                 .fillMaxHeight(),
             content = {

@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
@@ -73,7 +74,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
+                    color = Color.DarkGray,
                 ) {
                     val navController = rememberNavController()
 
@@ -127,12 +128,13 @@ class MainActivity : ComponentActivity() {
                                         navController.navigate("user_information")
                                         setTab("user_information")
                                     },
-                                    onEventDetailsPressed = {navController.navigate("eventDetail/1")},
                                     onAvailableEventsButtonPressed = {navController.navigate("availableEvents")},
-                                    onEditEventButtonPressed = {navController.navigate("editEvent")},
                                     onSearchButtonPressed = {
                                         navController.navigate("searchForFriend")
                                         setTab("searchForFriend")
+                                    },
+                                    onJoinedEventsButtonPressed = {navController.navigate("joinedEvents")
+                                        setTab("joinedEvents")
                                     }
                                 )
                             }

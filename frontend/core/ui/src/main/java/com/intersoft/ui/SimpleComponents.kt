@@ -66,7 +66,24 @@ fun PrimaryButton(buttonText: String, modifier: Modifier = Modifier, isEnabled: 
         ),
         enabled = isEnabled
     ){
-        Text(text = buttonText)
+        Text(text = buttonText, color = colorResource(id = R.color.primaryText))
+    }
+}
+
+@Composable
+fun HomePagePrimaryButton(buttonText: String, modifier: Modifier = Modifier, textSize: Int ,isEnabled: Boolean = true, action: () -> Unit ){
+    Button(
+        onClick = action,
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(R.color.primary),
+            contentColor = colorResource(R.color.primaryText),
+            disabledContainerColor = colorResource(R.color.primary),
+            disabledContentColor = colorResource(R.color.primaryText)
+        ),
+        enabled = isEnabled
+    ){
+        Text(text = buttonText, color = colorResource(id = R.color.primaryText), fontSize = textSize.sp)
     }
 }
 
@@ -82,7 +99,7 @@ fun SecondaryButton(buttonText: String, modifier: Modifier = Modifier, action: (
             disabledContentColor = colorResource(R.color.secondaryText)
         )
     ){
-        Text(text = buttonText)
+        Text(text = buttonText, color = colorResource(id = R.color.primaryText))
     }
 }
 
@@ -180,7 +197,7 @@ fun DisabledTextField(textvalue:String, visualTransformation: VisualTransformati
             singleLine = true,
             visualTransformation = visualTransformation,
             textStyle = TextStyle(fontSize = 25.sp),
-            modifier = Modifier.background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark)),
+            modifier = Modifier.background(color = colorResource(R.color.inputField)),
             decorationBox = {innerTextField ->
                 Row(modifier = Modifier.fillMaxWidth()){}
                 innerTextField()
@@ -199,7 +216,7 @@ fun DisabledTextField(textvalue:String, isMultiline: Boolean, visualTransformati
         singleLine = isMultiline,
         visualTransformation = visualTransformation,
         textStyle = TextStyle(fontSize = 25.sp),
-        modifier = Modifier.background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark)),
+        modifier = Modifier.background(color = colorResource(R.color.inputField)),
         decorationBox = {innerTextField ->
             Row(modifier = Modifier.fillMaxWidth()){}
             innerTextField()
@@ -217,7 +234,7 @@ fun ParticipantNumberDisplayField(label: String, currentNumber: Int, maxNumber: 
         visualTransformation = VisualTransformation.None,
         textStyle = TextStyle(fontSize = 25.sp),
         modifier = Modifier
-            .background(color = colorResource(androidx.appcompat.R.color.dim_foreground_disabled_material_dark))
+            .background(color = colorResource(R.color.inputField))
             .width(110.dp),
         decorationBox = {innerTextField ->
             Row(modifier = Modifier.width(30.dp)){}
@@ -236,7 +253,8 @@ fun TitleText(text: String, modifier: Modifier = Modifier){
         fontSize = 40.sp,
         textAlign = TextAlign.Center,
         lineHeight = 50.sp,
-        modifier = modifier
+        modifier = modifier,
+        color = colorResource(id = R.color.secondaryText)
     )
 }
 
@@ -432,7 +450,7 @@ fun TextSearchField(pageTitle: String, errorText: String, visualTransformation: 
                         innerTextField()
                         Icon(
                             imageVector = Icons.Default.Search,
-                            tint = colorResource(R.color.foregroundText),
+                            tint = colorResource(R.color.primaryText),
                             contentDescription = null,
                             modifier = Modifier
                                 .padding(10.dp)
@@ -504,7 +522,7 @@ fun ConfirmationDialog(
             Text(text = dialogText)
         },
         confirmButton = {
-            Button(onClick = onConfirmButton, colors = confirmColors) {
+            Button(onClick = onConfirmButton) {
                 Text(text = "Confirm")
             }
         },

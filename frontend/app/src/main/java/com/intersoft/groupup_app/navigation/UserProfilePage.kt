@@ -74,7 +74,8 @@ fun UserProfilePage(onEditPress: () -> Unit, onLocationModuleChanged: () -> Unit
                     style = MaterialTheme.typography.headlineLarge,
                     modifier = Modifier
                         .weight(1f)
-                        .wrapContentWidth(Alignment.CenterHorizontally)
+                        .wrapContentWidth(Alignment.CenterHorizontally),
+                    color = Color.White
                 )
 
                 PrimaryButton(buttonText ="Edit") {
@@ -94,7 +95,8 @@ fun UserProfilePage(onEditPress: () -> Unit, onLocationModuleChanged: () -> Unit
                     text = "Location",
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier
-                        .padding(bottom = 4.dp)
+                        .padding(bottom = 4.dp),
+                    color = Color.White
                 )
                 selectedModule.LocationDisplay(
                     latitude = latitude,
@@ -109,7 +111,8 @@ fun UserProfilePage(onEditPress: () -> Unit, onLocationModuleChanged: () -> Unit
             Text(
                 text = "Location",
                 style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(bottom = 4.dp, start = 32.dp, end = 32.dp)
+                modifier = Modifier.padding(bottom = 4.dp, start = 32.dp, end = 32.dp),
+                color = Color.White
             )
             Column(Modifier.padding(top = 20.dp)) {
                 AppContext.getLocationServicesNames().forEach{module->
@@ -122,10 +125,9 @@ fun UserProfilePage(onEditPress: () -> Unit, onLocationModuleChanged: () -> Unit
                         },
                         modifier = Modifier.fillMaxWidth()
                             .padding(start = 32.dp, end = 32.dp)
-                            .border(width = 2.dp, color = Color.Blue, shape = RoundedCornerShape(6.dp))
                             .background(
-                                if(module == selectedModuleName) Color.LightGray
-                                else Color.Transparent
+                                if(module == selectedModuleName) Color.Green
+                                else Color.LightGray
                             )
                         )
                     {
@@ -133,9 +135,10 @@ fun UserProfilePage(onEditPress: () -> Unit, onLocationModuleChanged: () -> Unit
                             text = module,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.background(
-                                if(module == selectedModuleName) Color.LightGray
-                                else Color.Transparent
-                            )
+                                if(module == selectedModuleName) Color.Green
+                                else Color.LightGray
+                            ),
+                            color = Color.DarkGray
                         )
                     }
                 }
@@ -163,13 +166,15 @@ fun UserTextInformation(field : UserProfileFields , value: String) {
             text = fieldString,
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier
-                .padding(bottom = 4.dp)
+                .padding(bottom = 4.dp),
+            color = Color.White
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            color = Color.White
         )
     }
 
