@@ -44,14 +44,11 @@ fun JoinedEventsPage(
     val events by viewModel.events.observeAsState()
     val error by viewModel.error.observeAsState()
 
-    LaunchedEffect(
-        key1 = events,
-        block = {
-            if (events == null) {
-                viewModel.fetchJoinedEvents(AuthContext.id!!, AuthContext.token!!)
-            }
-        }
-    )
+
+
+    if (events == null) {
+        viewModel.fetchJoinedEvents(AuthContext.id!!, AuthContext.token!!)
+    }
 
     Log.d("Events", events.toString())
 

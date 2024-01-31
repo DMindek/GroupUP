@@ -6,10 +6,12 @@ import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.EventDetails
 import com.intersoft.network.models.responses.NewEventData
 import com.intersoft.network.models.responses.EventSuccessResponse
+import com.intersoft.network.models.responses.JoinBodyRequest
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
 import com.intersoft.network.models.responses.StoredEventData
+import com.intersoft.network.models.responses.SuccessfulBodyResponse
 import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -79,4 +81,10 @@ interface ServerService {
     @DELETE("/api/v1/events/{event_id}")
     fun deleteEvent(
         @Path("event_id") id: Int) : Call<Unit>
+
+    @POST("/api/v1/events/{event_id}/join")
+    fun joinEvent(
+        @Path("event_id") eventId: Int,
+        @Body joinBodyRequest: JoinBodyRequest,
+        @Header("Authorization") authToken: String) : Call<SuccessfulBodyResponse>
 }

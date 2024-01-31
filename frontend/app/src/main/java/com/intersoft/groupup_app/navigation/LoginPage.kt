@@ -28,10 +28,10 @@ import com.intersoft.ui.TitleText
 @Composable
 fun LoginPage(context: Context, onLogin: () -> Unit, onRegisterClick: () -> Unit){
     var email by remember {
-        mutableStateOf("admin@admin.com")
+        mutableStateOf("")
     }
     var password by remember {
-        mutableStateOf("adminadmin10!")
+        mutableStateOf("")
     }
     var errorText by remember {
         mutableStateOf("")
@@ -49,8 +49,8 @@ fun LoginPage(context: Context, onLogin: () -> Unit, onRegisterClick: () -> Unit
             contentDescription = "app logo",
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
-        TextInputField(label = "e-mail") { email = it }
-        TextInputField(label = "password", visualTransformation = PasswordVisualTransformation()) { password = it }
+        TextInputField(label = "e-mail", placeholder = "admin@admin.com" ) { email = it }
+        TextInputField(label = "password", visualTransformation = PasswordVisualTransformation(), placeholder = "adminadmin10!") { password = it }
         ErrorText(text = errorText)
 
         PrimaryButton(buttonText = "Sign in",

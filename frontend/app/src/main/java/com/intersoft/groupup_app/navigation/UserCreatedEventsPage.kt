@@ -49,13 +49,6 @@ fun UserCreatedEventsPage(
         viewModel.fetchUserCurrentEvents(AuthContext.id!!, AuthContext.token!!)
     }
 
-    LaunchedEffect(
-        key1 = events,
-        block = {
-
-        }
-    )
-
     Log.d("Events", events.toString())
 
 

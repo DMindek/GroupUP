@@ -6,11 +6,13 @@ import com.intersoft.network.models.responses.EditEventBody
 import com.intersoft.network.models.responses.EventBody
 import com.intersoft.network.models.responses.EventDetails
 import com.intersoft.network.models.responses.EventSuccessResponse
+import com.intersoft.network.models.responses.JoinBodyRequest
 import com.intersoft.network.models.responses.LoginBody
 import com.intersoft.network.models.responses.LoginResponse
 import com.intersoft.network.models.responses.RegisterBody
 import com.intersoft.network.models.responses.NewEventData
 import com.intersoft.network.models.responses.StoredEventData
+import com.intersoft.network.models.responses.SuccessfulBodyResponse
 import com.intersoft.network.models.responses.UserData
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -139,6 +141,13 @@ object NetworkManager {
     fun editEvent(eventId:Int, eventData: EditEventBody, authToken: String, onEditEventSuccess: (EventDetails) ->Unit, onEditEventFail: (String?) -> Unit){
         val res =serverService.editEvent(eventId,eventData,authToken)
         res.enqueue(ResponseHandler<EventDetails>(successCode = 200, errorCode = 422, onEditEventSuccess, onEditEventFail))
+    }
+
+    fun joinEvent(eventId: Int, userId: Int, authToken: String, onJoinEventSuccess: (String?)->Unit, onJoinEventFail: (String?)-> Unit) {
+        val joinBodyRequest = JoinBodyRequest(userId)
+        val res = serverService.joinEvent(eventId, joinBodyRequest, authToken)
+        res.enqueue(ResponseHandler<SuccessfulBodyResponse>(successCode = 201, errorCode = 422, {onJoinEventSuccess(it.message)}, onJoinEventFail))
+
     }
 
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,

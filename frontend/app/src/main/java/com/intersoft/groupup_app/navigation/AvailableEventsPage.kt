@@ -38,14 +38,6 @@ fun AvailableEventsPage(
         viewModel.fetchAvailableEvents(AuthContext.token!!)
     }
 
-    LaunchedEffect(
-        key1 = events,
-        block = {
-
-        }
-    )
-
-
     if( events == null ) LoadingScreen()
     else{
         Column(
