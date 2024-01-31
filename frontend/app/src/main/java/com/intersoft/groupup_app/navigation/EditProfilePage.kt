@@ -49,7 +49,7 @@ fun EditProfilePage(
         username = AuthContext.username!!
         email = AuthContext.email!!
         location = AuthContext.location!!
-        locationName = AuthContext.location_name!!
+        locationName = AuthContext.location_name ?: ""
         coordinates = LocationUtils.coordinatesFromString(AuthContext.location!!)
     }
 

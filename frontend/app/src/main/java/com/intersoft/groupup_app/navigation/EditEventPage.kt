@@ -43,7 +43,7 @@ fun EditEventPage(
     durationInMillis: Long,
     maxNumberOfParticipants: Int,
     location: String,
-    locationName: String,
+    locationName: String?,
     hostId: Int,
     onEditEvent: () -> Unit,
     onCancelEditEvent: () -> Unit
@@ -74,7 +74,7 @@ fun EditEventPage(
     }
 
     var editedLocationName by remember {
-        mutableStateOf(locationName)
+        mutableStateOf(locationName ?: "")
     }
 
     var errorText by remember {
@@ -113,14 +113,19 @@ fun EditEventPage(
         WarningText(text = warningText)
         CounterElement(label = "Max Participants", placeholder = maxNumberOfParticipants) {editedMaxNumberOfParticipants = it}
         LabelText(text = "Location")
-        val coordinates = location.split(',')
+
+
+        val coordinates = if(!location.contains("\\w".toRegex())) location.split(',')
+        else listOf("10.0", "10.0")
+
+
         AppContext.getLocationService().LocationPicker(
             onLocationChanged = {lat, lon -> editedLocation = "$lat,$lon"},
             latitude = coordinates[0].toDouble(),
             longitude =  coordinates[1].toDouble(),
             isEdit = true
         )
-        TextInputField(label = "Location name", placeholder = locationName) { editedLocationName = it }
+        TextInputField(label = "Location name", placeholder = locationName ?: "") { editedLocationName = it }
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
 

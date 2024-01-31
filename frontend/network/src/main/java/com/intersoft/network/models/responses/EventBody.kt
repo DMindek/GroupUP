@@ -16,7 +16,7 @@ data class NewEventData(
     val duration : Int,
     val max_participants : Int,
     val location : String,
-    val location_name : String,
+    val location_name : String?,
     val owner_id : Int,
     val id: Int?,
     val participants : List<UserData>?
@@ -30,7 +30,7 @@ data class StoredEventData(
     val duration : Int,
     val max_participants : Int,
     val location : String,
-    val location_name : String,
+    val location_name : String?,
     val owner_id : Int,
     val participants : List<UserData>?
 )
@@ -42,7 +42,7 @@ data class EventDetails(
     val duration : Int,
     val max_participants : Int,
     val location : String,
-    val location_name : String,
+    val location_name : String?,
     val owner_id : Int,
     val participants : List<UserData>?
 )

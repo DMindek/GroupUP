@@ -81,7 +81,7 @@ object EventManager {
         if(event.description.length >= 256) return "Event description must contain less than 256 characters"
         if(event.dateInMillis <= 0) return "Please enter event date"
         if(event.location.isBlank()) return "Please enter event location"
-        if(event.locationName.isBlank()) return "Please enter event location name"
+        if(event.locationName == null || event.locationName!!.isBlank()) return "Please enter event location name"
 
         return ""
     }
@@ -142,7 +142,7 @@ object EventManager {
         val duration : Int,
         val max_participants : Int,
         val location : String,
-        val locationName : String,
+        val locationName : String?,
         val owner_id : Int,
         val participants : List<ReceivedUserData>?
     )
@@ -152,6 +152,6 @@ object EventManager {
         val password: String,
         val username: String,
         val location: String,
-        val locationName : String,
+        val locationName : String?,
     )
 }

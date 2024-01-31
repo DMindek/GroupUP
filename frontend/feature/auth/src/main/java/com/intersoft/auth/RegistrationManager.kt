@@ -33,7 +33,7 @@ object RegistrationManager {
         if("\\W".toRegex().containsMatchIn(user.username)) return "Username can only contain letters and numbers"
         if(user.username.isEmpty()) return "Please enter a username"
         if(user.location.isEmpty()) return "Please enter a location"
-        if(user.locationName.isEmpty()) return "Please enter a location name"
+        if(user.locationName == null || user.locationName!!.isEmpty()) return "Please enter a location name"
         if(!hasLetterDigitSymbol(user.password)) return "Password must contain at least one letter, number and symbol"
         if(user.password.length < 10) return "Password must have at least 10 characters"
         if(user.password.length > 20) return "Password can only have 20 characters at most"

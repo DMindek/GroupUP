@@ -53,7 +53,7 @@ fun UserProfilePage(onEditPress: () -> Unit, onLocationModuleChanged: () -> Unit
             latitude = coordinates.first
             longitude = coordinates.second
         }
-        locationName = AuthContext.location_name!!
+        locationName = AuthContext.location_name ?: ""
     }
 
     LazyColumn(

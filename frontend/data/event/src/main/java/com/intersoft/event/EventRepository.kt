@@ -14,7 +14,7 @@ class EventRepository: IEventRepository {
     override fun createEvent(newEvent: EventModel, onCreateEventError: (String) -> Unit, onCreateEventSuccess: (String) -> Unit) {
         Log.d("EventRepository", newEvent.toString())
         // Timestamp automatically adjusts to local time which is +1 offset for us, so we have to decrease the time by one hour in millis "3600000 ms" because it does not make sense to adjust starting time by 1 hour offset
-        val dateTimestamp = java.sql.Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
+        val dateTimestamp = Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
         Log.d("EventRepository", dateTimestamp.toString())
         val durationInMinutes = (newEvent.durationInMillis / 60000).toInt()
         Log.d("EventRepository", durationInMinutes.toString())
@@ -263,7 +263,7 @@ class EventRepository: IEventRepository {
     ) {
         Log.d("EventRepository", newEvent.toString())
         // Timestamp automatically adjusts to local time which is +1 offset for us, so we have to decrease the time by one hour in millis "3600000 ms" because it does not make sense to adjust starting time by 1 hour offset
-        val dateTimestamp = java.sql.Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
+        val dateTimestamp = Timestamp(newEvent.dateInMillis + newEvent.startTimeInMillis - 3600000 )
         Log.d("EventRepository", dateTimestamp.toString())
         val durationInMinutes = (newEvent.durationInMillis / 60000).toInt()
         Log.d("EventRepository", durationInMinutes.toString())
@@ -336,7 +336,7 @@ data class CreateEventFailResponse(
     val duration : String?,
     val maxParticipants : String?,
     val location : String?,
-    val locationName : String,
+    val locationName : String?,
     val ownerId : String?
 )
 
@@ -348,7 +348,7 @@ data class GetEventResponse(
     val duration : Int,
     val max_participants : Int,
     val location : String,
-    val locationName : String,
+    val locationName : String?,
     val owner_id : Int,
     val participants : List<UserModel>?
 )
@@ -359,5 +359,5 @@ data class UserModel(
     val password: String,
     val username: String,
     val location: String,
-    val locationName : String,
+    val locationName : String?,
 )

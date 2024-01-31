@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
         var tempDurationInMillis : Long = 0
         var tempMaxNumberOfParticipants = 0
         var tempLocation = ""
-        var tempLocationName = ""
+        var tempLocationName: String? = ""
         var tempHostId = 0
         val sharedPrefs = applicationContext.getSharedPreferences("GroupUpAppPreferences", MODE_PRIVATE)
 

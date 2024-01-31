@@ -18,7 +18,7 @@ object LoginManager {
 
         if(error != null)onLoginFail(error)
         else UserRepository().logIn(email, password, onLoginSuccess = {res ->
-            if(res.token != null && res.username != null && res.location != null && res.locationName != null && res.id != null && res.email != null){
+            if(res.token != null && res.username != null && res.location != null && res.id != null && res.email != null){
                 storeAuth(res, context)
                 onLoginSuccess()
             }

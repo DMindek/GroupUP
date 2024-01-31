@@ -141,7 +141,7 @@ fun EventDetailsPage(
             if (participantsNumber != null)
                 currentNumberOfParticipants = participantsNumber
             location = it.location
-            locationName = it.locationName
+            locationName = it.locationName ?: ""
             EventManager.getHostname(
                 it.owner_id,
                 AuthContext.token!!,
@@ -167,10 +167,12 @@ fun EventDetailsPage(
             TitleText(text = eventName)
             Spacer(modifier = Modifier.height(25.dp))
 
-            val coordinates = location.split(',')
-            LabelText(text = "Location:")
-            Spacer(modifier = Modifier.height(20.dp))
-            AppContext.getLocationService().LocationDisplay(coordinates[0].toDouble(), coordinates[1].toDouble())
+            if(location.contains(",".toRegex())){
+                val coordinates = location.split(',')
+                LabelText(text = "Location:")
+                Spacer(modifier = Modifier.height(20.dp))
+                AppContext.getLocationService().LocationDisplay(coordinates[0].toDouble(), coordinates[1].toDouble())
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
             Row{

@@ -12,7 +12,7 @@ data class EventModel(
     var startTimeInMillis: Long,
     var maxParticipants: Int,
     var location: String,
-    val locationName : String,
+    val locationName : String?,
     var ownerId: Int,
     var id: Int = 0,
     var participants: List<UserModel>? = null
