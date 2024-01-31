@@ -82,7 +82,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-
                     val navBarItems = listOf(
                         NavBarItem("userCreatedEvents", Icons.Filled.DateRange),
                         NavBarItem("joinedEvents", Icons.Filled.Place),
@@ -123,10 +122,14 @@ class MainActivity : ComponentActivity() {
                                     onRegisterClick = { navController.navigate("registration") }
                                 )
                             }
-
-                            composable("home") {
-                                AvailableEventsPage(
-                                    onEventClick = { navController.navigate("eventDetail/$it") }
+                           composable("home"){
+                                HomePage(
+                                    onCreateEventButtonPress = {navController.navigate("userCreatedEvents")},
+                                    onUserInformationPressed = {navController.navigate("user_information")},
+                                    onEventDetailsPressed = {navController.navigate("eventDetail/1")},
+                                    onAvailableEventsButtonPressed = {navController.navigate("availableEvents")},
+                                    onEditEventButtonPressed = {navController.navigate("editEvent")},
+                                    onSearchButtonPressed = {navController.navigate("searchForFriend")}
                                 )
                             }
                             composable("createEvent") {
@@ -145,6 +148,11 @@ class MainActivity : ComponentActivity() {
                                     onCreateEventButtonPress = { navController.navigate("createEvent") }
                                 )
                             }
+                            composable("availableEvents"){
+                                AvailableEventsPage(
+                                    onEventClick = { navController.navigate("eventDetail/$it") }
+                                )
+                            }
                             composable("joinedEvents") {
                                 JoinedEventsPage(
                                     onEventClick = { navController.navigate("eventDetail/$it") }
@@ -161,69 +169,68 @@ class MainActivity : ComponentActivity() {
                                  }
                               )
                             }
+                            composable("edit_profile") {
+                                EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
+                            }
+                            composable("editEvent"){
+                                EditEventPage(
+                                    eventId = tempEventId,
+                                    eventName = tempEventName,
+                                    description = tempDescription,
+                                    selectedDateInMillis = tempSelectedDateInMillis,
+                                    startTimeInMillis = tempStartTimeInMillis,
+                                    durationInMillis = tempDurationInMillis,
+                                    maxNumberOfParticipants = tempMaxNumberOfParticipants,
+                                    location = tempLocation,
+                                    locationName = tempLocationName,
+                                     tempHostId,
+                                    onEditEvent = { navController.navigate("eventDetail/$tempEventId") },
+                                    onCancelEditEvent = {navController.navigate("eventDetail/$tempEventId")}
+                                )
+                            }
+                            composable(
+                                "eventDetail/{eventId}",
+                                arguments = listOf(navArgument("eventId") {
+                                    type = NavType.IntType
+                                })
+                            ) { backStackEntry ->
+                                EventDetailsPage(
+                                    onGetEventFail = {
+                                        Toast.makeText(applicationContext, "Event not found", Toast.LENGTH_SHORT).show()
+                                        navController.navigate("home")
+                                    },
+                                    eventId = backStackEntry.arguments?.getInt("eventId") ?: 0,
+                                    onEditEventButtonPressed = {eventId,
+                                        eventName,
+                                        description,
+                                        selectedDateInMillis,
+                                        startTimeInMillis,
+                                        durationInMillis,
+                                        maxNumberOfParticipants,
+                                        location,
+                                        locationName,
+                                        hostId ->
 
-                        composable("edit_profile") {
-                            EditProfilePage(goBackForProfile = { navController.navigate("user_information") })
-                        }
-                        composable("editEvent"){
-                            EditEventPage(
-                                eventId = tempEventId,
-                                eventName = tempEventName,
-                                description = tempDescription,
-                                selectedDateInMillis = tempSelectedDateInMillis,
-                                startTimeInMillis = tempStartTimeInMillis,
-                                durationInMillis = tempDurationInMillis,
-                                maxNumberOfParticipants = tempMaxNumberOfParticipants,
-                                location = tempLocation,
-                                locationName = tempLocationName,
-                                 tempHostId,
-                                onEditEvent = { navController.navigate("eventDetail/$tempEventId") },
-                                onCancelEditEvent = {navController.navigate("eventDetail/$tempEventId")}
-                            )
-                        }
-                        composable(
-                            "eventDetail/{eventId}",
-                            arguments = listOf(navArgument("eventId") {
-                                type = NavType.IntType
-                            })
-                        ) { backStackEntry ->
-                            EventDetailsPage(
-                                onGetEventFail = {
-                                    Toast.makeText(applicationContext, "Event not found", Toast.LENGTH_SHORT).show()
-                                    navController.navigate("home")
-                                },
-                                eventId = backStackEntry.arguments?.getInt("eventId") ?: 0,
-                                onEditEventButtonPressed = {eventId,
-                                    eventName,
-                                    description,
-                                    selectedDateInMillis,
-                                    startTimeInMillis,
-                                    durationInMillis,
-                                    maxNumberOfParticipants,
-                                    location,
-                                    locationName,
-                                    hostId ->
+                                        tempEventId = eventId
+                                        tempEventName = eventName
+                                        tempDescription = description
+                                        tempSelectedDateInMillis = selectedDateInMillis
+                                        tempStartTimeInMillis = startTimeInMillis
+                                        tempDurationInMillis = durationInMillis
+                                        tempMaxNumberOfParticipants = maxNumberOfParticipants
+                                        tempLocation = location
+                                        tempLocationName = locationName
+                                        tempHostId = hostId
 
-                                    tempEventId = eventId
-                                    tempEventName = eventName
-                                    tempDescription = description
-                                    tempSelectedDateInMillis = selectedDateInMillis
-                                    tempStartTimeInMillis = startTimeInMillis
-                                    tempDurationInMillis = durationInMillis
-                                    tempMaxNumberOfParticipants = maxNumberOfParticipants
-                                    tempLocation = location
-                                    tempLocationName = locationName
-                                    tempHostId = hostId
-
-                                    navController.navigate("editEvent")
-                                },
-                                onEventDeleted = {
-                                    val destination = navController.previousBackStackEntry!!.destination.route!!
-                                    Log.d("Navigation control", "destination is $destination")
-                                    navController.navigate("goBack")
-                                    navController.navigate("goBack")
-                                    navController.navigate(destination)
-                                }
+                                        navController.navigate("editEvent")
+                                    },
+                                    onEventDeleted = {
+                                        val destination = navController.previousBackStackEntry!!.destination.route!!
+                                        Log.d("Navigation control", "destination is $destination")
+                                        navController.navigate("goBack")
+                                        navController.navigate("goBack")
+                                        navController.navigate(destination)
+                                    }
                                )
                           }
 
@@ -247,7 +254,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }
 
 fun initLocationModule(sharedPrefs: SharedPreferences, saveLocation: String){

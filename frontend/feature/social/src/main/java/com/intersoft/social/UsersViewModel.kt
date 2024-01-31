@@ -65,7 +65,8 @@ class UsersViewModel () : ViewModel() {
                            password = "",
                            location = user.location,
                            id = user.id,
-                           token = null
+                           token = null,
+                           locationName = user.locationName
                        )
                     }
                     _error.value = ""
