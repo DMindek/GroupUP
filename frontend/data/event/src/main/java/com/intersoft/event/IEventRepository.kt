@@ -28,4 +28,5 @@ interface IEventRepository {
 
     fun deleteEvent(eventId: Int, onDeleteEventError: (String) -> Unit, onDeleteEventSuccess: (String) -> Unit){}
     fun joinEvent(eventId: Int, userId: Int, authToken: String, onJoinEventError: (String) -> Unit, onJoinEventSuccess: (String) -> Unit)
+    fun leaveEvent(eventId: Int, userId: Int, authToken: String, onLeaveEventError: (String) -> Unit, onLeaveEventSuccess: (String) -> Unit)
 }

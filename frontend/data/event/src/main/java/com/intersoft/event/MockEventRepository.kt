@@ -61,4 +61,14 @@ class MockEventRepository : IEventRepository {
     ) {
         TODO("Not yet implemented")
     }
+
+    override fun leaveEvent(
+        eventId: Int,
+        userId: Int,
+        authToken: String,
+        onLeaveEventError: (String) -> Unit,
+        onLeaveEventSuccess: (String) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
 }

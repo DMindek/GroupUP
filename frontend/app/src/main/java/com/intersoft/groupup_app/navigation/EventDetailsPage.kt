@@ -124,7 +124,7 @@ fun EventDetailsPage(
 
     val canJoin by viewModel.canJoin.observeAsState()
 
-    if(canJoin == true){
+    if(canJoin == true ){
         isParticipant = true
     }
 
@@ -250,7 +250,8 @@ fun EventDetailsPage(
             title = "Leave Event",
             dialogText = "Are you sure you want to leave this event?",
             onConfirmButton = {
-                /*TODO Add leave event functionality*/
+                viewModel.leaveEvent(eventId, AuthContext.id!!, AuthContext.token!!)
+                isShowingLeaveConfirmationDialog = false
             },
             onDismissButton = {
                 isShowingLeaveConfirmationDialog = false

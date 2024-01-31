@@ -330,6 +330,26 @@ class EventRepository: IEventRepository {
         )
 
     }
+
+    override fun leaveEvent(
+        eventId: Int,
+        userId: Int,
+        authToken: String,
+        onLeaveEventError: (String) -> Unit,
+        onLeaveEventSuccess: (String) -> Unit
+    ) {
+        NetworkManager.leaveEvent(eventId,
+            userId,
+            authToken,
+            onLeaveEventSuccess = {onLeaveEventSuccess("Event has been left")},
+            onLeaveEventFail = {
+                if(it != null){
+                    onLeaveEventError(it)
+                }
+                else onLeaveEventError("Unknown error occurred")}
+        )
+
+    }
 }
 
 

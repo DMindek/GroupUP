@@ -13,11 +13,13 @@ class EventsViewModel : ViewModel(){
     private val _events: MutableLiveData<List<IIterableObject>> = MutableLiveData(null)
     private val _error : MutableLiveData<String> = MutableLiveData("")
     private val _canJoin: MutableLiveData<Boolean> = MutableLiveData(false)
+
     val events: LiveData<List<IIterableObject>> = _events
     val error: LiveData<String> = _error
     val canJoin: LiveData<Boolean> = _canJoin
 
     val CAN_JOIN = "Successfully joined the Event."
+    val CAN_LEAVE = "Successfully left the Event."
 
     fun fetchUserCurrentEvents(userId: Int, authtoken: String){
         eventRepository.getUserEvents(userId, authtoken, {error ->
@@ -70,6 +72,15 @@ class EventsViewModel : ViewModel(){
             _error.value = error
         }){
             _canJoin.value = true
+        }
+    }
+
+    fun leaveEvent(eventId: Int, userId: Int, authToken: String) {
+        eventRepository.leaveEvent(eventId, userId, authToken, {error ->
+            _canJoin.value = true
+            _error.value = error
+        }){
+            _canJoin.value = false
         }
     }
 

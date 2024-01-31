@@ -150,6 +150,12 @@ object NetworkManager {
 
     }
 
+    fun leaveEvent(eventId: Int, userId: Int, authToken: String, onLeaveEventSuccess: (String?) -> Unit, onLeaveEventFail: (String?) -> Unit) {
+        val joinBodyRequest = JoinBodyRequest(userId)
+        val res = serverService.leaveEvent(eventId, joinBodyRequest, authToken)
+        res.enqueue(ResponseHandler<SuccessfulBodyResponse>(successCode = 201, errorCode = 422, {onLeaveEventSuccess(it.message)}, onLeaveEventFail))
+    }
+
     private class ResponseHandler<T>(val successCode: Int, val errorCode: Int,
                                   val onSuccess : (T) -> Unit,
                                   val onFail: (String?) -> Unit): Callback<T>{

@@ -87,4 +87,10 @@ interface ServerService {
         @Path("event_id") eventId: Int,
         @Body joinBodyRequest: JoinBodyRequest,
         @Header("Authorization") authToken: String) : Call<SuccessfulBodyResponse>
+
+    @POST("/api/v1/events/{event_id}/leave")
+    fun leaveEvent(
+        @Path("event_id") eventId: Int,
+        @Body joinBodyRequest: JoinBodyRequest,
+        @Header("Authorization") authToken: String) : Call<SuccessfulBodyResponse>
 }
