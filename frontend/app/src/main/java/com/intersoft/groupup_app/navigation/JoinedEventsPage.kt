@@ -44,14 +44,11 @@ fun JoinedEventsPage(
     val events by viewModel.events.observeAsState()
     val error by viewModel.error.observeAsState()
 
-    LaunchedEffect(
-        key1 = events,
-        block = {
-            if (events == null) {
-                viewModel.fetchJoinedEvents(AuthContext.id!!, AuthContext.token!!)
-            }
-        }
-    )
+
+
+    if (events == null) {
+        viewModel.fetchJoinedEvents(AuthContext.id!!, AuthContext.token!!)
+    }
 
     Log.d("Events", events.toString())
 
@@ -66,7 +63,7 @@ fun JoinedEventsPage(
                 .fillMaxHeight(),
             content = {
 
-                TitleText(text = "Your Events")
+                TitleText(text = "Joined Events")
 
                 // Check if data is loaded before displaying DataScreen
 
@@ -76,7 +73,7 @@ fun JoinedEventsPage(
                 )
 
                 when {
-                    events?.isEmpty() == true && error == "NO_EVENTS" -> Text(text = "You have no events")
+                    events?.isEmpty() == true && error == "NO_EVENTS" -> Text(text = "There are no current joined events.")
                     events?.isEmpty() == true && error != "" -> ErrorText(text = error!!)
                 }
 

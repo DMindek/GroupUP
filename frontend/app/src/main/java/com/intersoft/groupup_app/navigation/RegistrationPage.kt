@@ -19,7 +19,6 @@ import com.intersoft.groupup_app.AppContext
 import com.intersoft.ui.ErrorText
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
-import com.intersoft.ui.TitleText
 import com.intersoft.user.UserModel
 
 
@@ -51,9 +50,8 @@ fun RegistrationPage(onRegister: () -> Unit){
         verticalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxSize()
-            .padding(50.dp)
+            .padding(start = 50.dp, end = 50.dp, top = 0.dp, bottom = 50.dp)
     ){
-        TitleText(text = "Register")
         TextInputField(label = "email") { email = it }
         TextInputField(label = "username") {username = it}
         Text(text = "Location")

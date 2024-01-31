@@ -51,4 +51,24 @@ class MockEventRepository : IEventRepository {
     ) {
         eventList.removeIf { it.id == eventId }
     }
+
+    override fun joinEvent(
+        eventId: Int,
+        userId: Int,
+        authToken: String,
+        onJoinEventError: (String) -> Unit,
+        onJoinEventSuccess: (String) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun leaveEvent(
+        eventId: Int,
+        userId: Int,
+        authToken: String,
+        onLeaveEventError: (String) -> Unit,
+        onLeaveEventSuccess: (String) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
 }

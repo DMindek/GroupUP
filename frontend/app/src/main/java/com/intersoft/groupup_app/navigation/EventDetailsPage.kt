@@ -1,5 +1,6 @@
 package com.intersoft.groupup_app.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -22,9 +24,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
+
+import com.intersoft.event.EventsViewModel
+
 import com.intersoft.groupup_app.AppContext
+
 import com.intersoft.ui.ConfirmationDialog
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.ErrorText
@@ -50,7 +57,8 @@ fun EventDetailsPage(
         location: String,
         locationName: String,
         hostId: Int,) -> Unit,
-    onEventDeleted: () -> Unit
+    onEventDeleted: () -> Unit,
+    viewModel: EventsViewModel = viewModel()
 ){
     var eventName by remember {
         mutableStateOf("")
@@ -74,7 +82,9 @@ fun EventDetailsPage(
         mutableStateOf(false)
     }
 
-    var currentNumberOfParticipants = 0
+    var currentNumberOfParticipants by remember {
+        mutableIntStateOf(0)
+    }
 
     var location by remember {
         mutableStateOf("")
@@ -120,6 +130,12 @@ fun EventDetailsPage(
         mutableStateOf(false)
     }
 
+    val canJoin by viewModel.canJoin.observeAsState()
+
+    if(canJoin == true ){
+        isParticipant = true
+    }
+
     if(!isDeleted) {
         EventManager.getEvent(eventId, { onGetEventFail() }) {
 
@@ -138,6 +154,8 @@ fun EventDetailsPage(
             hostId = it.owner_id
 
             val participantsNumber = it.participants?.count()
+            Log.d("Participants", participantsNumber.toString())
+
             if (participantsNumber != null)
                 currentNumberOfParticipants = participantsNumber
             location = it.location
@@ -209,7 +227,8 @@ fun EventDetailsPage(
                 hostId != AuthContext.id &&
                 currentNumberOfParticipants < maxNumberOfParticipants &&
                 !isParticipant -> EventDetailsButton(buttonName = "Join Event") {
-                    /*TODO Add join event functionality*/
+                    viewModel.joinEvent(eventId, AuthContext.id!!, AuthContext.token!!)
+
                 }
 
                 hostId != AuthContext.id &&
@@ -250,7 +269,8 @@ fun EventDetailsPage(
             title = "Leave Event",
             dialogText = "Are you sure you want to leave this event?",
             onConfirmButton = {
-                /*TODO Add leave event functionality*/
+                viewModel.leaveEvent(eventId, AuthContext.id!!, AuthContext.token!!)
+                isShowingLeaveConfirmationDialog = false
             },
             onDismissButton = {
                 isShowingLeaveConfirmationDialog = false

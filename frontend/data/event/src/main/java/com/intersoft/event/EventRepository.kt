@@ -75,7 +75,7 @@ class EventRepository: IEventRepository {
                        UserModel(
                            username = participant.username,
                            email = participant.email,
-                           password = participant.password!!,
+                           password = "nan",
                            location = participant.location,
                            locationName = participant.location_name,
                            id = participant.id,
@@ -131,7 +131,7 @@ class EventRepository: IEventRepository {
                             UserModel(
                                 username = participant.username,
                                 email = participant.email,
-                                password = participant.password!!,
+                                password = "nan",
                                 location = participant.location,
                                 locationName = participant.location_name,
                                 id = participant.id,
@@ -181,7 +181,7 @@ class EventRepository: IEventRepository {
                             UserModel(
                                 username = participant.username,
                                 email = participant.email,
-                                password = participant.password!!,
+                                password = "nan",
                                 location = participant.location,
                                 locationName = participant.location_name,
                                 id = participant.id,
@@ -231,7 +231,7 @@ class EventRepository: IEventRepository {
                             UserModel(
                                 username = participant.username,
                                 email = participant.email,
-                                password = participant.password!!,
+                                password = "nan",
                                 location = participant.location,
                                 locationName = participant.location_name,
                                 id = participant.id,
@@ -320,7 +320,49 @@ class EventRepository: IEventRepository {
                 else onDeleteEventError("Unknown error occurred")}
         )
     }
+
+    override fun joinEvent(
+        eventId: Int,
+        userId: Int,
+        authToken: String,
+        onJoinEventError: (String) -> Unit,
+        onJoinEventSuccess: (String) -> Unit
+    ) {
+        NetworkManager.joinEvent(eventId,
+            userId,
+            authToken,
+            onJoinEventSuccess = {onJoinEventSuccess("Event has been Joined")},
+            onJoinEventFail = {
+                if(it != null){
+                    onJoinEventError(it)
+                }
+                else onJoinEventError("Unknown error occurred")}
+        )
+
+    }
+
+    override fun leaveEvent(
+        eventId: Int,
+        userId: Int,
+        authToken: String,
+        onLeaveEventError: (String) -> Unit,
+        onLeaveEventSuccess: (String) -> Unit
+    ) {
+        NetworkManager.leaveEvent(eventId,
+            userId,
+            authToken,
+            onLeaveEventSuccess = {onLeaveEventSuccess("Event has been left")},
+            onLeaveEventFail = {
+                if(it != null){
+                    onLeaveEventError(it)
+                }
+                else onLeaveEventError("Unknown error occurred")}
+        )
+
+    }
 }
+
+
 
 
 

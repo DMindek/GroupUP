@@ -58,7 +58,7 @@ fun UserProfilePage(onEditPress: () -> Unit, onLocationModuleChanged: () -> Unit
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(16.dp),
 
     ){
