@@ -263,7 +263,7 @@ fun ErrorText(text: String){
 }
 
 @Composable
-fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
+fun navBar(navController: NavController, navBarItems: List<NavBarItem>): (String) -> Unit{
     var currentRoute by remember {
         mutableStateOf(navBarItems[0].route)
     }
@@ -282,6 +282,9 @@ fun NavBar(navController: NavController, navBarItems: List<NavBarItem>){
                     navController.navigate(item.route)
             })
         }
+    }
+    return {
+        currentRoute = it
     }
 }
 
