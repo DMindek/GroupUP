@@ -26,6 +26,7 @@ class EventRepository: IEventRepository {
             duration =durationInMinutes,
             max_participants = newEvent.maxParticipants,
             location = newEvent.location,
+            location_name = newEvent.locationName,
             owner_id =  newEvent.ownerId,
             id = newEvent.id,
             participants = emptyList()
@@ -68,6 +69,7 @@ class EventRepository: IEventRepository {
                     duration = it.duration,
                     max_participants = it.max_participants,
                     location = it.location,
+                    locationName = it.location_name,
                     owner_id = it.owner_id,
                    participants = it.participants?.map { participant ->
                        UserModel(
@@ -75,6 +77,7 @@ class EventRepository: IEventRepository {
                            email = participant.email,
                            password = "nan",
                            location = participant.location,
+                           locationName = participant.location_name,
                            id = participant.id,
                        )
                    }
@@ -121,6 +124,7 @@ class EventRepository: IEventRepository {
                         startTimeInMillis = event.date.time - event.duration.toLong() * 60000,
                         maxParticipants = event.max_participants,
                         location = event.location,
+                        locationName = event.location_name,
                         ownerId = event.owner_id,
                         id = event.id!!,
                         participants = event.participants?.map { participant ->
@@ -129,6 +133,7 @@ class EventRepository: IEventRepository {
                                 email = participant.email,
                                 password = "nan",
                                 location = participant.location,
+                                locationName = participant.location_name,
                                 id = participant.id,
                             )
                         }
@@ -169,6 +174,7 @@ class EventRepository: IEventRepository {
                         startTimeInMillis = event.date.time - event.duration.toLong() * 60000,
                         maxParticipants = event.max_participants,
                         location = event.location,
+                        locationName = event.location_name,
                         ownerId = event.owner_id,
                         id = event.id!!,
                         participants = event.participants?.map { participant ->
@@ -177,6 +183,7 @@ class EventRepository: IEventRepository {
                                 email = participant.email,
                                 password = "nan",
                                 location = participant.location,
+                                locationName = participant.location_name,
                                 id = participant.id,
                             )
                         }
@@ -217,6 +224,7 @@ class EventRepository: IEventRepository {
                         startTimeInMillis = event.date.time - event.duration.toLong() * 60000,
                         maxParticipants = event.max_participants,
                         location = event.location,
+                        locationName = event.location_name,
                         ownerId = event.owner_id,
                         id = event.id!!,
                         participants = event.participants?.map { participant ->
@@ -225,6 +233,7 @@ class EventRepository: IEventRepository {
                                 email = participant.email,
                                 password = "nan",
                                 location = participant.location,
+                                locationName = participant.location_name,
                                 id = participant.id,
                             )
                         }
@@ -266,6 +275,7 @@ class EventRepository: IEventRepository {
             duration =durationInMinutes,
             max_participants = newEvent.maxParticipants,
             location = newEvent.location,
+            location_name = newEvent.locationName,
             owner_id =  newEvent.ownerId,
             participants = null
         )
@@ -368,6 +378,7 @@ data class CreateEventFailResponse(
     val duration : String?,
     val maxParticipants : String?,
     val location : String?,
+    val locationName : String,
     val ownerId : String?
 )
 
@@ -379,6 +390,7 @@ data class GetEventResponse(
     val duration : Int,
     val max_participants : Int,
     val location : String,
+    val locationName : String,
     val owner_id : Int,
     val participants : List<UserModel>?
 )
@@ -388,5 +400,6 @@ data class UserModel(
     val email: String,
     val password: String,
     val username: String,
-    val location: String
+    val location: String,
+    val locationName : String,
 )

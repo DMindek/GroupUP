@@ -58,6 +58,10 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
         mutableStateOf("")
     }
 
+    var locationName by remember {
+        mutableStateOf("")
+    }
+
     var errorText by remember {
         mutableStateOf("")
     }
@@ -85,6 +89,7 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
             longitude = null,
             isEdit = false
         )
+        TextInputField(label = "Location name") { locationName = it }
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -102,7 +107,10 @@ fun CreateEventPage(onCreateEvent: () -> Unit, onCancelEventCreation: () -> Unit
                     durationInMillis = durationInMillis,
                     startTimeInMillis = startTimeInMillis,
                     maxNumberOfParticipants = maxNumberOfParticipants,
-                    location = location,AuthContext.id!!,{onCreateEvent()}
+                    location = location,
+                    locationName = locationName,
+                    ownerId = AuthContext.id!!,
+                    onCreateEventSuccess = {onCreateEvent()}
                 ){error ->
                     errorText = error
                 }

@@ -20,10 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
+import com.intersoft.groupup_app.AppContext
 import com.intersoft.ui.CounterElement
 import com.intersoft.ui.DurationSelectionElement
 import com.intersoft.ui.ErrorText
 import com.intersoft.ui.GeneralDatePicker
+import com.intersoft.ui.LabelText
 import com.intersoft.ui.MultiLineTextInputField
 import com.intersoft.ui.PrimaryButton
 import com.intersoft.ui.TextInputField
@@ -41,6 +43,7 @@ fun EditEventPage(
     durationInMillis: Long,
     maxNumberOfParticipants: Int,
     location: String,
+    locationName: String,
     hostId: Int,
     onEditEvent: () -> Unit,
     onCancelEditEvent: () -> Unit
@@ -68,6 +71,10 @@ fun EditEventPage(
     }
     var editedLocation by remember {
         mutableStateOf(location)
+    }
+
+    var editedLocationName by remember {
+        mutableStateOf(locationName)
     }
 
     var errorText by remember {
@@ -105,7 +112,15 @@ fun EditEventPage(
         )
         WarningText(text = warningText)
         CounterElement(label = "Max Participants", placeholder = maxNumberOfParticipants) {editedMaxNumberOfParticipants = it}
-        TextInputField(label = "location", placeholder = location) { editedLocation = it }
+        LabelText(text = "Location")
+        val coordinates = location.split(',')
+        AppContext.getLocationService().LocationPicker(
+            onLocationChanged = {lat, lon -> editedLocation = "$lat,$lon"},
+            latitude = coordinates[0].toDouble(),
+            longitude =  coordinates[1].toDouble(),
+            isEdit = true
+        )
+        TextInputField(label = "Location name", placeholder = locationName) { editedLocationName = it }
         ErrorText(text = errorText)
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -125,9 +140,10 @@ fun EditEventPage(
                     startTimeInMillis = editedStartTimeInMillis,
                     maxNumberOfParticipants = editedMaxNumberOfParticipants,
                     location = editedLocation,
-                    hostId,
-                    AuthContext.token!!,
-                    {onEditEvent()}
+                    locationName = editedLocationName,
+                    ownerId = hostId,
+                    authToken = AuthContext.token!!,
+                    onEditEventSuccess = {onEditEvent()}
                 ){error ->
                     errorText = error
                 }

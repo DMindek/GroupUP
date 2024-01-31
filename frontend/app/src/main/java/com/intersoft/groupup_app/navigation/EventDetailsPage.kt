@@ -27,7 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.intersoft.auth.AuthContext
 import com.intersoft.event.EventManager
+
 import com.intersoft.event.EventsViewModel
+
+import com.intersoft.groupup_app.AppContext
+
 import com.intersoft.ui.ConfirmationDialog
 import com.intersoft.ui.DisabledTextField
 import com.intersoft.ui.ErrorText
@@ -35,7 +39,6 @@ import com.intersoft.ui.LabelText
 import com.intersoft.ui.LoadingScreen
 import com.intersoft.ui.ParticipantNumberDisplayField
 import com.intersoft.ui.PrimaryButton
-import com.intersoft.ui.R
 import com.intersoft.ui.TitleText
 import com.intersoft.utils.DateTimeManager
 
@@ -52,6 +55,7 @@ fun EventDetailsPage(
         durationInMillis: Long,
         maxNumberOfParticipants: Int,
         location: String,
+        locationName: String,
         hostId: Int,) -> Unit,
     onEventDeleted: () -> Unit,
     viewModel: EventsViewModel = viewModel()
@@ -83,6 +87,10 @@ fun EventDetailsPage(
     }
 
     var location by remember {
+        mutableStateOf("")
+    }
+
+    var locationName by remember {
         mutableStateOf("")
     }
 
@@ -151,6 +159,7 @@ fun EventDetailsPage(
             if (participantsNumber != null)
                 currentNumberOfParticipants = participantsNumber
             location = it.location
+            locationName = it.locationName
             EventManager.getHostname(
                 it.owner_id,
                 AuthContext.token!!,
@@ -174,11 +183,18 @@ fun EventDetailsPage(
                 .verticalScroll(rememberScrollState())
         ) {
             TitleText(text = eventName)
+            Spacer(modifier = Modifier.height(25.dp))
+
+            val coordinates = location.split(',')
+            LabelText(text = "Location:")
             Spacer(modifier = Modifier.height(20.dp))
-            Row {
-                LabelText(text = "Location:")
-                Spacer(modifier = Modifier.width(45.dp))
-                DisabledTextField(textvalue = location)
+            AppContext.getLocationService().LocationDisplay(coordinates[0].toDouble(), coordinates[1].toDouble())
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Row{
+                LabelText(text = "Location name:")
+                Spacer(modifier = Modifier.width(30.dp))
+                DisabledTextField(textvalue = locationName)
             }
             Spacer(modifier = Modifier.height(20.dp))
             Row{
@@ -233,6 +249,7 @@ fun EventDetailsPage(
                             durationInMillis,
                             maxNumberOfParticipants,
                             location,
+                            locationName,
                             hostId
                         )
 

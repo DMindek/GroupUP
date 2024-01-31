@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GroupUP_app</string>
+    <string name="location_module_sharedpref">LocationModule</string>
 </resources>

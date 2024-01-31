@@ -69,8 +69,8 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.5.2")
     implementation(project(mapOf("path" to ":feature:event")))
     implementation(project(":core:utils:location"))
-    implementation(project(":core:utils:location:OSMservice"))
-    implementation(project(":core:utils:location:GoogleMapsService"))
+    implementation(project(":OSMservice"))
+    implementation(project(":GoogleMapsService"))
     implementation(project(mapOf("path" to ":feature:social")))
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -33,6 +33,9 @@ fun RegistrationPage(onRegister: () -> Unit){
     var location by remember {
         mutableStateOf("")
     }
+    var locationName by remember {
+        mutableStateOf("")
+    }
     var password by remember {
         mutableStateOf("")
     }
@@ -58,13 +61,14 @@ fun RegistrationPage(onRegister: () -> Unit){
             longitude = null,
             false
         )
+        TextInputField(label = "location name") {locationName = it}
         TextInputField(label = "password", PasswordVisualTransformation()) {password = it}
         TextInputField(label = "confirm password", PasswordVisualTransformation()) {passwordRetype = it}
         ErrorText(text = errorText)
         PrimaryButton(buttonText = "Sign up",
             modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-            RegistrationManager.registerUser(UserModel(username, email, password, location), passwordRetype,
+            RegistrationManager.registerUser(UserModel(username, email, password, location, locationName), passwordRetype,
                 onRegisterSuccess = onRegister,
                 onRegisterFail = {
                     errorText = it
