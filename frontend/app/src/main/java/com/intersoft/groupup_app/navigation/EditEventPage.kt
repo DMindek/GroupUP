@@ -115,7 +115,7 @@ fun EditEventPage(
         LabelText(text = "Location")
 
 
-        val coordinates = if(!location.contains("\\w".toRegex())) location.split(',')
+        val coordinates = if(location.contains(",".toRegex())) location.split(',')
         else listOf("10.0", "10.0")
 
 
